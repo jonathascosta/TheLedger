@@ -108,5 +108,11 @@ export default defineConfig([
     languageOptions: { globals: globals.node },
   },
 
+  {
+    name: 'repo/service-worker',
+    files: ['apps/game/public/**/*.js'],
+    languageOptions: { globals: globals.serviceworker },
+  },
+
   prettier,
 ]);
