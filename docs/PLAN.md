@@ -31,7 +31,7 @@ they would only slow the release down.
 - Tests: costs and buying, cycles over a long tick equal many short ticks, milestones, the
   receipt, formats.
 
-### T3. Engine: investments, the paper, achievements, prestige
+### T3. Engine: investments, the paper, achievements, prestige — done
 
 - Stocks, commodities, coins (seeded walks, shocks, buy and sell), bonds, real estate, startups,
   art, energy; unlocks by peak net worth; net worth.

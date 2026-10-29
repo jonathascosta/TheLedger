@@ -151,7 +151,7 @@ pencil, the classes, and the locked ones.
 | :---------- | -------: | :-------------------------------------------------------------------------------------- |
 | Businesses  |       $0 | As above                                                                                |
 | Stocks      |   $100 K | Six companies with their own drift and volatility; buy and sell shares; small dividends |
-| Bonds       |     $1 M | Lend up to one hour of business income; it earns 1% an hour, withdrawable any time      |
+| Bonds       |     $1 M | Lend up to three hours of business income; it earns 1% an hour, withdrawable any time   |
 | Real estate |    $10 M | Eight properties on the city map; each pays rent per second and can be sold at 90%      |
 | Commodities |    $50 M | Gold (calm), oil (moves with the news) and coffee; bought and sold by the unit          |
 | Crypto      |   $250 M | Three coins with wild swings                                                            |
@@ -165,7 +165,7 @@ Pennycoin (PNY), Hashbrown (HSH), Stardust (SDT). No real brand appears in the g
 
 ## The morning paper
 
-- A new edition arrives every 4 minutes of play (a badge on the Gazette). It carries one event
+- Once the Market is open, a new edition arrives every 4 minutes of play (a badge on the Gazette). It carries one event
   drawn from a seeded list: a headline, an engraving, two short columns and its effect on the
   market (for example: a tanker stuck in the strait, oil +18%, airlines −12%).
 - The player answers with one of three choices, cut out like coupons: a bold bet (10% of cash,

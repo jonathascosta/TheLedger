@@ -1,4 +1,5 @@
 import { BUSINESSES } from '../data/businesses.ts';
+import { INSTRUMENTS } from '../data/market.ts';
 import type { Trait } from '../data/people.ts';
 import type { Lang } from '../format/format.ts';
 
@@ -51,6 +52,70 @@ export interface AwayReceipt {
   total: number;
 }
 
+export interface Holding {
+  units: number;
+  /** Money paid for the units held (the cost basis). */
+  cost: number;
+}
+
+export interface MarketState {
+  /** Market ticks so far in this volume. */
+  tick: number;
+  /** Game time (ms) of the next market tick. */
+  nextAt: number;
+  prices: Record<string, number>;
+  /** Fair values the prices return to. */
+  fair: Record<string, number>;
+  /** The last ticks' prices, oldest first. */
+  history: Record<string, number[]>;
+}
+
+export interface StartupPitch {
+  index: number;
+  ask: number;
+  /** Set when the player invests: when it matures (game ms). */
+  maturesAt: number | null;
+}
+
+export interface StartupResult {
+  index: number;
+  stake: number;
+  multiple: number;
+}
+
+export interface ArtPiece {
+  /** Lot number (seeds its title and artist). */
+  lot: number;
+  paid: number;
+  value: number;
+}
+
+export interface ArtLot {
+  lot: number;
+  price: number;
+  /** Game time (ms) the lot closes and the next one comes up. */
+  closesAt: number;
+}
+
+export interface PaperResult {
+  choice: 'bold' | 'careful' | 'hold';
+  /** Cash won (positive) or lost (negative). */
+  delta: number;
+}
+
+export interface PaperState {
+  /** Number of the current edition (0 before the first). */
+  edition: number;
+  /** Event id of the current edition. */
+  event: string | null;
+  /** Game time (ms) of the next edition. */
+  nextAt: number;
+  /** The answer to the current edition, if any. */
+  answer: PaperResult | null;
+  /** Editions not yet read (the Gazette's badge). */
+  unread: boolean;
+}
+
 /** Everything that a closed volume resets. */
 export interface Volume {
   number: number;
@@ -68,6 +133,16 @@ export interface Volume {
   history: number[];
   /** Game time (ms) of the last history sample. */
   lastSampleAt: number;
+  market: MarketState;
+  holdings: Record<string, Holding>;
+  bonds: number;
+  properties: string[];
+  parks: string[];
+  startup: StartupPitch | null;
+  startupResults: StartupResult[];
+  art: ArtPiece[];
+  artLot: ArtLot | null;
+  paper: PaperState;
 }
 
 export interface ShelfEntry {
@@ -88,6 +163,7 @@ export interface Meta {
   shelf: ShelfEntry[];
   totalStamps: number;
   bestCombo: number;
+  editionsAnswered: number;
 }
 
 export interface Settings {
@@ -106,6 +182,8 @@ export interface GameState {
   settings: Settings;
   /** An absence receipt waiting to be collected. */
   away: AwayReceipt | null;
+  /** Achievements earned but not yet announced. */
+  fresh: string[];
 }
 
 export function newVolume(number: number, now: number, startCash = 0): Volume {
@@ -122,6 +200,22 @@ export function newVolume(number: number, now: number, startCash = 0): Volume {
     desk: { stamps: 0, invoice: 1, combo: 0, lastStampAt: 0, lastValue: 0 },
     history: [startCash],
     lastSampleAt: now,
+    market: {
+      tick: 0,
+      nextAt: now,
+      prices: Object.fromEntries(INSTRUMENTS.map((i) => [i.id, i.start])),
+      fair: Object.fromEntries(INSTRUMENTS.map((i) => [i.id, i.start])),
+      history: Object.fromEntries(INSTRUMENTS.map((i) => [i.id, [i.start]])),
+    },
+    holdings: {},
+    bonds: 0,
+    properties: [],
+    parks: [],
+    startup: null,
+    startupResults: [],
+    art: [],
+    artLot: null,
+    paper: { edition: 0, event: null, nextAt: now + 60_000, answer: null, unread: false },
   };
 }
 
@@ -140,9 +234,11 @@ export function newGame(now: number): GameState {
       shelf: [],
       totalStamps: 0,
       bestCombo: 0,
+      editionsAnswered: 0,
     },
     settings: { lang: null, buyMode: 1 },
     away: null,
+    fresh: [],
   };
 }
 
