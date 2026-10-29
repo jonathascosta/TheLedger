@@ -1,8 +1,7 @@
 # The Ledger
 
 Read `docs/PRODUCT.md` (what we build), `docs/ARCHITECTURE.md` (how) and `docs/PLAN.md` (what is
-next, and what done means) before changing anything. Until they exist, writing them is the first
-task.
+next, and what done means) before changing anything.
 
 ## Workflow
 
