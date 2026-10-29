@@ -30,6 +30,9 @@ import { money, moneyShort, plain } from '../ui/format.ts';
 
 const MODES: readonly BuyMode[] = [1, 10, 100, 'max'];
 
+/** Names longer than this get a smaller title, so they keep to one line. */
+const LONG_NAME = 20;
+
 function BusinessRow({ state, index }: { state: GameState; index: number }) {
   const b = state.volume.businesses[index]!;
   const name = tk(`biz.${BUSINESSES[index]!.id}`);
@@ -48,7 +51,7 @@ function BusinessRow({ state, index }: { state: GameState; index: number }) {
           <BusinessDoodle index={index} />
         </button>
         <div class="grow">
-          <p class="h3">{name}</p>
+          <p class={`h3 biz-title${name.length > LONG_NAME ? ' long' : ''}`}>{name}</p>
           <p class="small">
             {t('common.perSecond', {
               amount: moneyShort(BUSINESSES[index]!.baseRevenue / BUSINESSES[index]!.cycle),
@@ -90,7 +93,7 @@ function BusinessRow({ state, index }: { state: GameState; index: number }) {
           style={{ minHeight: 0, padding: 0 }}
           onClick={() => go({ name: 'business', index })}
         >
-          <span class="h3 biz-title">{name}</span>
+          <span class={`h3 biz-title${name.length > LONG_NAME ? ' long' : ''}`}>{name}</span>
         </button>
         <p class="small">
           {t('common.level', { level: b.level })} ·{' '}
