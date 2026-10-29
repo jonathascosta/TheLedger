@@ -1,7 +1,7 @@
 import type { ComponentChildren } from 'preact';
 import { useState } from 'preact/hooks';
 import { t } from '../i18n/index.ts';
-import { useSponsorNotice, watch } from '../sponsor.ts';
+import { noAds, useSponsorNotice, watch } from '../sponsor.ts';
 
 interface Props {
   /** What the sponsor offers, in a few words. */
@@ -31,8 +31,8 @@ export function Sponsor({ title, reward, detail, onEarned, spent = false }: Prop
   return (
     <div class={spent ? 'sponsor spent' : 'sponsor'}>
       <span class="sponsor-tape" aria-hidden="true" />
-      <span class="sponsor-mark" aria-hidden="true">
-        {t('sponsor.mark')}
+      <span class={noAds() ? 'sponsor-mark gold' : 'sponsor-mark'} aria-hidden="true">
+        {noAds() ? t('gold.mark') : t('sponsor.mark')}
       </span>
       <p class="sponsor-title">{title}</p>
       <p class="sponsor-reward">{reward}</p>
@@ -44,7 +44,13 @@ export function Sponsor({ title, reward, detail, onEarned, spent = false }: Prop
         aria-label={`${t('sponsor.mark')}: ${title}. ${reward}`}
         onClick={() => void onClick()}
       >
-        {busy ? t('sponsor.loading') : spent ? t('sponsor.spent') : t('sponsor.watch')}
+        {busy
+          ? t('sponsor.loading')
+          : spent
+            ? t('sponsor.spent')
+            : noAds()
+              ? t('sponsor.take')
+              : t('sponsor.watch')}
       </button>
     </div>
   );

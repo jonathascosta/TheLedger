@@ -149,3 +149,13 @@ invoice and its choice. A reward goes through `grant` in the store, which brings
 now before the engine's action. The owner's ad unit comes in at build time
 (`VITE_ADMOB_REWARDED_ID`) and the AdMob app id through the `ADMOB_APP_ID` build setting; both are
 Google's test ids until then (docs/STORE.md).
+
+### The Gold Edition
+
+`src/gold/gold.ts` holds the rules over a `GoldStore` (price, buy, owned, restore): buying sets
+`meta.gold` only when the store says it was bought; at launch `confirmAtLaunch` asks the store
+and removes the flag only on a definite no (a refund), never when the store does not answer
+(`owned` is null). `src/gold/native.ts` is the App Store through `@capgo/native-purchases`
+(StoreKit 2, Swift Package Manager, iOS 15): ownership is the current entitlements without a
+revocation date. The website has no store (`platform().gold` is null). With the flag,
+`sponsor.ts` grants every sponsor at once (`noAds`) and offers sponsors on any platform.

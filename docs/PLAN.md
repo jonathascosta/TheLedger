@@ -107,7 +107,7 @@ calls an action once a reward is earned.
   checks each reward, and closes it early to check nothing is given; a test checks the website
   build has no AdMob code; the iOS workflow builds.
 
-### T12. App: the Gold Edition
+### T12. App: the Gold Edition — done
 
 - The non-consumable purchase through StoreKit with a Capacitor 8 plugin that supports Swift
   Package Manager (`@capgo/native-purchases` or similar), Restore purchases, the flag kept in the

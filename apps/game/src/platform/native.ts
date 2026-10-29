@@ -4,6 +4,7 @@ import { Preferences } from '@capacitor/preferences';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { AdMobAds, TEST_REWARDED_UNIT } from '../ads/admob.ts';
 import { AdConsent } from '../ads/consent.ts';
+import { AppStoreGold } from '../gold/native.ts';
 import type { Storage } from '../persist/storage.ts';
 import type { Platform } from './index.ts';
 
@@ -57,5 +58,6 @@ export async function createNativePlatform(): Promise<Platform> {
       required: () => consent.privacyOptionsRequired,
       show: () => consent.showPrivacyOptions(),
     },
+    gold: new AppStoreGold(),
   };
 }

@@ -1,6 +1,7 @@
 import { Capacitor } from '@capacitor/core';
 import { NO_ADS, wantsTestAds, type AdProvider } from '../ads/ads.ts';
 import { DebugAds } from '../ads/debug.ts';
+import type { GoldStore } from '../gold/gold.ts';
 import { webStorage, type Storage } from '../persist/storage.ts';
 
 /** What differs between the website and the iPhone app. */
@@ -12,6 +13,8 @@ export interface Platform {
   ads: AdProvider;
   /** Google's form to change the player's choices about ads, where the law asks for one. */
   privacy: { required(): boolean; show(): Promise<void> };
+  /** The App Store, for the Gold Edition; none on the website. */
+  gold: GoldStore | null;
 }
 
 const web: Platform = {
@@ -22,6 +25,7 @@ const web: Platform = {
       ? new DebugAds(document)
       : NO_ADS,
   privacy: { required: () => false, show: () => Promise.resolve() },
+  gold: null,
 };
 
 let current: Platform = web;
