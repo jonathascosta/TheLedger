@@ -57,7 +57,7 @@ function BusinessRow({ state, index }: { state: GameState; index: number }) {
         </div>
         <button
           type="button"
-          class="btn"
+          class="btn buy-btn"
           disabled={state.volume.cash < cost}
           onClick={() => act((s) => buyBusiness(s, index))}
         >
@@ -97,33 +97,34 @@ function BusinessRow({ state, index }: { state: GameState; index: number }) {
           {t('common.perSecond', { amount: moneyShort(businessRate(state, index)) })}
           {managed ? ` · ${t('ledger.running')}` : ''}
         </p>
-        <div class={full ? 'bar full' : 'bar'}>
-          <div style={{ width: `${(full ? 1 : fraction) * 100}%` }} />
-        </div>
-      </div>
-      {full ? (
         <button
           type="button"
-          class="stamp-btn green"
-          style={{ minWidth: '96px', fontSize: '17px', minHeight: '50px' }}
+          class={full ? 'bar-btn full' : 'bar-btn'}
+          disabled={!full}
+          aria-label={full ? `${t('ledger.collect')} ${moneyShort(b.till)}` : undefined}
           onClick={() => act((s) => collect(s, index))}
         >
-          {t('ledger.collect')}
-          <br />
-          <span style={{ fontSize: '13px' }}>{moneyShort(b.till)}</span>
+          <span class={full ? 'bar full' : 'bar'}>
+            <span style={{ width: `${(full ? 1 : fraction) * 100}%` }} />
+          </span>
+          {full && (
+            <span class="bar-label" aria-hidden="true">
+              <span class="bar-word">{t('ledger.collect')}&nbsp;</span>
+              {moneyShort(b.till)}
+            </span>
+          )}
         </button>
-      ) : (
-        <button
-          type="button"
-          class="btn"
-          disabled={state.volume.cash < offer.cost}
-          onClick={() => act((s) => buyBusiness(s, index))}
-        >
-          {t('ledger.buy', { count: offer.count })}
-          <br />
-          <strong>{moneyShort(offer.cost)}</strong>
-        </button>
-      )}
+      </div>
+      <button
+        type="button"
+        class="btn buy-btn"
+        disabled={state.volume.cash < offer.cost}
+        onClick={() => act((s) => buyBusiness(s, index))}
+      >
+        {t('ledger.buy', { count: offer.count })}
+        <br />
+        <strong>{moneyShort(offer.cost)}</strong>
+      </button>
     </div>
   );
 }

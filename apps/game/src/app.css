@@ -429,7 +429,8 @@ p {
   overflow: hidden;
 }
 
-.bar > div {
+.bar > div,
+.bar > span {
   position: absolute;
   inset: 0 auto 0 0;
   background: repeating-linear-gradient(
@@ -441,8 +442,61 @@ p {
   );
 }
 
-.bar.full > div {
+.bar.full > div,
+.bar.full > span {
   background: var(--highlight);
+}
+
+/* The till: the progress bar is also the Collect button, so nothing moves when it fills. */
+.bar-btn {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin: -4px 0 -6px;
+  padding: 8px 0;
+  border: none;
+  background: transparent;
+  container-type: inline-size;
+}
+
+.bar-btn .bar {
+  display: block;
+  height: 18px;
+  margin-top: 0;
+}
+
+.bar-btn.full .bar {
+  border-width: 2px;
+}
+
+.bar-label {
+  position: absolute;
+  inset: 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  overflow: hidden;
+  font-family: var(--type);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+/* On a narrow bar only the amount shows. */
+@container (max-width: 128px) {
+  .bar-word {
+    display: none;
+  }
+}
+
+.buy-btn {
+  flex: none;
+  width: 112px;
+  padding: 4px 6px;
 }
 
 .card-link {
