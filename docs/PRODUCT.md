@@ -87,7 +87,7 @@ The approved mock-ups live in the design canvas (owner's link). The rules:
   of the current income per second, times the combo multiplier, times the desk upgrades.
 - **The desk is a boost, not the game.** Early on the $2 floor gets the first businesses open;
   later, fully upgraded and at full combo, stamping 3 to 6 times a second roughly doubles the
-  income while the player taps, and without desk upgrades it adds about a tenth.
+  income while the player taps; without desk upgrades it adds a few percent.
 - Ten stamps fill an invoice; the next one slides in.
 - **Combo:** taps less than 1.2 s apart add a tally mark (up to 20). The multiplier is ×1, ×1.5
   from 5 marks, ×1.75 from 10 and ×2 from 15. A pause resets it.
