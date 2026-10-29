@@ -95,6 +95,9 @@ The approved mock-ups live in the design canvas (owner's link). The rules:
 - **Combo:** taps less than 1.2 s apart add a tally mark (up to 20). The multiplier is ×1, ×1.5
   from 5 marks, ×1.75 from 10 and ×2 from 15. A pause resets it.
 - Desk upgrades multiply the stamp's value.
+- **The golden invoice:** every 5 to 10 minutes of play a golden invoice slides onto the desk and
+  shows on the ledger page for 30 seconds. A tap pays one minute of business income; with a
+  sponsor (see Sponsors) it pays fifteen.
 
 ## Businesses
 
@@ -185,7 +188,7 @@ Pennycoin (PNY), Hashbrown (HSH), Stardust (SDT). No real brand appears in the g
   each business with a manager, rents, bond interest and park income, for the time away (at most
   12 hours), at the offline rate: 10%, plus 15 points with the _Night manager_ partner, plus
   _Night owl_ managers for their business. Market prices move on meanwhile.
-- **Collect** adds it. (Doubling it with a rewarded ad comes later, on iPhone.)
+- **Collect** adds it; **Collect ×2** with a sponsor (the audit, see Sponsors).
 
 ## Achievements
 
@@ -222,16 +225,61 @@ secret until earned. A new one arrives with a stamp on the screen.
 | Fast tills    |      150 | Every cycle 1.5× faster                     |
 | Estate agent  |      200 | Rents ×2                                    |
 
+## Sponsors (rewarded ads)
+
+The game has no ad the player did not ask for: no interstitials, no banners. A **sponsor** is a
+clipping taped onto the page, stamped SPONSORED, that offers a reward for watching a short ad.
+The player taps it, watches, and gets the reward; an ad that is closed early or fails to load
+gives nothing and costs nothing. Rewards are counted in minutes of income, so they matter as much
+in volume IX as in volume I. Daily limits reset at the device's midnight.
+
+| Offer           | Where                | Reward                                                                                           | Limit             |
+| :-------------- | :------------------- | :----------------------------------------------------------------------------------------------- | :---------------- |
+| Overtime        | Front desk           | Stamps ×3 for 3 minutes                                                                          | 6 a day           |
+| Golden invoice  | Desk and ledger page | The golden invoice pays 15 minutes of business income instead of one                             | 10 a day          |
+| Audit           | The absence receipt  | The receipt pays twice                                                                           | One per receipt   |
+| Sponsorship     | Ledger page          | Business profit ×2 for 4 hours, banked up to 12 hours, also while away                           | Up to 12 h banked |
+| Headhunter      | Classifieds          | New candidates for every business without a manager; one is a **star**, whose trait counts twice | 3 a day           |
+| Closing sponsor | Closing the volume   | +10% goodwill on that closing                                                                    | Once a volume     |
+
+- The sponsorship's time runs on the clock, in play and away; an absence's receipt doubles the
+  business lines for the part of the absence it covered.
+- Sponsors exist on iPhone. The website shows none until its ad network is approved; there the
+  golden invoice still pays its one minute.
+- Before the first ad the iPhone app asks for the consent that the law and Apple require (the
+  Google consent form where it applies, then Apple's tracking prompt); declining still shows ads,
+  not personalised.
+
+## The Gold Edition (the purchase)
+
+One purchase, once, on iPhone: the **Gold Edition** of the ledger.
+
+- **×3 business profit, for good:** it survives every closing, like goodwill.
+- **Sponsors without ads:** every sponsor offer is granted with a tap, no ad (the daily limits
+  stay).
+- A gold ribbon bookmark on the ledger's header.
+- **Restore purchases** in Settings brings it back on a new device or after reinstalling.
+
+Why ×3 and not more: ×3 is what one ledger upgrade gives (there are six, each 1,000 times dearer
+than the last); it makes every volume faster without making goodwill and the partners pointless.
+A ×10 would end the game's first weeks in days.
+
 ## Saving
 
 The game saves on the device every few seconds, when it goes to the background and on every
 purchase. One save, versioned; a newer version migrates older saves. Settings can erase it after
 a confirmation.
 
+**Backup:** Settings can copy a **backup code**, one line of text that holds the whole game, to
+paste on another device (Settings, Restore from a code). The code is scrambled and signed: a code
+changed by hand, or cut short, is refused. Before restoring, the game shows what the code holds
+(volume, net worth, the date it was made) and asks to confirm, since it replaces the game on
+this device. The Gold Edition is not in the code; Restore purchases brings it back.
+
 ## Later (not in the first release)
 
 The dynasty (retiring to an heir, eras), special editions (two-week themed notebooks), royalties,
 sports clubs, satellites and the IPO, the stock rules on post-it notes, Game Center achievements
-and leaderboards, cloud saves, rewarded and interstitial ads, in-app purchases (cosmetic covers,
-time savers; never pay-to-win), haptics on every stamp, local notifications, a big-number type
+and leaderboards, cloud saves, ads on the website (once its ad network is approved), more
+purchases (cosmetic covers), haptics on every stamp, local notifications, a big-number type
 past 10^308, the balance simulator with calibration bands.

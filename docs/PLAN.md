@@ -78,8 +78,44 @@ Playwright on the production build, phone profile: the first session (stamp, ope
 collect, buy) and a tour of every tab, in CI on every pull request, with the Chromium that cloud
 sessions already have.
 
+### T10. Engine: sponsor rewards and the Gold Edition's effects
+
+PRODUCT.md, Sponsors and The Gold Edition, in the engine, with no ad or store in sight: the app
+calls an action once a reward is earned.
+
+- Overtime, the golden invoice (its schedule drawn from the volume's seed, its plain and sponsored
+  pay), the audit, the sponsorship (banked hours, its share of an absence), the headhunter (new
+  candidates and the star, whose trait counts twice), the closing sponsor.
+- Daily counts keyed by the device's date, which the app passes in.
+- The Gold Edition as a flag in the save's meta: ×3 business profit.
+- Tests: each reward's value and limit, the sponsorship across an absence, the star's trait,
+  the golden invoice's schedule replays for a seed, an old save migrates.
+
+### T11. App: sponsors on iPhone
+
+- The ads layer from Arrows (`AdProvider`, AdMob on iOS loading ahead, consent and tracking
+  prompt, the AdMob patch), rewarded only; nothing on the website.
+- The SPONSORED clippings for each offer, the golden invoice on the desk and the ledger page,
+  Collect ×2 on the receipt, the closing sponsor in the ceremony. The development build has a test
+  card instead of the SDK, for the end-to-end tests.
+- `docs/STORE.md`: what the owner sets up in AdMob (app and ad unit ids, the consent form).
+
+### T12. App: the Gold Edition
+
+- The non-consumable purchase through StoreKit (a Capacitor plugin), Restore purchases, the
+  flag kept in the save and confirmed by the store at launch; sponsors granted with a tap; the
+  gold ribbon.
+- `docs/STORE.md`: the in-app purchase to create in App Store Connect.
+
+### T13. App: the backup code
+
+- Settings: copy the backup code; restore from a code with a preview and a confirmation.
+- The code: a prefix and version, the save scrambled and signed (HMAC with a key in the app), so
+  a hand-edited or truncated code is refused. Tests: a round trip, a changed character, a cut code,
+  a code from a newer version.
+
 ### Later
 
 Everything in PRODUCT.md, Later: the dynasty, special editions, more classes, rules on post-its,
-Game Center, cloud saves, ads, purchases, haptics, notifications, the big-number type, the
+Game Center, cloud saves, ads on the website, more purchases, haptics, notifications, the big-number type, the
 balance simulator.
