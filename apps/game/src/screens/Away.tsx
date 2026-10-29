@@ -1,6 +1,6 @@
 import { BUSINESSES, collectAway, type AwayReceipt } from '@ledger/engine';
 import { t, tk } from '../i18n/index.ts';
-import { sponsorsOffered } from '../sponsor.ts';
+import { sponsorsOffered, useWatching } from '../sponsor.ts';
 import { act, grant } from '../store.ts';
 import { Sponsor } from '../ui/Sponsor.tsx';
 import { duration, moneyShort, percent } from '../ui/format.ts';
@@ -13,6 +13,7 @@ const NAMES: Record<string, () => string> = {
 
 /** The adding machine's receipt for an absence. */
 export function Away({ receipt }: { receipt: AwayReceipt }) {
+  const watching = useWatching();
   return (
     <div class="modal page">
       <div class="scroll">
@@ -106,6 +107,7 @@ export function Away({ receipt }: { receipt: AwayReceipt }) {
             type="button"
             class="stamp-btn green"
             style={{ alignSelf: 'center', marginTop: '22px', minWidth: '240px' }}
+            disabled={watching}
             onClick={() => act((s) => collectAway(s))}
           >
             {t('away.collect', { amount: moneyShort(receipt.total) })}
