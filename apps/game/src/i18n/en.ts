@@ -457,6 +457,26 @@ export const en = {
   'settings.erase': 'Erase the save',
   'settings.eraseConfirm': 'Erase everything and start again? This cannot be undone.',
   'settings.eraseYes': 'Erase',
+  'settings.backup': 'Backup',
+  'settings.backupNote':
+    'A backup code holds the whole game in one line of text. Paste it on another device, iPhone or website, to carry on there.',
+  'settings.copy': 'Copy backup code',
+  'settings.copied': 'Copied. Keep it somewhere safe.',
+  'settings.copyManual': 'Select the code below and copy it.',
+  'settings.codeLabel': 'Your backup code',
+  'settings.restore': 'Restore from a code',
+  'settings.pasteLabel': 'Paste a backup code here',
+  'settings.read': 'Read the code',
+  'settings.preview': 'Vol. {roman} · net worth {worth} · made {date}',
+  'settings.restoreConfirm':
+    'Replace the game on this device with this one? This cannot be undone.',
+  'settings.restoreYes': 'Restore',
+  'settings.restored': 'Restored.',
+  'settings.error.format': 'That is not a backup code.',
+  'settings.error.signature': 'This code was changed or cut short. Copy it again, whole.',
+  'settings.error.version':
+    'This code comes from a newer version of the game. Update the game first.',
+  'settings.error.broken': 'This code holds a game that cannot be loaded.',
   'settings.about': 'The Ledger: Business Simulator · version {version}',
   'settings.credits': 'Fonts: Caveat, Courier Prime and IM Fell English (SIL Open Font License).',
 

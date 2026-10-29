@@ -116,7 +116,7 @@ calls an action once a reward is earned.
 - Done: unit tests with a fake store (buy, restore, launch offline keeps the flag, a refund
   removes it); the iOS workflow builds.
 
-### T13. App: the backup code
+### T13. App: the backup code — done
 
 - Settings: copy the backup code; restore from a code pasted into a text field, with a preview and
   a confirmation.
