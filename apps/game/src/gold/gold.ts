@@ -1,9 +1,9 @@
-import { setGold, type GameState } from '@ledger/engine';
+import { newGame, setGold, type GameState } from '@ledger/engine';
 
 /** The Gold Edition's product id in App Store Connect (docs/STORE.md). */
 export const GOLD_PRODUCT = 'theledger.gold';
 
-export type BuyOutcome = 'bought' | 'cancelled' | 'failed';
+export type BuyOutcome = 'bought' | 'cancelled' | 'pending' | 'failed';
 
 /**
  * What the game needs of the store (docs/PRODUCT.md, The Gold Edition). `owned` answers null when
@@ -19,6 +19,29 @@ export interface GoldStore {
   restore(): Promise<boolean | null>;
 }
 
+/** A new game that keeps this device's Gold Edition (erasing keeps it; docs/PRODUCT.md). */
+export function newGameKeepingGold(previous: GameState, now: number): GameState {
+  const next = newGame(now);
+  next.meta.gold = previous.meta.gold;
+  return next;
+}
+
+/**
+ * Whether a saved game (its text) holds the Gold Edition: then the app starts no ads at launch,
+ * so a Gold player is never asked for ad consent or tracking.
+ */
+export function goldInSave(text: string | null): boolean {
+  if (!text) return false;
+  try {
+    return (JSON.parse(text) as { meta?: { gold?: unknown } } | null)?.meta?.gold === true;
+  } catch {
+    return false;
+  }
+}
+
+/** Bumped by every purchase or restore: a launch check that answers later is stale. */
+let decided = 0;
+
 /** Applies the store's answer to the save: removed only on a definite no (a refund). */
 export function applyOwnership(state: GameState, owned: boolean | null): void {
   if (owned === null) return;
@@ -30,7 +53,10 @@ export async function confirmAtLaunch(
   store: GoldStore,
   act: (fn: (s: GameState) => void) => void,
 ): Promise<void> {
+  const before = decided;
   const owned = await store.owned().catch(() => null);
+  // A purchase or a restore meanwhile answered more recently.
+  if (decided !== before) return;
   act((s) => applyOwnership(s, owned));
 }
 
@@ -40,7 +66,10 @@ export async function buyGold(
   act: (fn: (s: GameState) => void) => void,
 ): Promise<BuyOutcome> {
   const outcome = await store.buy().catch((): BuyOutcome => 'failed');
-  if (outcome === 'bought') act((s) => setGold(s, true));
+  if (outcome === 'bought') {
+    decided++;
+    act((s) => setGold(s, true));
+  }
   return outcome;
 }
 
@@ -50,6 +79,7 @@ export async function restoreGold(
   act: (fn: (s: GameState) => void) => void,
 ): Promise<boolean | null> {
   const owned = await store.restore().catch(() => null);
+  if (owned !== null) decided++;
   act((s) => applyOwnership(s, owned));
   return owned;
 }

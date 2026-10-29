@@ -161,5 +161,10 @@ Google's test ids until then (docs/STORE.md).
 and removes the flag only on a definite no (a refund), never when the store does not answer
 (`owned` is null). `src/gold/native.ts` is the App Store through `@capgo/native-purchases`
 (StoreKit 2, Swift Package Manager, iOS 15): ownership is the current entitlements without a
-revocation date. The website has no store (`platform().gold` is null). With the flag,
+revocation date. Those are read on the device: with no Apple ID signed in, or another one, they
+are empty and the flag goes, until Restore purchases with the right account. A purchase waiting
+for approval (Ask to Buy) arrives at the next launch. A launch check that answers after a
+purchase or a restore is ignored. A save holding the flag starts no ads at launch (no consent
+form, no tracking prompt, no SDK), and erasing the game keeps the flag. The website has no store
+(`platform().gold` is null). With the flag,
 `sponsor.ts` grants every sponsor at once (`noAds`) and offers sponsors on any platform.

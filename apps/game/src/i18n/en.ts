@@ -629,6 +629,7 @@ export const en = {
   'gold.notFound': 'No purchase to restore.',
   'gold.offline': 'The App Store did not answer. Try again later.',
   'gold.failed': 'The purchase did not go through.',
+  'gold.pending': 'Waiting for approval. It arrives once approved.',
   'gold.busy': 'One moment…',
   'gold.ribbon': 'Gold Edition',
 } as const;

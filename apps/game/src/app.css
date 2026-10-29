@@ -1068,4 +1068,6 @@ p {
 .sponsor-mark.gold {
   border-color: var(--gold-dark);
   color: var(--gold-dark);
+  font-size: 9px;
+  letter-spacing: 0.06em;
 }

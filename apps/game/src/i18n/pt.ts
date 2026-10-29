@@ -607,6 +607,7 @@ export const pt: Record<StringKey, string> = {
   'gold.notFound': 'Nenhuma compra para restaurar.',
   'gold.offline': 'A App Store não respondeu. Tente mais tarde.',
   'gold.failed': 'A compra não foi concluída.',
+  'gold.pending': 'Aguardando aprovação. Ela chega assim que for aprovada.',
   'gold.busy': 'Um momento…',
   'gold.ribbon': 'Edição de Ouro',
 };

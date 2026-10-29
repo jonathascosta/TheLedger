@@ -13,11 +13,13 @@ export const VERSION = '0.1.0';
 function GoldSection({ state, store }: { state: GameState; store: GoldStore }) {
   const [price, setPrice] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
+  const [message, setMessage] = useState<{ text: string; good: boolean } | null>(null);
   useEffect(() => {
     void store.price().then(setPrice);
   }, [store]);
-  const run = async (task: () => Promise<string | null>): Promise<void> => {
+  const run = async (
+    task: () => Promise<{ text: string; good: boolean } | null>,
+  ): Promise<void> => {
     setBusy(true);
     setMessage(null);
     try {
@@ -29,12 +31,17 @@ function GoldSection({ state, store }: { state: GameState; store: GoldStore }) {
   const buy = (): Promise<void> =>
     run(async () => {
       const outcome = await buyGold(store, act);
-      return outcome === 'failed' ? t('gold.failed') : null;
+      if (outcome === 'failed') return { text: t('gold.failed'), good: false };
+      if (outcome === 'pending') return { text: t('gold.pending'), good: true };
+      return null;
     });
   const restore = (): Promise<void> =>
     run(async () => {
       const owned = await restoreGold(store, act);
-      return owned === null ? t('gold.offline') : owned ? t('gold.restored') : t('gold.notFound');
+      if (owned === null) return { text: t('gold.offline'), good: false };
+      return owned
+        ? { text: t('gold.restored'), good: true }
+        : { text: t('gold.notFound'), good: false };
     });
   return (
     <div class="stack" style={{ gap: '8px' }}>
@@ -69,8 +76,12 @@ function GoldSection({ state, store }: { state: GameState; store: GoldStore }) {
         {t('gold.restore')}
       </button>
       {message && (
-        <p class="hand loss" role="status" style={{ fontSize: '18px' }}>
-          {message}
+        <p
+          class={message.good ? 'hand profit' : 'hand loss'}
+          role="status"
+          style={{ fontSize: '18px' }}
+        >
+          {message.text}
         </p>
       )}
     </div>
@@ -130,7 +141,7 @@ export function Settings({ state }: { state: GameState }) {
         )}
       </div>
       {platform().gold && <GoldSection state={state} store={platform().gold!} />}
-      {platform().privacy.required() && (
+      {!state.meta.gold && platform().privacy.required() && (
         <button
           type="button"
           class="btn"

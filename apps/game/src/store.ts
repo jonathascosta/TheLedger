@@ -1,5 +1,6 @@
 import { applyAway, migrate, newGame, tick, type GameState } from '@ledger/engine';
 import { useEffect, useState } from 'preact/hooks';
+import { newGameKeepingGold } from './gold/gold.ts';
 import { webStorage, type Storage } from './persist/storage.ts';
 
 /** The game state, owned by the engine; screens read it and call `act`. */
@@ -51,7 +52,7 @@ export function act<T>(fn: (s: GameState) => T): T {
 
 export function eraseSave(): void {
   storage.erase();
-  state = newGame(Date.now());
+  state = newGameKeepingGold(state, Date.now());
   notify();
   save();
 }

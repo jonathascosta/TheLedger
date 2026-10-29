@@ -11,9 +11,8 @@ export interface PurchasesApi {
   restorePurchases(): Promise<void>;
 }
 
-/** A purchase cancelled by the player: StoreKit's and the plugin's wordings. */
-function cancelled(error: unknown): boolean {
-  return /cancel/i.test(error instanceof Error ? error.message : String(error));
+function message(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
 }
 
 /** The App Store through StoreKit (iOS only; docs/ARCHITECTURE.md, The Gold Edition). */
@@ -37,7 +36,9 @@ export class AppStoreGold implements GoldStore {
       const t = await this.api.purchaseProduct({ productIdentifier: GOLD_PRODUCT });
       return t.productIdentifier === GOLD_PRODUCT ? 'bought' : 'failed';
     } catch (error) {
-      return cancelled(error) ? 'cancelled' : 'failed';
+      // The plugin's wordings: "User cancelled", "Transaction pending" (Ask to Buy).
+      const text = message(error);
+      return /cancel/i.test(text) ? 'cancelled' : /pending/i.test(text) ? 'pending' : 'failed';
     }
   }
 

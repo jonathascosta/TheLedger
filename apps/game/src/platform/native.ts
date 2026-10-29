@@ -4,6 +4,7 @@ import { Preferences } from '@capacitor/preferences';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { AdMobAds, TEST_REWARDED_UNIT } from '../ads/admob.ts';
 import { AdConsent } from '../ads/consent.ts';
+import { goldInSave } from '../gold/gold.ts';
 import { AppStoreGold } from '../gold/native.ts';
 import type { Storage } from '../persist/storage.ts';
 import type { Platform } from './index.ts';
@@ -49,7 +50,9 @@ export async function createNativePlatform(): Promise<Platform> {
     ready: () => consent.ready(),
     onError: report,
   });
-  ads.preload();
+  // A Gold player sees no ad: nothing starts (no consent form, no tracking prompt, no SDK) unless
+  // an ad is needed later, after the store has removed the flag.
+  if (!goldInSave(value)) ads.preload();
   return {
     storage,
     tap: () => void Haptics.impact({ style: ImpactStyle.Light }).catch(() => undefined),
