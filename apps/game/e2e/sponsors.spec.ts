@@ -127,3 +127,58 @@ test('the audit pays the absence receipt twice', async ({ page, context }) => {
     );
   await expect.poll(cash, { timeout: 5000 }).toBeGreaterThanOrEqual(total * 2 * 0.999);
 });
+
+test('the closing sponsor closed early seals the volume without the bonus', async ({
+  page,
+  context,
+}) => {
+  const pt = test.info().project.name.endsWith('-pt');
+  await page.goto('./?ads=test');
+  await page.waitForFunction(() => localStorage.getItem('theledger.save'));
+  const save = await page.evaluate(
+    () =>
+      JSON.parse(localStorage.getItem('theledger.save') ?? 'null') as {
+        volume: { businesses: unknown[] };
+        meta: { lifetimeEarnings: number };
+        lastTick: number;
+      },
+  );
+  save.volume.businesses[0] = { level: 10, progress: 0, till: 0 };
+  save.meta.lifetimeEarnings = 1e17;
+  save.lastTick = Date.now();
+  const second = await context.newPage();
+  await second.addInitScript((text) => {
+    if (!sessionStorage.getItem('seeded')) {
+      localStorage.setItem('theledger.save', text);
+      sessionStorage.setItem('seeded', '1');
+    }
+  }, JSON.stringify(save));
+  await page.close();
+  await second.goto('./?ads=test');
+  await second.locator('.note .btn-link').first().click();
+  await second.locator('.stamp-btn.red').click();
+  await watch(second, pt ? 'Patrocínio do encerramento' : 'Closing sponsor', false);
+  // Sealed, with the claim alone: 150 × sqrt(100) = 1,500 goodwill.
+  await expect(second.locator('.seal-in')).toBeVisible();
+  await expect
+    .poll(() =>
+      second.evaluate(
+        () =>
+          (
+            JSON.parse(localStorage.getItem('theledger.save') ?? '{}') as {
+              meta?: { goodwill?: number; shelf?: unknown[] };
+            }
+          ).meta,
+      ),
+    )
+    .toMatchObject({ goodwill: 1500, shelf: [expect.anything()] });
+});
+
+test('the website’s entry script holds no AdMob code', async ({ page, request }) => {
+  await page.goto('./');
+  const src = await page.locator('script[type="module"][src]').first().getAttribute('src');
+  expect(src).toBeTruthy();
+  const entry = await (await request.get(new URL(src!, page.url()).href)).text();
+  expect(entry.length).toBeGreaterThan(1000);
+  expect(entry).not.toMatch(/AdMob|admob|prepareRewardVideoAd/);
+});

@@ -141,12 +141,16 @@ Preferences, taps the haptic engine on each stamp and styles the status bar.
   so an upgrade of `@capacitor-community/admob` must carry it over.
 - `DebugAds` (`debug.ts`): the test card on the website with `?ads=test`, for the end-to-end
   tests. Without it the website gets `NO_ADS` and shows no sponsor; only `platform/native.ts`
-  imports AdMob (`bundle.test.ts` checks it).
+  imports AdMob (`bundle.test.ts` checks the sources, and an end-to-end test that the built entry
+  script holds none of it).
 
 `src/sponsor.ts` gives the screens `sponsorsOffered()`, `today()` (the device's date for the
 engine's daily limits) and `watch()`; `ui/Sponsor.tsx` is the clipping, `ui/Golden.tsx` the golden
-invoice and its choice. A reward goes through `grant` in the store, which brings the game up to
-now before the engine's action. The owner's ad unit comes in at build time
+invoice and its choice. One ad plays at a time: while it loads or plays, `useWatching()` disables
+the alternatives (Take, Collect, Seal without a sponsor) and a second tap does nothing. A reward
+goes through `grant` in the store, which ticks the game up to now (as play, never as an absence)
+before the engine's action. The closing sponsor's ad closed early seals without the bonus; the
+seal runs once. The owner's ad unit comes in at build time
 (`VITE_ADMOB_REWARDED_ID`) and the AdMob app id through the `ADMOB_APP_ID` build setting; both are
 Google's test ids until then (docs/STORE.md).
 

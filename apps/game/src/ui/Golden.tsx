@@ -7,7 +7,7 @@ import {
   type GameState,
 } from '@ledger/engine';
 import { t } from '../i18n/index.ts';
-import { today, sponsorsOffered } from '../sponsor.ts';
+import { today, sponsorsOffered, useWatching } from '../sponsor.ts';
 import { act, grant } from '../store.ts';
 import { moneyShort } from './format.ts';
 import { Sponsor } from './Sponsor.tsx';
@@ -41,6 +41,7 @@ export function GoldenInvoice({ state }: { state: GameState }) {
 
 /** The taken golden invoice: its minute, or fifteen with a sponsor. Waits while the ad plays. */
 export function GoldenOffer({ state }: { state: GameState }) {
+  const watching = useWatching();
   if (!state.volume.golden.taken) return null;
   const plainValue = goldenValue(state, false);
   return (
@@ -62,6 +63,7 @@ export function GoldenOffer({ state }: { state: GameState }) {
             type="button"
             class="stamp-btn green"
             style={{ minWidth: '240px' }}
+            disabled={watching}
             onClick={() => act((s) => payGolden(s, today(), false))}
           >
             {t('golden.take', { amount: moneyShort(plainValue) })}

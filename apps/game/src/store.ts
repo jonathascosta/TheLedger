@@ -57,11 +57,12 @@ export function eraseSave(): void {
 }
 
 /**
- * Grants a sponsor's reward (docs/ARCHITECTURE.md, Sponsors): the game is brought up to now first,
- * so the time the ad took is paid at the rates it had, then the reward applies.
+ * Grants a sponsor's reward (docs/ARCHITECTURE.md, Sponsors): the game is ticked up to now first,
+ * so the time the ad took is paid at the rates it had (as play, never as an absence, however long
+ * the ad), then the reward applies.
  */
 export function grant<T>(fn: (s: GameState) => T): T {
-  catchUp();
+  tick(state, Date.now());
   return act(fn);
 }
 

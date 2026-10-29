@@ -7,10 +7,10 @@ import {
   PARTNERS,
   type GameState,
 } from '@ledger/engine';
-import { useState } from 'preact/hooks';
+import { useRef, useState } from 'preact/hooks';
 import { Cover, coverFor } from '../art/Covers.tsx';
 import { roman, t, tk } from '../i18n/index.ts';
-import { sponsorsOffered } from '../sponsor.ts';
+import { sponsorsOffered, useWatching } from '../sponsor.ts';
 import { act, grant } from '../store.ts';
 import { switchTab } from '../router.ts';
 import { Page } from '../ui/Page.tsx';
@@ -21,6 +21,9 @@ export function Close({ state }: { state: GameState }) {
   const [sealed, setSealed] = useState<{ number: number; goodwill: number } | null>(null);
   // Confirmed, and the closing sponsor on offer before the seal.
   const [asking, setAsking] = useState(false);
+  // The volume closes once, whatever a late ad answers.
+  const closed = useRef(false);
+  const watching = useWatching();
   const claim = claimable(state);
   const v = state.volume;
   if (sealed) {
@@ -87,6 +90,8 @@ export function Close({ state }: { state: GameState }) {
   }
   const after = GOODWILL_BONUS * (state.meta.goodwill + claim);
   const seal = (sponsored: boolean): void => {
+    if (closed.current) return;
+    closed.current = true;
     const number = state.volume.number;
     const goodwill = (sponsored ? grant : act)((s) => closeVolume(s, Date.now(), sponsored));
     setSealed({ number, goodwill });
@@ -128,8 +133,14 @@ export function Close({ state }: { state: GameState }) {
             title={t('closing.sponsorTitle')}
             reward={t('closing.sponsorReward', { goodwill: plain(closingBonus(claim)) })}
             onEarned={() => seal(true)}
+            onSkipped={() => seal(false)}
           />
-          <button type="button" class="stamp-btn red" onClick={() => seal(false)}>
+          <button
+            type="button"
+            class="stamp-btn red"
+            disabled={watching}
+            onClick={() => seal(false)}
+          >
             {t('closing.without')}
           </button>
         </div>

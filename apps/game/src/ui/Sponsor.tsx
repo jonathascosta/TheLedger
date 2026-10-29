@@ -1,7 +1,6 @@
 import type { ComponentChildren } from 'preact';
-import { useState } from 'preact/hooks';
 import { t } from '../i18n/index.ts';
-import { noAds, useSponsorNotice, watch } from '../sponsor.ts';
+import { noAds, useSponsorNotice, useWatching, watch } from '../sponsor.ts';
 
 interface Props {
   /** What the sponsor offers, in a few words. */
@@ -12,21 +11,20 @@ interface Props {
   detail?: ComponentChildren;
   /** Grants the reward; called only when the ad was watched to the end. */
   onEarned: () => void;
+  /** Called when the ad was closed early (the closing sponsor then seals without it). */
+  onSkipped?: () => void;
   /** Nothing left to offer today (the clipping stays, greyed). */
   spent?: boolean;
 }
 
 /** A sponsor's clipping taped onto the page, stamped SPONSORED (docs/PRODUCT.md, Sponsors). */
-export function Sponsor({ title, reward, detail, onEarned, spent = false }: Props) {
-  const [busy, setBusy] = useState(false);
+export function Sponsor({ title, reward, detail, onEarned, onSkipped, spent = false }: Props) {
+  const busy = useWatching();
   const onClick = async (): Promise<void> => {
-    if (busy || spent) return;
-    setBusy(true);
-    try {
-      if ((await watch()) === 'earned') onEarned();
-    } finally {
-      setBusy(false);
-    }
+    if (spent) return;
+    const outcome = await watch();
+    if (outcome === 'earned') onEarned();
+    else if (outcome === 'skipped') onSkipped?.();
   };
   return (
     <div class={spent ? 'sponsor spent' : 'sponsor'}>
