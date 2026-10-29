@@ -402,10 +402,19 @@ p {
 
 .biz-title {
   --title-size: 22px;
-  font-size: max(15px, min(var(--title-size), calc(100cqi / (var(--chars) * 0.4))));
+  font-size: var(--title-size);
+  overflow-wrap: anywhere;
+  hyphens: auto;
 }
 
-/* Below 340 px the column is too narrow for one line: names wrap at full size. */
+/* Container units arrived in Safari 16; iOS 15 keeps the plain size. */
+@supports (width: 1cqi) {
+  .biz-title {
+    font-size: max(15px, min(var(--title-size), calc(100cqi / (var(--chars) * 0.4))));
+  }
+}
+
+/* Below 340 px the column is too narrow for one line: names wrap (and hyphenate) at full size. */
 @media (max-width: 340px) {
   .biz-title {
     font-size: var(--title-size);

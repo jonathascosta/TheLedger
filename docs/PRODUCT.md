@@ -109,7 +109,7 @@ costs `baseCost × growth^level`. A cycle pays `baseRevenue × level × multipli
 | 4   | Fresh Ink Print Shop / Gráfica Tinta Fresca          |     8,640 |   1.13 |             4,320 |   12 s |
 | 5   | Yellow Cab Co. / Táxis Amarelos                      |   103,680 |   1.12 |            51,840 |   24 s |
 | 6   | Seaside Hotel / Hotel Beira-Mar                      |   1.244 M |   1.11 |           622,080 |   96 s |
-| 7   | Harbour Gazette / Gazeta do Porto                    |   14.93 M |   1.10 |           7.465 M |  384 s |
+| 7   | Umbrella Insurance / Seguradora Guarda-Chuva         |   14.93 M |   1.10 |           7.465 M |  384 s |
 | 8   | Anchor Shipyard / Estaleiro Âncora                   |   179.2 M |   1.09 |           89.58 M | 1536 s |
 | 9   | Transcontinental Railway / Ferrovia Transcontinental |   2.150 B |   1.08 |           1.075 B | 6144 s |
 | 10  | Albatross Airways / Companhia Aérea Albatroz         |   25.80 B |   1.07 |           29.67 B |   10 h |

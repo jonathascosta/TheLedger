@@ -9,7 +9,7 @@ export const SAVE_VERSION = 2;
 /** Version 2 renamed five businesses; their upgrades' ids follow the new names. */
 const RENAMED_BUSINESSES: Readonly<Record<string, string>> = {
   pizza: 'print',
-  cinema: 'newspaper',
+  cinema: 'insurance',
   club: 'shipyard',
   bank: 'railway',
   refinery: 'airline',

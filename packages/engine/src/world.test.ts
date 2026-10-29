@@ -17,7 +17,7 @@ describe('world', () => {
     expect(save?.volume.upgrades).toEqual([
       'cafe.0',
       'print.1',
-      'newspaper.3',
+      'insurance.3',
       'airline.7',
       'all.0',
       'desk.2',
