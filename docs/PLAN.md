@@ -83,39 +83,51 @@ sessions already have.
 PRODUCT.md, Sponsors and The Gold Edition, in the engine, with no ad or store in sight: the app
 calls an action once a reward is earned.
 
-- Overtime, the golden invoice (its schedule drawn from the volume's seed, its plain and sponsored
-  pay), the audit, the sponsorship (banked hours, its share of an absence), the headhunter (new
-  candidates and the star, whose trait counts twice), the closing sponsor.
-- Daily counts keyed by the device's date, which the app passes in.
-- The Gold Edition as a flag in the save's meta: ×3 business profit.
-- Tests: each reward's value and limit, the sponsorship across an absence, the star's trait,
-  the golden invoice's schedule replays for a seed, an old save migrates.
+- New state: the sponsors' timers and daily counts (kept across volumes), the golden invoice's
+  schedule, the headhunter's count and star (in the volume), the Gold flag (in the meta). Old
+  saves load with the defaults.
+- Overtime, the golden invoice (taken by the tap, paid plain or sponsored once the ad ends), the
+  audit, the sponsorship (banked, its share of an absence), the headhunter, the closing sponsor;
+  daily counts keyed by the device's date, which the app passes in.
+- Tests: each reward's value and limit, the sponsorship across an absence, the star's traits,
+  the golden invoice's schedule replays for a seed, the closing bonus leaves later claims alone,
+  an old save loads.
 
 ### T11. App: sponsors on iPhone
 
-- The ads layer from Arrows (`AdProvider`, AdMob on iOS loading ahead, consent and tracking
-  prompt, the AdMob patch), rewarded only; nothing on the website.
+- The ads layer, ported from Arrows to this app (Arrows' is plain DOM, this one is Preact):
+  `AdProvider` with rewarded ads only, AdMob on iOS (loading ahead), the consent form and the
+  tracking prompt, the AdMob patch and its unit test. The website gets none, except the test card
+  when opened with `?ads=test`, for the end-to-end tests.
 - The SPONSORED clippings for each offer, the golden invoice on the desk and the ledger page,
-  Collect ×2 on the receipt, the closing sponsor in the ceremony. The development build has a test
-  card instead of the SDK, for the end-to-end tests.
-- `docs/STORE.md`: what the owner sets up in AdMob (app and ad unit ids, the consent form).
+  Collect ×2 on the receipt, the closing sponsor in the ceremony.
+- Create `docs/STORE.md` with what the owner sets up in AdMob (app and ad unit ids, the consent
+  form); ARCHITECTURE.md describes the layer.
+- Done: an end-to-end test watches the test card for overtime, the audit and the sponsorship and
+  checks each reward, and closes it early to check nothing is given; a test checks the website
+  build has no AdMob code; the iOS workflow builds.
 
 ### T12. App: the Gold Edition
 
-- The non-consumable purchase through StoreKit (a Capacitor plugin), Restore purchases, the
-  flag kept in the save and confirmed by the store at launch; sponsors granted with a tap; the
-  gold ribbon.
-- `docs/STORE.md`: the in-app purchase to create in App Store Connect.
+- The non-consumable purchase through StoreKit with a Capacitor 8 plugin that supports Swift
+  Package Manager (`@capgo/native-purchases` or similar), Restore purchases, the flag kept in the
+  save and confirmed at launch (PRODUCT.md), sponsors granted with a tap, the gold ribbon.
+- `docs/STORE.md`: the in-app purchase to create in App Store Connect; ARCHITECTURE.md: the store.
+- Done: unit tests with a fake store (buy, restore, launch offline keeps the flag, a refund
+  removes it); the iOS workflow builds.
 
 ### T13. App: the backup code
 
-- Settings: copy the backup code; restore from a code with a preview and a confirmation.
-- The code: a prefix and version, the save scrambled and signed (HMAC with a key in the app), so
-  a hand-edited or truncated code is refused. Tests: a round trip, a changed character, a cut code,
-  a code from a newer version.
+- Settings: copy the backup code; restore from a code pasted into a text field, with a preview and
+  a confirmation.
+- The code: a prefix and version, the save without the histories, scrambled and signed with a
+  small synchronous HMAC-SHA-256 in the app (not WebCrypto, which the iOS web view may lack), so a
+  hand-edited or truncated code is refused. ARCHITECTURE.md describes the format.
+- Done: unit tests for a round trip, a changed character, a cut code and a code from a newer
+  version; an end-to-end test copies a code and restores it in a fresh page.
 
 ### Later
 
 Everything in PRODUCT.md, Later: the dynasty, special editions, more classes, rules on post-its,
-Game Center, cloud saves, ads on the website, more purchases, haptics, notifications, the big-number type, the
-balance simulator.
+Game Center, cloud saves, ads on the website, more purchases, haptics, notifications, the
+big-number type, the balance simulator.
