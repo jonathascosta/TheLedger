@@ -39,7 +39,7 @@ they would only slow the release down.
 - Achievements; goodwill, closing the volume, partners, the shelf.
 - Tests: determinism of the market for a seed, goodwill formula, a reset keeps what it should.
 
-### T4. App: the ledger playable in the browser
+### T4. App: the ledger playable in the browser — done (with T5)
 
 - `apps/game` scaffold (Vite, Preact, fonts, theme), store and loop, persistence, the index
   tabs, English and Portuguese strings.
@@ -48,7 +48,7 @@ they would only slow the release down.
   included), Classifieds, Away receipt, Settings.
 - CI builds the app.
 
-### T5. App: investments, paper, achievements, prestige
+### T5. App: investments, paper, achievements, prestige — done (with T4)
 
 - Market (stocks, commodities, crypto) with ink charts and stamp buttons; Portfolio with the
   pencil donut and the class pages (bonds, the city map, startups, art, energy).
