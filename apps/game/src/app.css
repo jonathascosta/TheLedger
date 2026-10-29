@@ -863,8 +863,9 @@ p {
   }
 }
 
-@media (max-width: 340px) {
+@media (max-width: 380px) {
   .card-link .h3 {
     font-size: 18px;
+    overflow-wrap: anywhere;
   }
 }

@@ -111,7 +111,7 @@ export function formatNumberShort(value: number, lang: Lang): string {
     lang,
     Math.abs(scaled) < 10 ? 2 : Math.abs(scaled) < 100 ? 1 : 0,
   );
-  return lang === 'pt' ? `${digits} ${suffix}` : `${digits}${suffix}`;
+  return lang === 'pt' ? `${digits}\u00a0${suffix}` : `${digits}${suffix}`;
 }
 
 /** Money in long form: "$4,812,360", "$4.81 million". */
