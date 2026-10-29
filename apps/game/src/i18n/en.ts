@@ -12,6 +12,8 @@ export const en = {
   'common.level': 'lvl {level}',
   'common.new': 'New!',
 
+  'strip.cash': 'Cash {amount}',
+  'strip.income': '+{amount}/s',
   // Tabs
   'tab.ledger': 'Ledger',
   'tab.market': 'Market',

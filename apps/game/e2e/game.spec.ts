@@ -57,6 +57,19 @@ test('the first session: stamp, open the café, collect, buy', async ({ page }) 
   expect(errors).toEqual([]);
 });
 
+test('the cash stays in sight when the page scrolls', async ({ page }) => {
+  // A short window, so a new game's ledger has something to scroll.
+  await page.setViewportSize({ width: 375, height: 420 });
+  await page.goto('./');
+  const strip = page.locator('.cash-strip');
+  await expect(strip).not.toHaveClass(/\bon\b/);
+  await page.locator('.scroll').evaluate((e) => e.scrollTo(0, 300));
+  await expect(strip).toHaveClass(/\bon\b/);
+  await expect(strip).toContainText('$');
+  await page.locator('.scroll').evaluate((e) => e.scrollTo(0, 0));
+  await expect(strip).not.toHaveClass(/\bon\b/);
+});
+
 test('every tab opens without errors', async ({ page }) => {
   const errors = noErrors(page);
   const w = words(page);
