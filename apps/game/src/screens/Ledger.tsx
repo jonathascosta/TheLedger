@@ -90,12 +90,12 @@ function BusinessRow({ state, index }: { state: GameState; index: number }) {
           style={{ minHeight: 0, padding: 0 }}
           onClick={() => go({ name: 'business', index })}
         >
-          <span class="h3">{name}</span>
+          <span class="h3 biz-title">{name}</span>
         </button>
         <p class="small">
           {t('common.level', { level: b.level })} ·{' '}
           {t('common.perSecond', { amount: moneyShort(businessRate(state, index)) })}
-          {managed ? ` · ${t('ledger.running')}` : ''}
+          {managed ? ` · ${t('ledger.managed')}` : ''}
         </p>
         <button
           type="button"
@@ -150,10 +150,10 @@ export function Ledger({ state }: { state: GameState }) {
   const hint =
     open === 0
       ? t('ledger.hintFirst')
-      : v.businesses.some((b) => b.till > 0) && !v.managers.some((m) => m)
-        ? t('ledger.hintCollect')
-        : open >= 3 && !v.managers.some((m) => m)
-          ? t('ledger.hintManager')
+      : open >= 3 && !v.managers.some((m) => m)
+        ? t('ledger.hintManager')
+        : v.businesses.some((b) => b.till > 0) && !v.managers.some((m) => m)
+          ? t('ledger.hintCollect')
           : null;
   return (
     <Page>
@@ -203,7 +203,7 @@ export function Ledger({ state }: { state: GameState }) {
             <span class="h3" style={{ display: 'block' }}>
               {t('ledger.desk')}
             </span>
-            <span class="tiny">{t('ledger.deskHint')}</span>
+            <span class="tiny">{t('ledger.deskShort')}</span>
           </span>
         </button>
         <button type="button" class="card-link alt" onClick={() => go({ name: 'upgrades' })}>
@@ -212,7 +212,9 @@ export function Ledger({ state }: { state: GameState }) {
             <span class="h3" style={{ display: 'block' }}>
               {t('ledger.upgrades')}
             </span>
-            <span class="tiny">{affordableUpgrades > 0 ? `${affordableUpgrades} ✓` : ' '}</span>
+            <span class="tiny">
+              {affordableUpgrades > 0 ? t('ledger.onOffer', { count: affordableUpgrades }) : ' '}
+            </span>
           </span>
           {affordableUpgrades > 0 && <span class="badge-dot" />}
         </button>
@@ -223,7 +225,13 @@ export function Ledger({ state }: { state: GameState }) {
               <span class="h3" style={{ display: 'block' }}>
                 {t('ledger.classifieds')}
               </span>
-              <span class="tiny">{applicants > 0 ? `${applicants}` : ' '}</span>
+              <span class="tiny">
+                {applicants > 0
+                  ? t(applicants === 1 ? 'ledger.applicant' : 'ledger.applicants', {
+                      count: applicants,
+                    })
+                  : ' '}
+              </span>
             </span>
             {applicants > 0 && v.cash >= 1000 && <span class="badge-dot" />}
           </button>

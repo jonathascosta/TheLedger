@@ -10,7 +10,7 @@ describe('format', () => {
     expect(formatMoney(3.738, 'en')).toBe('$3.74');
     expect(formatMoneyShort(48_000, 'en')).toBe('$48K');
     expect(formatMoneyShort(1_200_000, 'en')).toBe('$1.2M');
-    expect(formatMoneyShort(1_200_000, 'pt')).toBe('$1,2 mi');
+    expect(formatMoneyShort(1_200_000, 'pt')).toBe('$1,2\u00a0mi');
     expect(formatMoneyShort(5e12, 'en')).toBe('$5T');
     expect(formatMoney(2e40, 'en')).toBe('$2e40');
     expect(formatMoneyShort(999_960, 'en')).toBe('$1M');

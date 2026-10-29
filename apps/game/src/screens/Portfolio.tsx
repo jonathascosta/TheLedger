@@ -41,13 +41,13 @@ export function Portfolio({ state }: { state: GameState }) {
     <Page>
       <div class="between">
         <h1 class="h1">{t('portfolio.title')}</h1>
-        <p class="small">{t('portfolio.classes', { open: open.length, locked: locked.length })}</p>
+        <p class="small">{t('portfolio.classes', { open: open.length, total: classes.length })}</p>
       </div>
       <Donut
         parts={open.map((c) => ({ value: c.value, pattern: c.pattern }))}
         label={t('portfolio.chartLabel')}
         center={moneyShort(netWorth(state))}
-        caption={t('portfolio.invested')}
+        caption={t('ledger.netWorth').toLowerCase()}
       />
       <div class="stack" style={{ gap: 0 }}>
         {open.map((c) => (
