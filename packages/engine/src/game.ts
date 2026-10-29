@@ -5,8 +5,6 @@ import type { AwayReceipt, GameState } from './state/state.ts';
 /** Net worth is sampled for the ink chart this often (game ms). */
 export const SAMPLE_EVERY_MS = 10_000;
 export const HISTORY_LENGTH = 180;
-/** A single tick never advances more than this (s); longer gaps are absences. */
-export const MAX_STEP_SECONDS = AWAY_MIN_SECONDS;
 
 /** Cash plus every holding's value. Investments add to it (T3). */
 export function netWorth(state: GameState): number {
@@ -24,7 +22,10 @@ function sample(state: GameState, now: number): void {
   if (v.history.length > HISTORY_LENGTH) v.history.splice(0, v.history.length - HISTORY_LENGTH);
 }
 
-/** Advances the game to `now` (ms). Steps are split so long gaps stay accurate. */
+/**
+ * Advances the game to `now` (ms). Steps are split so long gaps stay accurate. Gaps of a minute or
+ * more are absences: the app routes them through `applyAway`.
+ */
 export function tick(state: GameState, now: number): void {
   let remaining = Math.max(0, (now - state.lastTick) / 1000);
   while (remaining > 0) {
@@ -50,10 +51,7 @@ export function applyAway(state: GameState, now: number): AwayReceipt | null {
   const seconds = Math.min(gap, AWAY_MAX_SECONDS);
   const receipt = awayReceipt(state, seconds);
   // Unmanaged tills fill (one cycle each); managed businesses earn through the receipt.
-  const managers = state.volume.managers.slice();
-  state.volume.managers = state.volume.managers.map(() => null);
-  advanceBusinesses(state, seconds);
-  state.volume.managers = managers;
+  advanceBusinesses(state, seconds, true);
   state.lastTick = now;
   state.volume.lastSampleAt = now;
   if (receipt.total > 0) state.away = receipt;

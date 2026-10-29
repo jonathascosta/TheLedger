@@ -165,11 +165,15 @@ export function buyUpgrade(state: GameState, id: string): ActionResult {
   return OK;
 }
 
-/** Advances every business by `dt` seconds: managed ones run on, the others fill their till. */
-export function advanceBusinesses(state: GameState, dt: number): void {
+/**
+ * Advances every business by `dt` seconds: managed ones run on, the others fill their till.
+ * With `onlyUnmanaged`, managed businesses are left alone (an absence pays them by receipt).
+ */
+export function advanceBusinesses(state: GameState, dt: number, onlyUnmanaged = false): void {
   for (let i = 0; i < BUSINESSES.length; i++) {
     const b = state.volume.businesses[i]!;
     if (b.level === 0) continue;
+    if (onlyUnmanaged && state.volume.managers[i]) continue;
     const { seconds } = cycleOf(state, i);
     if (state.volume.managers[i]) {
       if (b.till > 0) {

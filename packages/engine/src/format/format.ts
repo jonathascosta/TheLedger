@@ -72,13 +72,20 @@ function small(value: number, lang: Lang): string {
   return Math.abs(value) < 1000 ? formatPlain(value, lang, 2) : formatPlain(value, lang, 0);
 }
 
+/** True when a scaled value in [100, 1000) would print as 1000 (move up one unit). */
+function roundsUp(scaled: number): boolean {
+  return scaled >= 999.5;
+}
+
 /** A number in long form: "4,812,360", "4.81 million", "4,81 milhões". */
 export function formatNumberLong(value: number, lang: Lang): string {
   if (!Number.isFinite(value)) return '∞';
   const abs = Math.abs(value);
   if (abs < 1e6) return small(value, lang);
   if (abs >= NAMED_LIMIT) return scientific(value, lang);
-  const index = Math.floor(Math.log10(abs) / 3) - 2;
+  let index = Math.floor(Math.log10(abs) / 3) - 2;
+  if (roundsUp(abs / 10 ** ((index + 2) * 3))) index += 1;
+  if (index >= LONG_EN.length) return scientific(value, lang);
   const scaled = value / 10 ** ((index + 2) * 3);
   const digits = significant(scaled, lang);
   if (lang === 'pt') {
@@ -94,7 +101,9 @@ export function formatNumberShort(value: number, lang: Lang): string {
   const abs = Math.abs(value);
   if (abs < 1000) return formatPlain(value, lang, abs < 10 ? 2 : abs < 100 ? 1 : 0);
   if (abs >= NAMED_LIMIT) return scientific(value, lang);
-  const index = Math.floor(Math.log10(abs) / 3) - 1;
+  let index = Math.floor(Math.log10(abs) / 3) - 1;
+  if (roundsUp(abs / 10 ** ((index + 1) * 3))) index += 1;
+  if (index >= SHORT_EN.length) return scientific(value, lang);
   const scaled = value / 10 ** ((index + 1) * 3);
   const suffix = (lang === 'pt' ? SHORT_PT : SHORT_EN)[index]!;
   const digits = formatPlain(

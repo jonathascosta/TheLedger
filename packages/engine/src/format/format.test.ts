@@ -13,6 +13,7 @@ describe('format', () => {
     expect(formatMoneyShort(1_200_000, 'pt')).toBe('$1,2 mi');
     expect(formatMoneyShort(5e12, 'en')).toBe('$5T');
     expect(formatMoney(2e40, 'en')).toBe('$2e40');
+    expect(formatMoneyShort(999_960, 'en')).toBe('$1M');
   });
 
   it('writes durations', () => {

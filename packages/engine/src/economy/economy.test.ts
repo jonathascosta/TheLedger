@@ -72,6 +72,8 @@ describe('economy', () => {
     const owl = s.volume.managers[0]!.trait === 'nightOwl' ? 0.15 : 0;
     expect(receipt?.total).toBeCloseTo(businessRate(s, 0) * 12 * 3600 * (receipt!.rate + owl), 0);
     collectAway(s);
-    expect(s.volume.cash).toBeGreaterThan(cash);
+    expect(s.volume.cash).toBeCloseTo(cash + receipt!.total, 0);
+    tick(s, T0 + 48 * 3600_000 + 100);
+    expect(s.volume.cash).toBeLessThan(cash + receipt!.total + 20);
   });
 });
