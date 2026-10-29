@@ -30,8 +30,8 @@ describe('world', () => {
 
   it('claims goodwill, keeps the meta and resets the volume', () => {
     const s = newGame(T0);
-    expect(goodwillTotal(1e13)).toBe(150);
-    s.meta.lifetimeEarnings = 4e13;
+    expect(goodwillTotal(1e15)).toBe(150);
+    s.meta.lifetimeEarnings = 4e15;
     s.volume.cash = 1e12;
     s.meta.achievements.million = T0;
     expect(claimable(s)).toBe(300);
