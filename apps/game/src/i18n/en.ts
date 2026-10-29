@@ -636,6 +636,22 @@ export const en = {
   'ads.test.finish': 'Watched to the end',
   'ads.test.skip': 'Close early',
   'settings.privacy': 'Ad choices',
+  // The Gold Edition
+  'sponsor.take': 'Take it',
+  'gold.mark': 'GOLD EDITION',
+  'gold.title': 'Gold Edition',
+  'gold.pitch': 'Business profit ×3 for good, and every sponsor with a tap, no ads.',
+  'gold.buy': 'Buy for {price}',
+  'gold.buyNoPrice': 'Buy',
+  'gold.owned': 'You own the Gold Edition. Thank you!',
+  'gold.restore': 'Restore purchases',
+  'gold.restored': 'Restored: the Gold Edition is back.',
+  'gold.notFound': 'No purchase to restore.',
+  'gold.offline': 'The App Store did not answer. Try again later.',
+  'gold.failed': 'The purchase did not go through.',
+  'gold.pending': 'Waiting for approval. It arrives once approved.',
+  'gold.busy': 'One moment…',
+  'gold.ribbon': 'Gold Edition',
 } as const;
 
 export type StringKey = keyof typeof en;

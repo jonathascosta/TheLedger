@@ -1,5 +1,6 @@
 import { netWorth, type GameState, type Lang } from '@ledger/engine';
 import { useEffect, useRef, useState } from 'preact/hooks';
+import { buyGold, restoreGold, type GoldStore } from '../gold/gold.ts';
 import { setLang, deviceLang, lang, roman, t } from '../i18n/index.ts';
 import { decodeBackup, encodeBackup, type Decoded } from '../persist/backup.ts';
 import { platform } from '../platform/index.ts';
@@ -9,6 +10,85 @@ import { money } from '../ui/format.ts';
 import { Page } from '../ui/Page.tsx';
 
 export const VERSION = '0.1.0';
+
+/** The Gold Edition: buy or restore it (iOS only; docs/PRODUCT.md, The Gold Edition). */
+function GoldSection({ state, store }: { state: GameState; store: GoldStore }) {
+  const [price, setPrice] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState<{ text: string; good: boolean } | null>(null);
+  useEffect(() => {
+    void store.price().then(setPrice);
+  }, [store]);
+  const run = async (
+    task: () => Promise<{ text: string; good: boolean } | null>,
+  ): Promise<void> => {
+    setBusy(true);
+    setMessage(null);
+    try {
+      setMessage(await task());
+    } finally {
+      setBusy(false);
+    }
+  };
+  const buy = (): Promise<void> =>
+    run(async () => {
+      const outcome = await buyGold(store, act);
+      if (outcome === 'failed') return { text: t('gold.failed'), good: false };
+      if (outcome === 'pending') return { text: t('gold.pending'), good: true };
+      return null;
+    });
+  const restore = (): Promise<void> =>
+    run(async () => {
+      const owned = await restoreGold(store, act);
+      if (owned === null) return { text: t('gold.offline'), good: false };
+      return owned
+        ? { text: t('gold.restored'), good: true }
+        : { text: t('gold.notFound'), good: false };
+    });
+  return (
+    <div class="stack" style={{ gap: '8px' }}>
+      <p class="caps">{t('gold.title')}</p>
+      {state.meta.gold ? (
+        <p class="hand profit" style={{ fontSize: '20px' }}>
+          {t('gold.owned')}
+        </p>
+      ) : (
+        <>
+          <p class="hand" style={{ fontSize: '20px', lineHeight: 1.15 }}>
+            {t('gold.pitch')}
+          </p>
+          <button
+            type="button"
+            class="stamp-btn green"
+            style={{ alignSelf: 'flex-start' }}
+            disabled={busy}
+            onClick={() => void buy()}
+          >
+            {busy ? t('gold.busy') : price ? t('gold.buy', { price }) : t('gold.buyNoPrice')}
+          </button>
+        </>
+      )}
+      <button
+        type="button"
+        class="btn-link"
+        style={{ alignSelf: 'flex-start' }}
+        disabled={busy}
+        onClick={() => void restore()}
+      >
+        {t('gold.restore')}
+      </button>
+      {message && (
+        <p
+          class={message.good ? 'hand profit' : 'hand loss'}
+          role="status"
+          style={{ fontSize: '18px' }}
+        >
+          {message.text}
+        </p>
+      )}
+    </div>
+  );
+}
 
 export function Settings({ state }: { state: GameState }) {
   const [confirm, setConfirm] = useState(false);
@@ -63,7 +143,8 @@ export function Settings({ state }: { state: GameState }) {
           </button>
         )}
       </div>
-      {platform().privacy.required() && (
+      {platform().gold && <GoldSection state={state} store={platform().gold!} />}
+      {!state.meta.gold && platform().privacy.required() && (
         <button
           type="button"
           class="btn"

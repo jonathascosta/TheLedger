@@ -179,6 +179,9 @@ export function Ledger({ state }: { state: GameState }) {
           }}
         >
           {t('ledger.header', { roman: roman(v.number) })}
+          {state.meta.gold && (
+            <span class="gold-ribbon" title={t('gold.ribbon')} aria-label={t('gold.ribbon')} />
+          )}
         </p>
         <p class="small">{t('ledger.cash', { amount: moneyShort(v.cash) })}</p>
       </div>

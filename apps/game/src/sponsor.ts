@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 import { platform } from './platform/index.ts';
+import { game } from './store.ts';
 
 /**
  * The app's side of the sponsors (docs/PRODUCT.md, Sponsors): whether they are offered, the
@@ -14,9 +15,14 @@ export function today(now = Date.now()): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 
-/** Whether this platform offers sponsors at all (the website does not). */
+/** Whether sponsors are offered: on iPhone, or anywhere with the Gold Edition. */
 export function sponsorsOffered(): boolean {
-  return platform().ads.available;
+  return platform().ads.available || game().meta.gold;
+}
+
+/** With the Gold Edition a sponsor is granted with a tap, no ad (docs/PRODUCT.md). */
+export function noAds(): boolean {
+  return game().meta.gold;
 }
 
 export type WatchOutcome = 'earned' | 'skipped' | 'none';
@@ -41,6 +47,7 @@ function announce(outcome: WatchOutcome | null): void {
  */
 export async function watch(): Promise<WatchOutcome | null> {
   if (watching) return null;
+  if (noAds()) return 'earned';
   watching = true;
   changed();
   let outcome: WatchOutcome;

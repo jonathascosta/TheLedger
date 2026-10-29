@@ -22,3 +22,17 @@ Until these steps are done the app shows Google's test ads, which never pay.
    asks for tracking permission.
 
 The website shows no sponsors until its AdSense account is approved (docs/PRODUCT.md, Sponsors).
+
+## The Gold Edition (the in-app purchase)
+
+1. App Store Connect, Business: sign the **Paid Apps agreement** and fill in tax and banking.
+2. The app, Monetization, In-App Purchases: create a **Non-Consumable** with the product id
+   **`theledger.gold`** (the code expects exactly this id), reference name "Gold Edition", a price
+   (for example US$ 4.99), and its localizations. App Store Connect allows 30 characters for the
+   display name and 45 for the description:
+   - English: "Gold Edition" / "Profit ×3 for good; sponsors with no ads"
+   - Portuguese (Brazil): "Edição de Ouro" / "Lucro ×3 para sempre; patrocínio sem anúncio"
+3. Add the review screenshot (Settings with the Gold Edition section) and submit the purchase
+   with the next app version.
+4. To try it before release: a Sandbox tester (Users and Access, Sandbox) signed in on the
+   device, or a StoreKit configuration file in Xcode with the same product id.
