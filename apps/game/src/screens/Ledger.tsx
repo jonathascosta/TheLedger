@@ -92,10 +92,10 @@ function BusinessRow({ state, index }: { state: GameState; index: number }) {
         >
           <span class="h3 biz-title">{name}</span>
         </button>
-        <p class="small biz-meta">
+        <p class="small">
           {t('common.level', { level: b.level })} ·{' '}
           {t('common.perSecond', { amount: moneyShort(businessRate(state, index)) })}
-          {managed ? ` · ${t('ledger.running')}` : ''}
+          {managed ? ` · ${t('ledger.managed')}` : ''}
         </p>
         <button
           type="button"
@@ -226,7 +226,11 @@ export function Ledger({ state }: { state: GameState }) {
                 {t('ledger.classifieds')}
               </span>
               <span class="tiny">
-                {applicants > 0 ? t('ledger.applicants', { count: applicants }) : ' '}
+                {applicants > 0
+                  ? t(applicants === 1 ? 'ledger.applicant' : 'ledger.applicants', {
+                      count: applicants,
+                    })
+                  : ' '}
               </span>
             </span>
             {applicants > 0 && v.cash >= 1000 && <span class="badge-dot" />}

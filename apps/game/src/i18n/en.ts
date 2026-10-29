@@ -36,6 +36,8 @@ export const en = {
   'ledger.deskHint': 'Stamp invoices to get paid',
   'ledger.deskShort': 'stamp invoices',
   'ledger.onOffer': '{count} on offer',
+  'ledger.applicant': '{count} applicant',
+  'ledger.managed': 'managed',
   'ledger.applicants': '{count} applicants',
   'ledger.upgrades': 'Upgrades',
   'ledger.paper': 'The Gazette',

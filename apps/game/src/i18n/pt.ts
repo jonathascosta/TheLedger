@@ -35,6 +35,8 @@ export const pt: Record<StringKey, string> = {
   'ledger.deskHint': 'Carimbe faturas para receber',
   'ledger.deskShort': 'carimbe faturas',
   'ledger.onOffer': '{count} à venda',
+  'ledger.applicant': '{count} candidato',
+  'ledger.managed': 'com gerente',
   'ledger.applicants': '{count} candidatos',
   'ledger.upgrades': 'Melhorias',
   'ledger.paper': 'A Gazeta',
