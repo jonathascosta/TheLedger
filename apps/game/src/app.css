@@ -926,3 +926,129 @@ p {
 .cash-strip.on {
   transform: none;
 }
+
+/* A sponsor's clipping, taped onto the page and stamped SPONSORED (docs/PRODUCT.md, Sponsors). */
+.sponsor {
+  position: relative;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 14px 12px;
+  background: var(--newsprint);
+  border: 1px dashed var(--ink-soft);
+  box-shadow: 1px 2px 5px var(--shadow);
+  transform: rotate(-0.8deg);
+}
+
+.sponsor.spent {
+  opacity: 0.6;
+}
+
+.sponsor-tape {
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  width: 74px;
+  height: 18px;
+  margin-left: -37px;
+  background: var(--tape);
+  transform: rotate(2deg);
+}
+
+.sponsor-mark {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  padding: 1px 6px;
+  border: 2px solid var(--loss);
+  color: var(--loss);
+  font-family: var(--type);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  transform: rotate(6deg);
+  opacity: 0.85;
+}
+
+.sponsor-title {
+  font-family: var(--print);
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding-right: 96px;
+}
+
+.sponsor-reward {
+  font-family: var(--hand);
+  font-weight: 700;
+  font-size: 21px;
+  line-height: 1.1;
+}
+
+.sponsor-btn {
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+/* The golden invoice: on the desk and the ledger page for 30 seconds. */
+.golden {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 220px;
+  padding: 10px 18px;
+  background: var(--highlight);
+  border: 3px double var(--gold-dark);
+  color: var(--ink);
+  box-shadow: 2px 3px 8px var(--shadow);
+  transform: rotate(-2deg);
+  animation: golden-in 0.4s ease-out both;
+}
+
+.golden-title {
+  font-family: var(--print);
+  font-size: 20px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.golden-amount {
+  font-family: var(--hand);
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1;
+}
+
+@keyframes golden-in {
+  from {
+    opacity: 0;
+    transform: rotate(-8deg) scale(0.8);
+  }
+}
+
+/* The test card that stands in for an ad (`?ads=test`). */
+.test-ad {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--shadow);
+}
+
+.test-ad-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 320px;
+  padding: 24px;
+  background: var(--paper-white);
+  border: 2px solid var(--ink);
+  text-align: center;
+}

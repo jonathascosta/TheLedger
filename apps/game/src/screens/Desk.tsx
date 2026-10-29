@@ -1,6 +1,9 @@
 import {
   comboMultiplier,
   currentCombo,
+  offerLeft,
+  overtimeFactor,
+  startOvertime,
   stamp,
   stampBase,
   STAMPS_PER_INVOICE,
@@ -13,9 +16,12 @@ import { PaidMark } from '../art/Badges.tsx';
 import { UpgradeIcon } from '../art/UpgradeIcon.tsx';
 import { t, tk } from '../i18n/index.ts';
 import { platform } from '../platform/index.ts';
-import { act } from '../store.ts';
+import { sponsorsOffered, today } from '../sponsor.ts';
+import { act, grant } from '../store.ts';
+import { GoldenInvoice } from '../ui/Golden.tsx';
 import { Page } from '../ui/Page.tsx';
-import { money, moneyShort, plain } from '../ui/format.ts';
+import { Sponsor } from '../ui/Sponsor.tsx';
+import { duration, money, moneyShort, plain } from '../ui/format.ts';
 
 const SPOTS: readonly (readonly [number, number, number])[] = [
   [18, 116, -12],
@@ -55,7 +61,9 @@ export function Desk({ state }: { state: GameState }) {
   const desk = state.volume.desk;
   const combo = currentCombo(state, now);
   const base = stampBase(state);
-  const nextValue = base * comboMultiplier(Math.min(20, combo + 1));
+  const overtime = overtimeFactor(state, now);
+  const nextValue = base * comboMultiplier(Math.min(20, combo + 1)) * overtime;
+  const overtimeLeft = offerLeft(state, 'overtime', today(now));
   const deskUpgrades = UPGRADES.filter(
     (u) => u.effect.kind === 'desk' && !state.volume.upgrades.includes(u.id),
   ).slice(0, 2);
@@ -78,6 +86,7 @@ export function Desk({ state }: { state: GameState }) {
         <h1 class="h1">{t('desk.title')}</h1>
         <p class="small">{t('desk.subtitle')}</p>
       </div>
+      <GoldenInvoice state={state} />
       <div class="invoice-stack">
         <div
           aria-hidden="true"
@@ -197,6 +206,21 @@ export function Desk({ state }: { state: GameState }) {
           ×{plain(comboMultiplier(combo), 2)}
         </p>
       </div>
+      {sponsorsOffered() && (
+        <Sponsor
+          title={t('overtime.title')}
+          reward={t('overtime.reward')}
+          detail={
+            overtime > 1
+              ? t('overtime.running', {
+                  time: duration((state.sponsors.overtimeUntil - now) / 1000),
+                })
+              : t('sponsor.left', { count: overtimeLeft })
+          }
+          spent={overtimeLeft === 0}
+          onEarned={() => grant((s) => startOvertime(s, Date.now(), today()))}
+        />
+      )}
       {deskUpgrades.length > 0 && (
         <>
           <p class="caps">{t('desk.upgrades')}</p>
