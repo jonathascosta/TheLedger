@@ -4,7 +4,7 @@ import { newVolume, type GameState } from '../state/state.ts';
 
 /** Goodwill earned in total from lifetime earnings (PRODUCT.md, Closing the volume). */
 export function goodwillTotal(lifetimeEarnings: number): number {
-  return Math.floor(150 * Math.sqrt(Math.max(0, lifetimeEarnings) / 1e13));
+  return Math.floor(150 * Math.sqrt(Math.max(0, lifetimeEarnings) / 1e15));
 }
 
 /** Goodwill that closing the volume now would claim. */
@@ -12,10 +12,10 @@ export function claimable(state: GameState): number {
   return Math.max(0, goodwillTotal(state.meta.lifetimeEarnings) - state.meta.goodwillClaimed);
 }
 
-/** The pencilled note: closing would at least double the goodwill held, and claim 10 or more. */
+/** The pencilled note: closing would at least double the goodwill held, and claim 25 or more. */
 export function shouldClose(state: GameState): boolean {
   const claim = claimable(state);
-  return claim >= 10 && claim >= state.meta.goodwill;
+  return claim >= 25 && claim >= state.meta.goodwill;
 }
 
 /** Closes the volume: claims goodwill, shelves the book and opens the next volume. */

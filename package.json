@@ -19,7 +19,8 @@
     "typecheck": "tsc -p tsconfig.json && pnpm -r typecheck",
     "test": "vitest run",
     "test:watch": "vitest",
-    "prepare": "husky"
+    "prepare": "husky",
+    "ios:sync": "pnpm --filter @ledger/game build && pnpm --filter @ledger/game exec cap sync ios"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

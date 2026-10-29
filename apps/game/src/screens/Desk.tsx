@@ -12,6 +12,7 @@ import { useState } from 'preact/hooks';
 import { Icon } from '../art/Doodles.tsx';
 import { PaidMark } from '../art/Badges.tsx';
 import { t, tk } from '../i18n/index.ts';
+import { platform } from '../platform/index.ts';
 import { act } from '../store.ts';
 import { Page } from '../ui/Page.tsx';
 import { money, moneyShort, plain } from '../ui/format.ts';
@@ -59,6 +60,7 @@ export function Desk({ state }: { state: GameState }) {
     (u) => u.effect.kind === 'desk' && !state.volume.upgrades.includes(u.id),
   ).slice(0, 2);
   const onStamp = (): void => {
+    platform().tap();
     const result = act((s) => stamp(s, Date.now()));
     const id = state.meta.totalStamps;
     setFloats((f) => [...f.slice(-4), { id, value: result.value, x: 90 + ((id * 37) % 100) }]);

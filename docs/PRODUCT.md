@@ -193,14 +193,14 @@ secret until earned. A new one arrives with a stamp on the screen.
 
 - **Goodwill** is earned from the money made in all volumes (business income, stamps, rents,
   interest, dividends and trading profits):
-  `total = floor(150 × sqrt(lifetime earnings / 10^13))`; closing a volume claims
+  `total = floor(150 × sqrt(lifetime earnings / 10^15))`; closing a volume claims
   `total − claimed so far`.
 - Each goodwill point held adds **2%** to all business profit.
 - Closing the volume resets cash, businesses, managers, upgrades and investments; it keeps
   goodwill, partners, achievements, the shelf and the settings. Volumes are numbered in order:
   Vol. I, II, III…
 - A pencilled note in the ledger suggests closing when the claim would at least double the
-  goodwill held (and is at least 10).
+  goodwill held (and is at least 25), which a steady player reaches in about a day.
 - **The ceremony:** the book closes, a wax seal drops on it and it goes to the **shelf**, where
   every past volume shows its number, its peak net worth and the goodwill it earned.
 - **Partners** are bought with goodwill (spent goodwill no longer adds its 2%):
