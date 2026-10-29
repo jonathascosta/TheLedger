@@ -6,6 +6,7 @@ import { collectAway } from '../away/away.ts';
 import { newGame } from '../state/state.ts';
 import {
   buyBusiness,
+  businessIncome,
   businessRate,
   buyUpgrade,
   collect,
@@ -79,5 +80,18 @@ describe('economy', () => {
     expect(s.volume.cash).toBeCloseTo(cash + total, 0);
     tick(s, T0 + 48 * 3600_000 + 180_100);
     expect(s.volume.cash).toBeLessThan(cash + total + 20);
+  });
+});
+
+describe('the front desk stays a boost', () => {
+  it('pays at most a fifth of a second of income per stamp, fully upgraded at full combo', () => {
+    const s = newGame(T0);
+    s.volume.businesses.forEach((b, i) => (b.level = 100 - i * 8));
+    s.volume.upgrades = ['desk.0', 'desk.1', 'desk.2', 'desk.3', 'desk.4'];
+    let value = 0;
+    for (let i = 0; i < 20; i++) value = stamp(s, T0 + i * 100).value;
+    const income = businessIncome(s);
+    expect(value / income).toBeLessThanOrEqual(0.2);
+    expect(value / income).toBeGreaterThan(0.1);
   });
 });

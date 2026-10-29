@@ -12,6 +12,8 @@ export const en = {
   'common.level': 'lvl {level}',
   'common.new': 'New!',
 
+  'strip.cash': 'Cash {amount}',
+  'strip.income': '+{amount}/s',
   // Tabs
   'tab.ledger': 'Ledger',
   'tab.market': 'Market',
@@ -426,7 +428,7 @@ export const en = {
   'partner.nightManager.name': 'Night manager',
   'partner.nightManager.desc': 'offline earnings +15 points',
   'partner.stampMaker.name': 'Stamp maker',
-  'partner.stampMaker.desc': 'stamps ×5',
+  'partner.stampMaker.desc': 'stamps ×3',
   'partner.headStart.name': 'Head start',
   'partner.headStart.desc': 'every volume starts with $10,000',
   'partner.oldFriends.name': 'Old friends',
