@@ -73,7 +73,10 @@ with the Gold Edition) it calls the reward's action with the time and the device
 (`YYYY-MM-DD`), which keys the daily limits. The multipliers live where they apply: the
 sponsorship and the Gold Edition in `profitPerCycle` (so stamps, the golden invoice and the
 receipt's business lines follow), overtime in `stamp`, the star's weight on each trait, the
-closing bonus in `closeVolume` (added to the goodwill held, not to the goodwill claimed).
+closing bonus in `closeVolume` (added to the goodwill held, not to the goodwill claimed). The
+app ticks the game to now before granting a reward, so time spent watching the ad is not paid at
+the new rate. `tick` moves `lastTick` second by second, so a sponsorship that ends inside a tick
+doubles only the seconds before its end; the bond cap leaves the sponsorship out.
 
 ### Numbers
 

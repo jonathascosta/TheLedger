@@ -160,17 +160,17 @@ move on a market tick every 5 seconds, drawn from random walks seeded by the vol
 market can be replayed exactly (in tests and in support). The Portfolio tab shows the split as a pie coloured in
 pencil, the classes, and the locked ones.
 
-| Class       | Opens at | Rule                                                                                    |
-| :---------- | -------: | :-------------------------------------------------------------------------------------- |
-| Businesses  |       $0 | As above                                                                                |
-| Stocks      |   $100 K | Six companies with their own drift and volatility; buy and sell shares; small dividends |
-| Bonds       |     $1 M | Lend up to three hours of business income; it earns 1% an hour, withdrawable any time   |
-| Real estate |    $10 M | Eight properties on the city map; each pays rent per second and can be sold at 90%      |
-| Commodities |    $50 M | Gold (calm), oil (moves with the news) and coffee; bought and sold by the unit          |
-| Crypto      |   $250 M | Three coins with wild swings                                                            |
-| Startups    |     $1 B | A pitch at a time: invest the ask; after a few minutes it fails or returns 1× to 100×   |
-| Art         |    $10 B | Pieces at auction; value creeps up with noise; selling at auction lands at 80% to 130%  |
-| Energy      |   $100 B | Solar and wind parks: dear, steady income                                               |
+| Class       | Opens at | Rule                                                                                                   |
+| :---------- | -------: | :----------------------------------------------------------------------------------------------------- |
+| Businesses  |       $0 | As above                                                                                               |
+| Stocks      |   $100 K | Six companies with their own drift and volatility; buy and sell shares; small dividends                |
+| Bonds       |     $1 M | Lend up to three hours of business income (without the sponsorship); 1% an hour, withdrawable any time |
+| Real estate |    $10 M | Eight properties on the city map; each pays rent per second and can be sold at 90%                     |
+| Commodities |    $50 M | Gold (calm), oil (moves with the news) and coffee; bought and sold by the unit                         |
+| Crypto      |   $250 M | Three coins with wild swings                                                                           |
+| Startups    |     $1 B | A pitch at a time: invest the ask; after a few minutes it fails or returns 1× to 100×                  |
+| Art         |    $10 B | Pieces at auction; value creeps up with noise; selling at auction lands at 80% to 130%                 |
+| Energy      |   $100 B | Solar and wind parks: dear, steady income                                                              |
 
 The fictional companies: New Moon Telecom (NMTC), Iron Blue Mining (IRNB), Golden
 Cocoa (GLDC), Nimbus Cloud (NMBS), Skylark Airlines (SKYL), Petro Atlantic (PATL). Coins:

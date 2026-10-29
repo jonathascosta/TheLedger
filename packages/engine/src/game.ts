@@ -57,6 +57,8 @@ export function tick(state: GameState, now: number): void {
     advanceBusinesses(state, dt);
     earn(state, passiveRate(state) * dt);
     remaining -= dt;
+    // Each step reads the multipliers in force at its own second (a sponsorship may end inside).
+    state.lastTick = Math.min(now, state.lastTick + dt * 1000);
   }
   advanceWorld(state, now, total);
   advanceGolden(state, now);

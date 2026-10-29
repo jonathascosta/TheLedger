@@ -162,6 +162,7 @@ export {
   buyPartner,
   claimable,
   closeVolume,
+  closingBonus,
   goodwillTotal,
   shouldClose,
 } from './prestige/prestige.ts';

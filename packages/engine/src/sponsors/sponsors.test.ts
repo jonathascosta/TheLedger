@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { GOLDEN_SHOWN_MS, OVERTIME_MS, SPONSORSHIP_MS, goldenGap } from '../data/sponsors.ts';
+import { bondCap } from '../assets/assets.ts';
 import { collectAway } from '../away/away.ts';
 import { businessIncome, levelCost, profitPerCycle } from '../economy/economy.ts';
 import { applyAway, tick } from '../game.ts';
@@ -106,6 +107,60 @@ describe('sponsors', () => {
     tick(s, due + 1);
     takeGolden(s, due + 1);
     expect(payGolden(s, DAY, true)).toBeCloseTo(businessIncome(s) * 60);
+  });
+
+  it('the golden schedule replays for a seed through play', () => {
+    const run = (): number[] => {
+      const s = running();
+      const arrivals: number[] = [];
+      for (let t = T0; t < T0 + 3600_000; t += 1000) {
+        tick(s, t);
+        if (goldenOnDesk(s, t) && !s.volume.golden.taken) {
+          arrivals.push(t - T0);
+          takeGolden(s, t);
+          payGolden(s, DAY, false);
+        }
+      }
+      return arrivals;
+    };
+    const a = run();
+    expect(a.length).toBeGreaterThanOrEqual(5);
+    expect(run()).toEqual(a);
+  });
+
+  it('a sponsorship ending inside a tick doubles only its own seconds', () => {
+    const plain = running();
+    const sponsored = running();
+    sponsored.sponsors.sponsoredUntil = T0 + 1000;
+    plain.volume.managers[1] = sponsored.volume.managers[1] = {
+      name: 'Ana B.',
+      trait: 'negotiator',
+      face: 2,
+    };
+    const before = [plain.volume.cash, sponsored.volume.cash];
+    tick(plain, T0 + 50_000);
+    tick(sponsored, T0 + 50_000);
+    const gainPlain = plain.volume.cash - before[0]!;
+    const gainSponsored = sponsored.volume.cash - before[1]!;
+    expect(gainSponsored / gainPlain).toBeLessThan(1.1);
+  });
+
+  it('the bond cap ignores the sponsorship', () => {
+    const s = running();
+    const cap = bondCap(s);
+    startSponsorship(s, T0, DAY);
+    expect(bondCap(s)).toBeCloseTo(cap);
+  });
+
+  it('a save with partial sponsor records loads and plays', () => {
+    const old = JSON.parse(JSON.stringify(running())) as Record<string, unknown>;
+    old.sponsors = { day: DAY };
+    (old.volume as Record<string, unknown>).golden = { count: 2 };
+    const s = migrate(old, T0)!;
+    expect(offerLeft(s, 'overtime', DAY)).toBe(6);
+    expect(Number.isFinite(s.volume.golden.nextAt)).toBe(true);
+    const receipt = applyAway(s, T0 + 3600_000);
+    expect(receipt?.total).toBeGreaterThan(0);
   });
 
   it('the golden schedule replays for a seed', () => {

@@ -30,7 +30,7 @@ export function awayReceipt(state: GameState, seconds: number, extras?: AwayExtr
   // The sponsorship doubles business profit for the part of the absence it covers.
   const covered = Math.min(
     seconds,
-    Math.max(0, (state.sponsors.sponsoredUntil - state.lastTick) / 1000),
+    Math.max(0, (state.sponsors.sponsoredUntil - state.lastTick) / 1000) || 0,
   );
   const sponsored = 1 + ((SPONSORSHIP_FACTOR - 1) * covered) / Math.max(seconds, 1e-9);
   for (let i = 0; i < BUSINESSES.length; i++) {

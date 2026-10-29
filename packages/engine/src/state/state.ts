@@ -309,6 +309,16 @@ export function migrate(raw: unknown, now: number): GameState | null {
   // Fill any field a development build may have missed.
   const fresh = newGame(now);
   const volume = { ...newVolume(save.volume.number, now), ...save.volume };
+  // Nested records are filled field by field, so a partial one keeps working.
+  const seed = typeof volume.seed === 'string' ? volume.seed : `vol:${volume.number}:${now}`;
+  const golden = save.volume.golden as Partial<GoldenState> | undefined;
+  volume.golden = {
+    count: 0,
+    nextAt: now + goldenGap(seed, golden?.count ?? 0),
+    until: null,
+    taken: false,
+    ...golden,
+  };
   if (save.version < 2 && Array.isArray(volume.upgrades)) {
     volume.upgrades = (volume.upgrades as unknown[])
       .filter((id): id is string => typeof id === 'string')
@@ -320,6 +330,11 @@ export function migrate(raw: unknown, now: number): GameState | null {
     version: SAVE_VERSION,
     volume,
     meta: { ...fresh.meta, ...save.meta },
+    sponsors: {
+      ...fresh.sponsors,
+      ...save.sponsors,
+      counts: { ...save.sponsors?.counts },
+    },
     settings: { ...fresh.settings, ...save.settings },
   };
 }

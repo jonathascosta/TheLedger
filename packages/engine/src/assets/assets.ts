@@ -14,12 +14,13 @@ import {
   STARTUP_SECTORS,
 } from '../data/assets.ts';
 import {
+  type ActionResult,
   businessIncome,
   earn,
   hasPartner,
-  spend,
   OK,
-  type ActionResult,
+  spend,
+  sponsorshipFactor,
 } from '../economy/economy.ts';
 import { createRng } from '../rng/rng.ts';
 import type { GameState, StartupResult } from '../state/state.ts';
@@ -30,9 +31,12 @@ export function bondRate(state: GameState): number {
   return BOND_RATE * (hasPartner(state, 'bondDesk') ? 2 : 1);
 }
 
-/** The most that can be lent: a few hours of business income. */
+/**
+ * The most that can be lent: a few hours of business income, without the sponsorship, so a few
+ * sponsored hours do not leave larger bonds for the rest of the volume.
+ */
 export function bondCap(state: GameState): number {
-  return Math.max(1e6, businessIncome(state) * BOND_CAP_SECONDS);
+  return Math.max(1e6, (businessIncome(state) / sponsorshipFactor(state)) * BOND_CAP_SECONDS);
 }
 
 export function lend(state: GameState, amount: number): ActionResult {
