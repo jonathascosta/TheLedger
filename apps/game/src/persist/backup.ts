@@ -1,10 +1,12 @@
 import {
   EDITION_SECONDS,
   MARKET_TICK_SECONDS,
+  applyAway,
   migrate,
   netWorth,
   restartGolden,
   SAVE_VERSION,
+  tick,
   type GameState,
 } from '@ledger/engine';
 import { hmacSha256, sha256 } from './sha256.ts';
@@ -166,6 +168,12 @@ function unpack(scrambled: string, now: number): Decoded {
   );
   state.volume.history = [netWorth(state)];
   restartClock(state, now);
+  // A game that loads but would stop the engine (a forged field of the wrong shape) is refused:
+  // a minute of play and an hour away on copies must run. JSON copies: iOS 15.0 has no
+  // structuredClone.
+  const copy = (): GameState => JSON.parse(JSON.stringify(state)) as GameState;
+  tick(copy(), now + 60_000);
+  applyAway(copy(), now + 3600_000);
   return { ok: true, state, madeAt: payload.made };
 }
 

@@ -861,6 +861,10 @@ p {
 
 /* Small phones (375 px and below): tighter business rows so names fit on one line more often. */
 @media (max-width: 380px) {
+  .stamp-btn {
+    letter-spacing: 0.06em;
+  }
+
   .biz {
     gap: 8px;
   }

@@ -213,6 +213,11 @@ describe('the backup code', () => {
     (noHoldings.volume as { holdings: unknown }).holdings = null;
     const noVolume = save();
     (noVolume as { volume: unknown }).volume = 'nope';
+    // Loads, but would stop the engine.
+    const badPartners = save();
+    (badPartners.meta as { partners: unknown }).partners = 7;
+    const badBusiness = save();
+    (badBusiness.volume.businesses as unknown[])[0] = null;
     const payloads: Record<string, unknown> = {
       null: null,
       number: 42,
@@ -225,6 +230,8 @@ describe('the backup code', () => {
       'market null': { made: T0, save: noMarket },
       'holdings null': { made: T0, save: noHoldings },
       'volume not an object': { made: T0, save: noVolume },
+      'partners not a list': { made: T0, save: badPartners },
+      'a business null': { made: T0, save: badBusiness },
     };
     for (const [name, payload] of Object.entries(payloads))
       expect([name, decodeBackup(sealBackup(payload), T0)]).toEqual([
