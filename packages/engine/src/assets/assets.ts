@@ -189,10 +189,10 @@ export function buyArt(state: GameState): ActionResult {
   return OK;
 }
 
-/** Art values creep up with noise, once per market tick. */
+/** Art values creep up with noise, once per market tick (about 1% an hour, ±). */
 export function artTick(state: GameState): void {
   const rng = createRng(state.volume.seed).fork('artValue').fork(String(state.volume.market.tick));
-  for (const piece of state.volume.art) piece.value *= Math.exp(0.0008 + 0.01 * rng.normal());
+  for (const piece of state.volume.art) piece.value *= Math.exp(1.5e-5 + 0.004 * rng.normal());
 }
 
 /** Sells a piece at auction: 80% to 130% of its value. */

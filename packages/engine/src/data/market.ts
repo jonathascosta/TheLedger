@@ -11,7 +11,11 @@ export interface InstrumentDef {
   readonly ticker: string;
   readonly sector: string;
   readonly start: number;
-  /** Fair value's drift per tick (log). */
+  /**
+   * Fair value's drift per tick (log): about 0.5% to 1.5% an hour for stocks, flat for coins.
+   * With the mean reversion, a price wanders about vol / sqrt(0.02) around its fair value, so a
+   * short hold can lose.
+   */
   readonly drift: number;
   /** Volatility per tick (log). */
   readonly vol: number;
@@ -26,7 +30,7 @@ export const INSTRUMENTS: readonly InstrumentDef[] = [
     ticker: 'NMTC',
     sector: 'telecom',
     start: 120,
-    drift: 0.0004,
+    drift: 1.5e-5,
     vol: 0.012,
     dividend: 1e-5,
   },
@@ -36,7 +40,7 @@ export const INSTRUMENTS: readonly InstrumentDef[] = [
     ticker: 'IRNB',
     sector: 'mining',
     start: 45,
-    drift: 0.0003,
+    drift: 1e-5,
     vol: 0.015,
     dividend: 2e-5,
   },
@@ -46,7 +50,7 @@ export const INSTRUMENTS: readonly InstrumentDef[] = [
     ticker: 'GLDC',
     sector: 'food',
     start: 80,
-    drift: 0.0003,
+    drift: 1e-5,
     vol: 0.008,
     dividend: 2e-5,
   },
@@ -56,7 +60,7 @@ export const INSTRUMENTS: readonly InstrumentDef[] = [
     ticker: 'NMBS',
     sector: 'tech',
     start: 210,
-    drift: 0.0006,
+    drift: 2e-5,
     vol: 0.02,
     dividend: 0,
   },
@@ -66,7 +70,7 @@ export const INSTRUMENTS: readonly InstrumentDef[] = [
     ticker: 'SKYL',
     sector: 'airline',
     start: 60,
-    drift: 0.0002,
+    drift: 8e-6,
     vol: 0.016,
     dividend: 1e-5,
   },
@@ -76,7 +80,7 @@ export const INSTRUMENTS: readonly InstrumentDef[] = [
     ticker: 'PATL',
     sector: 'oil',
     start: 95,
-    drift: 0.0003,
+    drift: 1e-5,
     vol: 0.012,
     dividend: 3e-5,
   },
@@ -86,7 +90,7 @@ export const INSTRUMENTS: readonly InstrumentDef[] = [
     ticker: 'GOLD',
     sector: 'gold',
     start: 1800,
-    drift: 0.0002,
+    drift: 6e-6,
     vol: 0.005,
     dividend: 0,
   },
@@ -96,7 +100,7 @@ export const INSTRUMENTS: readonly InstrumentDef[] = [
     ticker: 'OIL',
     sector: 'oil',
     start: 75,
-    drift: 0.0002,
+    drift: 5e-6,
     vol: 0.014,
     dividend: 0,
   },
@@ -106,7 +110,7 @@ export const INSTRUMENTS: readonly InstrumentDef[] = [
     ticker: 'COFFEE',
     sector: 'food',
     start: 2.1,
-    drift: 0.0002,
+    drift: 5e-6,
     vol: 0.01,
     dividend: 0,
   },
@@ -116,7 +120,7 @@ export const INSTRUMENTS: readonly InstrumentDef[] = [
     ticker: 'PNY',
     sector: 'crypto',
     start: 0.8,
-    drift: 0.0008,
+    drift: 0,
     vol: 0.04,
     dividend: 0,
   },
@@ -126,7 +130,7 @@ export const INSTRUMENTS: readonly InstrumentDef[] = [
     ticker: 'HSH',
     sector: 'crypto',
     start: 140,
-    drift: 0.0006,
+    drift: 0,
     vol: 0.035,
     dividend: 0,
   },
@@ -136,7 +140,7 @@ export const INSTRUMENTS: readonly InstrumentDef[] = [
     ticker: 'SDT',
     sector: 'crypto',
     start: 12_000,
-    drift: 0.0005,
+    drift: 0,
     vol: 0.03,
     dividend: 0,
   },
@@ -151,7 +155,7 @@ export const MARKET_TICK_SECONDS = 5;
 /** Price history kept per instrument, in ticks. */
 export const PRICE_HISTORY = 120;
 /** How fast a price returns to its fair value, per tick. */
-export const MEAN_REVERSION = 0.04;
+export const MEAN_REVERSION = 0.01;
 
 /** Asset classes and the peak net worth that opens each (PRODUCT.md, Investments). */
 export type AssetClass =
