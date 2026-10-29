@@ -155,7 +155,10 @@ export function Ledger({ state }: { state: GameState }) {
       u.cost <= v.cash &&
       (u.effect.kind !== 'business' || v.businesses[u.effect.business]!.level > 0),
   ).length;
-  const applicants = candidates(state).length;
+  const list = candidates(state);
+  const applicants = list.length;
+  // The dot asks for a hire only when one of the applicants can be paid now.
+  const affordableApplicant = list.some((c) => c.cost <= v.cash);
   const claim = claimable(state);
   const factor = (1 + GOODWILL_BONUS * (state.meta.goodwill + claim)) / goodwillMultiplier(state);
   const hint =
@@ -248,7 +251,7 @@ export function Ledger({ state }: { state: GameState }) {
                   : ' '}
               </span>
             </span>
-            {applicants > 0 && v.cash >= 1000 && <span class="badge-dot" />}
+            {affordableApplicant && <span class="badge-dot" />}
           </button>
         )}
         {isUnlocked(state, 'stocks') && (
