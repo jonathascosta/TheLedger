@@ -21,7 +21,7 @@ they would only slow the release down.
 
 `PRODUCT.md`, `ARCHITECTURE.md`, this plan.
 
-### T2. Engine: the economy
+### T2. Engine: the economy — done
 
 - Formats (EN and PT, long and short), the data tables (businesses, upgrades, managers, desk),
   `GameState`, `newGame`, saves with a version.
