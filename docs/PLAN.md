@@ -60,7 +60,7 @@ they would only slow the release down.
 - The `Website` workflow publishes `apps/game/dist` to GitHub Pages; the game works offline once
   loaded (fonts bundled). A smoke test in a real browser of the first session's steps.
 
-### T7. iOS wrapper
+### T7. iOS wrapper — done
 
 - Capacitor config, `apps/game/ios` (Swift Package Manager), Preferences storage on iOS, safe
   areas, status bar, `pnpm ios:sync`, an `iOS` workflow building on macOS.

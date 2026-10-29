@@ -104,5 +104,9 @@ from `main` (the owner sets Settings › Pages › Source to "GitHub Actions" on
 ## iOS
 
 Capacitor wraps `apps/game/dist` in `apps/game/ios` (Swift Package Manager, no CocoaPods). The
-iOS build runs on macOS only; `pnpm ios:sync` builds the app and copies it into the Xcode
-project.
+iOS build runs on macOS only (the `iOS` workflow builds it for the simulator, unsigned);
+`pnpm ios:sync` builds the app and copies it into the Xcode project.
+
+`src/platform/` hides what differs: on the website the save lives in `localStorage`; in the app
+`platform/native.ts` (loaded only there, with a dynamic import) keeps it in Capacitor
+Preferences, taps the haptic engine on each stamp and styles the status bar.
