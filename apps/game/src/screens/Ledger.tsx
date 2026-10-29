@@ -109,7 +109,8 @@ function BusinessRow({ state, index }: { state: GameState; index: number }) {
           </span>
           {full && (
             <span class="bar-label" aria-hidden="true">
-              {t('ledger.collect')} {moneyShort(b.till)}
+              <span class="bar-word">{t('ledger.collect')}&nbsp;</span>
+              {moneyShort(b.till)}
             </span>
           )}
         </button>
