@@ -18,11 +18,11 @@ It runs in the browser and, wrapped with Capacitor, on iPhone: one code base for
 
 ## Status
 
-| Area                                              | State                                      |
-| :------------------------------------------------ | :----------------------------------------- |
-| [`packages/engine`](packages/engine/src/index.ts) | Seeded RNG; the economy comes next         |
-| `apps/game`                                       | Not started: the web app, then iOS         |
-| CI                                                | Lint, format, typecheck, unit tests, build |
+| Area                                              | State                                                                                         |
+| :------------------------------------------------ | :-------------------------------------------------------------------------------------------- |
+| [`packages/engine`](packages/engine/src/index.ts) | Seeded RNG; the economy comes next                                                            |
+| `apps/game`                                       | Not started: the web app, then iOS                                                            |
+| CI                                                | Lint, format, typecheck, unit tests, build; Playwright end to end; the iOS build; the website |
 
 ## Quick start
 
@@ -35,11 +35,12 @@ pnpm install
 pnpm dev   # the game at http://localhost:5173
 ```
 
-| Command                                        | What it does                                      |
-| :--------------------------------------------- | :------------------------------------------------ |
-| `pnpm test`                                    | Unit tests for every package (seconds)            |
-| `pnpm lint` · `pnpm format` · `pnpm typecheck` | Type-aware ESLint, Prettier, and `tsc` everywhere |
-| `pnpm build`                                   | Builds every package                              |
+| Command                                        | What it does                                                                                    |
+| :--------------------------------------------- | :---------------------------------------------------------------------------------------------- |
+| `pnpm test`                                    | Unit tests for every package (seconds)                                                          |
+| `pnpm lint` · `pnpm format` · `pnpm typecheck` | Type-aware ESLint, Prettier, and `tsc` everywhere                                               |
+| `pnpm test:e2e`                                | Playwright on the production build: the first session, every tab, an absence (phone, EN and PT) |
+| `pnpm build`                                   | Builds every package                                                                            |
 
 A Husky pre-commit hook runs `lint`, `format:check`, `typecheck` and `test`.
 

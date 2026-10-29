@@ -72,7 +72,7 @@ line where they can, ledger cards that say what they count ("2 on offer", "3 app
 manager hint before the collect hint once three businesses are open, the locked market showing
 how far the player is from opening it, the portfolio's wording.
 
-### T9. End-to-end test in CI
+### T9. End-to-end test in CI — done
 
 Playwright on the production build, phone profile: the first session (stamp, open the café,
 collect, buy) and a tour of every tab, in CI on every pull request, with the Chromium that cloud
