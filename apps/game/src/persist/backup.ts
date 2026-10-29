@@ -1,4 +1,12 @@
-import { migrate, netWorth, SAVE_VERSION, type GameState } from '@ledger/engine';
+import {
+  EDITION_SECONDS,
+  MARKET_TICK_SECONDS,
+  migrate,
+  netWorth,
+  restartGolden,
+  SAVE_VERSION,
+  type GameState,
+} from '@ledger/engine';
 import { hmacSha256, sha256 } from './sha256.ts';
 
 /**
@@ -99,7 +107,11 @@ export function encodeBackup(state: GameState, now: number): string {
   delete (save.volume.market as Partial<GameState['volume']['market']>).history;
   // The Gold Edition belongs to the device.
   delete (save.meta as Partial<GameState['meta']>).gold;
-  const payload: Payload = { made: now, save };
+  return sealBackup({ made: now, save });
+}
+
+/** Scrambles and signs any payload; exported for the tests, which forge malformed codes. */
+export function sealBackup(payload: unknown): string {
   const body = PREFIX + toBase64Url(scramble(utf8(JSON.stringify(payload))));
   return `${body}.${sign(body)}`;
 }
@@ -115,26 +127,40 @@ export function decodeBackup(text: string, now: number = Date.now()): Decoded {
   const body = code.slice(0, dot);
   if (body.length <= PREFIX.length || sign(body) !== code.slice(dot + 1))
     return { ok: false, error: 'signature' };
-  const bytes = fromBase64Url(body.slice(PREFIX.length));
-  if (!bytes) return { ok: false, error: 'broken' };
-  let payload: Payload;
+  // Past the signature the code came from the app, or from someone with its key: whatever it
+  // holds, a save that does not load is 'broken', never an exception.
   try {
-    payload = JSON.parse(
-      new TextDecoder('utf-8', { fatal: true }).decode(scramble(bytes)),
-    ) as Payload;
+    return unpack(body.slice(PREFIX.length), now);
   } catch {
     return { ok: false, error: 'broken' };
   }
-  const save = payload.save as Partial<GameState> | null;
+}
+
+function isRecord(value: unknown): boolean {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function unpack(scrambled: string, now: number): Decoded {
+  const bytes = fromBase64Url(scrambled);
+  if (!bytes) return { ok: false, error: 'broken' };
+  const payload = JSON.parse(
+    new TextDecoder('utf-8', { fatal: true }).decode(scramble(bytes)),
+  ) as Partial<Payload> | null;
+  if (typeof payload !== 'object' || payload === null) return { ok: false, error: 'broken' };
+  const save = payload.save as Partial<GameState> | null | undefined;
   if (typeof payload.made !== 'number' || typeof save !== 'object' || save === null)
     return { ok: false, error: 'broken' };
+  if (!isRecord(save.volume) || !isRecord(save.meta)) return { ok: false, error: 'broken' };
   if (typeof save.version === 'number' && save.version > SAVE_VERSION)
     return { ok: false, error: 'version' };
   const state = migrate(save, now);
-  if (!state || typeof state.volume.market !== 'object') return { ok: false, error: 'broken' };
+  const market = state?.volume.market as GameState['volume']['market'] | null | undefined;
+  if (!state || typeof market !== 'object' || market === null)
+    return { ok: false, error: 'broken' };
   // Not in the code: the device's own Gold Edition comes back with the restore.
   state.meta.gold = false;
-  const market = state.volume.market;
+  // Announced on the device the code came from.
+  state.fresh = [];
   market.history = Object.fromEntries(
     Object.entries(market.prices).map(([id, price]) => [id, [price]]),
   );
@@ -146,13 +172,15 @@ export function decodeBackup(text: string, now: number = Date.now()): Decoded {
 /**
  * A restored game goes on from `now`: the time since the code was made earns nothing (the same
  * hours went on earning on the device it came from), so there is no absence to receipt. The
- * market and the paper restart from now, as after an absence; an uncollected receipt that was
- * already in the save stays.
+ * market, the paper and the golden invoice restart from now, as after an absence; an uncollected
+ * receipt that was already in the save stays.
  */
 export function restartClock(state: GameState, now: number): void {
   const v = state.volume;
   state.lastTick = now;
   v.lastSampleAt = now;
-  v.market.nextAt = Math.max(v.market.nextAt, now);
-  v.paper.nextAt = Math.max(v.paper.nextAt, now + 30_000);
+  // Clamped both ways: a device whose clock ran ahead must not freeze the market or the paper.
+  v.market.nextAt = Math.min(Math.max(v.market.nextAt, now), now + MARKET_TICK_SECONDS * 1000);
+  v.paper.nextAt = Math.min(Math.max(v.paper.nextAt, now + 30_000), now + EDITION_SECONDS * 1000);
+  restartGolden(state, now);
 }

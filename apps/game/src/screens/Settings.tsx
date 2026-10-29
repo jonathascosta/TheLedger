@@ -1,5 +1,5 @@
 import { netWorth, type GameState, type Lang } from '@ledger/engine';
-import { useRef, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { setLang, deviceLang, lang, roman, t } from '../i18n/index.ts';
 import { decodeBackup, encodeBackup, type Decoded } from '../persist/backup.ts';
 import { act, eraseSave, game, restoreGame } from '../store.ts';
@@ -85,6 +85,20 @@ function Backup() {
   const [decoded, setDecoded] = useState<Decoded | null>(null);
   const [restored, setRestored] = useState(false);
   const box = useRef<HTMLTextAreaElement>(null);
+  const result = useRef<HTMLDivElement>(null);
+
+  // The preview and its Restore button may open below the fold on a small phone.
+  useEffect(() => {
+    if (decoded) result.current?.scrollIntoView({ block: 'nearest' });
+  }, [decoded]);
+
+  const read = (): void => {
+    try {
+      setDecoded(decodeBackup(pasted, Date.now()));
+    } catch {
+      setDecoded({ ok: false, error: 'broken' });
+    }
+  };
 
   const copy = async (): Promise<void> => {
     const text = encodeBackup(game(), Date.now());
@@ -154,12 +168,7 @@ function Backup() {
         }}
       />
       <div>
-        <button
-          type="button"
-          class="btn alt"
-          disabled={pasted.trim() === ''}
-          onClick={() => setDecoded(decodeBackup(pasted, Date.now()))}
-        >
+        <button type="button" class="btn alt" disabled={pasted.trim() === ''} onClick={read}>
           {t('settings.read')}
         </button>
       </div>
@@ -168,33 +177,35 @@ function Backup() {
           {t('settings.restored')}
         </p>
       )}
-      {decoded &&
-        (decoded.ok ? (
-          <div class="stack">
-            <p class="hand" style={{ fontSize: '20px' }}>
-              {t('settings.preview', {
-                roman: roman(decoded.state.volume.number),
-                worth: money(netWorth(decoded.state)),
-                date: madeOn(decoded.madeAt),
-              })}
-            </p>
-            <p class="hand loss" style={{ fontSize: '20px' }}>
-              {t('settings.restoreConfirm')}
-            </p>
-            <div class="row">
-              <button type="button" class="stamp-btn red" onClick={() => restore(decoded.state)}>
-                {t('settings.restoreYes')}
-              </button>
-              <button type="button" class="btn alt" onClick={() => setDecoded(null)}>
-                {t('common.cancel')}
-              </button>
+      <div ref={result}>
+        {decoded &&
+          (decoded.ok ? (
+            <div class="stack">
+              <p class="hand" style={{ fontSize: '20px' }}>
+                {t('settings.preview', {
+                  roman: roman(decoded.state.volume.number),
+                  worth: money(netWorth(decoded.state)),
+                  date: madeOn(decoded.madeAt),
+                })}
+              </p>
+              <p class="hand loss" style={{ fontSize: '20px' }}>
+                {t('settings.restoreConfirm')}
+              </p>
+              <div class="row">
+                <button type="button" class="stamp-btn red" onClick={() => restore(decoded.state)}>
+                  {t('settings.restoreYes')}
+                </button>
+                <button type="button" class="btn alt" onClick={() => setDecoded(null)}>
+                  {t('common.cancel')}
+                </button>
+              </div>
             </div>
-          </div>
-        ) : (
-          <p class="note" role="alert">
-            {t(`settings.error.${decoded.error}`)}
-          </p>
-        ))}
+          ) : (
+            <p class="note" role="alert">
+              {t(`settings.error.${decoded.error}`)}
+            </p>
+          ))}
+      </div>
     </section>
   );
 }

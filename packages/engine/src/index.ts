@@ -58,6 +58,7 @@ export {
   goldenValue,
   headhunt,
   payGolden,
+  restartGolden,
   offerLeft,
   overtimeFactor,
   setGold,

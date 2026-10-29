@@ -1,7 +1,15 @@
 import { createHmac, createHash } from 'node:crypto';
-import { applyAway, newGame, SAVE_VERSION, tick, type GameState } from '@ledger/engine';
+import {
+  applyAway,
+  EDITION_SECONDS,
+  MARKET_TICK_SECONDS,
+  newGame,
+  SAVE_VERSION,
+  tick,
+  type GameState,
+} from '@ledger/engine';
 import { describe, expect, it } from 'vitest';
-import { decodeBackup, encodeBackup, restartClock } from './backup.ts';
+import { decodeBackup, encodeBackup, restartClock, sealBackup } from './backup.ts';
 import { hmacSha256, sha256 } from './sha256.ts';
 
 const T0 = 1_750_000_000_000;
@@ -57,6 +65,7 @@ describe('the backup code', () => {
     // Everything but the histories and the clock, which restarts at the restore.
     const expected = JSON.parse(JSON.stringify(state)) as GameState;
     restartClock(expected, T0 + 800_000);
+    expected.fresh = [];
     const { history: _h, market: m1, ...volume } = expected.volume;
     const { history: _h2, market: m2, ...restored } = decoded.state.volume;
     expect(restored).toEqual(volume);
@@ -162,5 +171,65 @@ describe('the backup code', () => {
     // Encoding left the game itself untouched.
     expect(state.meta.gold).toBe(true);
     expect(state.volume.history.length).toBeGreaterThan(1);
+  });
+
+  it('clears the achievements waiting to be announced', () => {
+    const state = played();
+    state.fresh = ['firstBusiness'];
+    const decoded = decodeBackup(encodeBackup(state, T0), T0);
+    if (!decoded.ok) throw new Error(decoded.error);
+    expect(decoded.state.fresh).toEqual([]);
+    expect(decoded.state.meta.achievements).toEqual(state.meta.achievements);
+  });
+
+  it('clamps the schedules of a code made on a clock a day ahead', () => {
+    const state = played();
+    const ahead = state.lastTick + 86_400_000;
+    for (let s = 1; s <= 60; s++) tick(state, ahead + s * 1000);
+    const made = state.lastTick;
+    const now = made - 86_400_000;
+    const decoded = decodeBackup(encodeBackup(state, made), now);
+    if (!decoded.ok) throw new Error(decoded.error);
+    const v = decoded.state.volume;
+    expect(decoded.state.lastTick).toBe(now);
+    expect(v.market.nextAt).toBeGreaterThanOrEqual(now);
+    expect(v.market.nextAt).toBeLessThanOrEqual(now + MARKET_TICK_SECONDS * 1000);
+    expect(v.paper.nextAt).toBeGreaterThanOrEqual(now + 30_000);
+    expect(v.paper.nextAt).toBeLessThanOrEqual(now + EDITION_SECONDS * 1000);
+    expect(v.golden.until).toBeNull();
+    expect(v.golden.nextAt).toBeGreaterThan(now);
+    expect(v.golden.nextAt).toBeLessThan(made);
+    // The market moves again within a tick.
+    const marketTick = v.market.tick;
+    tick(decoded.state, now + MARKET_TICK_SECONDS * 1000 + 1);
+    expect(decoded.state.volume.market.tick).toBeGreaterThan(marketTick);
+  });
+
+  it('calls a signed but malformed code broken, never throws', () => {
+    const save = (): GameState => JSON.parse(JSON.stringify(played())) as GameState;
+    const noMarket = save();
+    (noMarket.volume as { market: unknown }).market = null;
+    const noHoldings = save();
+    (noHoldings.volume as { holdings: unknown }).holdings = null;
+    const noVolume = save();
+    (noVolume as { volume: unknown }).volume = 'nope';
+    const payloads: Record<string, unknown> = {
+      null: null,
+      number: 42,
+      text: 'text',
+      array: [],
+      empty: {},
+      'no save': { made: T0 },
+      'made not a number': { made: 'today', save: save() },
+      'save null': { made: T0, save: null },
+      'market null': { made: T0, save: noMarket },
+      'holdings null': { made: T0, save: noHoldings },
+      'volume not an object': { made: T0, save: noVolume },
+    };
+    for (const [name, payload] of Object.entries(payloads))
+      expect([name, decodeBackup(sealBackup(payload), T0)]).toEqual([
+        name,
+        { ok: false, error: 'broken' },
+      ]);
   });
 });

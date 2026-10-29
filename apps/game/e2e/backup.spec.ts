@@ -69,11 +69,15 @@ test('a backup code copied on one device restores the game on another', async ({
   await read.click();
   await expect(second.getByRole('alert')).toHaveText(pt ? /alterado ou cortado/ : /changed or cut/);
 
-  // The whole code shows what it holds, then replaces the game.
+  // The whole code shows what it holds, then replaces the game. On a small phone the preview
+  // scrolls into view with its Restore button.
+  await second.setViewportSize({ width: 320, height: 568 });
   await paste.fill(code);
   await read.click();
   await expect(second.getByText(/Vol\. IV/)).toBeVisible();
-  await second.getByRole('button', { name: pt ? /^Restaurar$/ : /^Restore$/ }).click();
+  const restore = second.getByRole('button', { name: pt ? /^Restaurar$/ : /^Restore$/ });
+  await expect(restore).toBeInViewport();
+  await restore.click();
   await expect(second.getByRole('status')).toHaveText(pt ? /Restaurado/ : /Restored/);
   const restored = await readSave(second);
   expect(restored?.volume.number).toBe(4);
