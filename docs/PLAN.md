@@ -89,7 +89,7 @@ calls an action once a reward is earned.
 - Overtime, the golden invoice (taken by the tap, paid plain or sponsored once the ad ends), the
   audit, the sponsorship (banked, its share of an absence), the headhunter, the closing sponsor;
   daily counts keyed by the device's date, which the app passes in.
-- Tests: each reward's value and limit, the sponsorship across an absence, the star's traits,
+- Done: tests for each reward's value and limit, the sponsorship across an absence, the star's traits,
   the golden invoice's schedule replays for a seed, the closing bonus leaves later claims alone,
   an old save loads.
 
