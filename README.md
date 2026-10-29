@@ -10,11 +10,11 @@ It runs in the browser and, wrapped with Capacitor, on iPhone: one code base for
 
 ## Documents
 
-| Document               | What it says                                       |
-| :--------------------- | :------------------------------------------------- |
-| `docs/PRODUCT.md`      | What we are building and why (being written)       |
-| `docs/ARCHITECTURE.md` | How the code is put together (being written)       |
-| `docs/PLAN.md`         | What comes next, task by task, and what done means |
+| Document                                       | What it says                                       |
+| :--------------------------------------------- | :------------------------------------------------- |
+| [`docs/PRODUCT.md`](docs/PRODUCT.md)           | What we are building and why                       |
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | How the code is put together                       |
+| [`docs/PLAN.md`](docs/PLAN.md)                 | What comes next, task by task, and what done means |
 
 ## Status
 

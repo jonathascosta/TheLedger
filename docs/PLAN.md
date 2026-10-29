@@ -44,7 +44,8 @@ they would only slow the release down.
 - `apps/game` scaffold (Vite, Preact, fonts, theme), store and loop, persistence, the index
   tabs, English and Portuguese strings.
 - Screens: Ledger (net worth, ink chart, businesses with tills and buy buttons), Front desk,
-  Business page (sketch, upgrades, manager), Classifieds, Away receipt, Settings.
+  Business page (sketch, upgrades, manager), Upgrades page (all upgrades, ledger and desk ones
+  included), Classifieds, Away receipt, Settings.
 - CI builds the app.
 
 ### T5. App: investments, paper, achievements, prestige

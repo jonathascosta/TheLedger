@@ -69,7 +69,7 @@ mantissa-and-exponent type comes later (PRODUCT.md, Later) behind the same `form
 
 ### Seeds
 
-Each volume has a seed (`vol:<n>:<started-at>`). Market tick `k` draws from
+Each volume has its own seed (`vol:<n>:<started-at>`), so worlds differ between players and volumes but each one replays exactly. Market tick `k` draws from
 `fork('market').fork(k)`; edition `e` of the paper from `fork('paper').fork(e)`; candidates from
 `fork('managers')`; startups and auctions likewise. The same volume replays the same world.
 
@@ -78,15 +78,15 @@ Each volume has a seed (`vol:<n>:<started-at>`). Market tick `k` draws from
 `apps/game`: Vite, Preact with TSX (chosen over vanilla DOM because the game has many screens
 that re-render at 10 Hz), CSS with custom properties.
 
-| Folder          | Contents                                                                                                                                                                                      |
-| :-------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/main.tsx`  | Boot: load the save, apply the absence, start the loop, mount the app                                                                                                                         |
-| `src/store.ts`  | The game state, the loop (`requestAnimationFrame`, a tick at most 10 times a second), autosave, a version signal for re-rendering                                                             |
-| `src/screens/`  | Ledger, Desk, Business, Market (stocks, commodities, crypto), Portfolio and the class pages, Achievements, Gazette and Classifieds, Away receipt, Close the volume, Partners, Shelf, Settings |
-| `src/art/`      | SVG pieces: stickers and doodles, ink charts, the donut, stamps and seals, covers, the city map, portraits                                                                                    |
-| `src/i18n/`     | `en.ts` and `pt.ts`, one key set; `t(key, params)`; the language follows the device and Settings                                                                                              |
-| `src/persist/`  | `Storage` interface: `localStorage` on the web, Capacitor Preferences on iOS                                                                                                                  |
-| `src/theme.css` | Every colour, font and size as a custom property                                                                                                                                              |
+| Folder          | Contents                                                                                                                                                                                                |
+| :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `src/main.tsx`  | Boot: load the save, apply the absence, start the loop, mount the app                                                                                                                                   |
+| `src/store.ts`  | The game state, the loop (`requestAnimationFrame`, a tick at most 10 times a second), autosave, a version signal for re-rendering                                                                       |
+| `src/screens/`  | Ledger, Desk, Business, Upgrades, Market (stocks, commodities, crypto), Portfolio and the class pages, Achievements, Gazette and Classifieds, Away receipt, Close the volume, Partners, Shelf, Settings |
+| `src/art/`      | SVG pieces: stickers and doodles, ink charts, the donut, stamps and seals, covers, the city map, portraits                                                                                              |
+| `src/i18n/`     | `en.ts` and `pt.ts`, one key set; `t(key, params)`; the language follows the device and Settings                                                                                                        |
+| `src/persist/`  | `Storage` interface: `localStorage` on the web, Capacitor Preferences on iOS                                                                                                                            |
+| `src/theme.css` | Every colour, font and size as a custom property                                                                                                                                                        |
 
 Art is drawn with inline SVG and CSS. The paper grain is one small noise texture made once at
 start; heavy SVG filters are kept to static pieces, so the 10 Hz render stays cheap on a phone.

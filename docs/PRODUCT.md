@@ -102,11 +102,11 @@ costs `baseCost × growth^level`. A cycle pays `baseRevenue × level × multipli
 | 3   | Bubbles Laundromat / Lavanderia Bolhas     |       720 |   1.14 |               540 |    6 s |
 | 4   | Nonna's Pizza / Pizzaria da Nonna          |     8,640 |   1.13 |             4,320 |   12 s |
 | 5   | Yellow Cab Co. / Táxis Amarelos            |   103,680 |   1.12 |            51,840 |   24 s |
-| 6   | Seaside Hotel / Hotel Beira-Mar            |  1.244 mi |   1.11 |           622,080 |   96 s |
-| 7   | Starlight Cinema / Cine Estrela            |  14.93 mi |   1.10 |          7.465 mi |  384 s |
-| 8   | Riverside Rovers FC / Ribeirinha FC        |  179.2 mi |   1.09 |          89.58 mi | 1536 s |
-| 9   | Nest Egg Bank / Banco Pé-de-Meia           |  2.150 bi |   1.08 |          1.075 bi | 6144 s |
-| 10  | Black Gold Refinery / Refinaria Ouro Negro |  25.80 bi |   1.07 |          29.67 bi |   10 h |
+| 6   | Seaside Hotel / Hotel Beira-Mar            |   1.244 M |   1.11 |           622,080 |   96 s |
+| 7   | Starlight Cinema / Cine Estrela            |   14.93 M |   1.10 |           7.465 M |  384 s |
+| 8   | Riverside Rovers FC / Ribeirinha FC        |   179.2 M |   1.09 |           89.58 M | 1536 s |
+| 9   | Nest Egg Bank / Banco Pé-de-Meia           |   2.150 B |   1.08 |           1.075 B | 6144 s |
+| 10  | Black Gold Refinery / Refinaria Ouro Negro |   25.80 B |   1.07 |           29.67 B |   10 h |
 
 - **Till:** without a manager, a finished cycle waits in the till until the player taps
   **Collect**; collecting starts the next cycle. With a manager, cycles run on their own.
@@ -121,7 +121,7 @@ costs `baseCost × growth^level`. A cycle pays `baseRevenue × level × multipli
 
 - Hired from the **classifieds** page of the newspaper: one candidate per business the player
   owns and has no manager for. A candidate has a name, a pencil portrait made from parts, a short
-  CV line, a trait and a price (`baseCost × 1,000`, the café's at $1,000).
+  CV line, a trait and a price (`baseCost × 250`, the café's at $1,000).
 - **Traits:** _Perfectionist_ (+10% profit for that business), _Negotiator_ (levels of that
   business 10% cheaper), _Night owl_ (that business earns offline at +15 points).
 - A manager collects every cycle by itself, while playing and while away.
@@ -129,7 +129,8 @@ costs `baseCost × growth^level`. A cycle pays `baseRevenue × level × multipli
 
 ## Upgrades
 
-Paid in cash, bought once per volume, shown in the business's page and in the Upgrades list.
+Paid in cash, bought once per volume, shown in the business's page and on the Upgrades page of the ledger (which also holds the ledger
+and desk upgrades).
 
 - **Business upgrades:** eight per business, each **×3** profit for that business. The k-th
   (k = 0…7) costs `baseCost × 2,500 × 40^k`. Each has its own name in a story that takes the
@@ -142,15 +143,15 @@ Paid in cash, bought once per volume, shown in the business's page and in the Up
 ## Investments
 
 Each class unlocks the first time the volume's **peak net worth** reaches its threshold. Prices
-move on a market tick every 5 seconds, drawn from seeded random walks, so they are the same for
-everyone in the same volume and day. The Portfolio tab shows the split as a pie coloured in
+move on a market tick every 5 seconds, drawn from random walks seeded by the volume, so a volume's
+market can be replayed exactly (in tests and in support). The Portfolio tab shows the split as a pie coloured in
 pencil, the classes, and the locked ones.
 
 | Class       | Opens at | Rule                                                                                    |
 | :---------- | -------: | :-------------------------------------------------------------------------------------- |
 | Businesses  |       $0 | As above                                                                                |
 | Stocks      |   $100 K | Six companies with their own drift and volatility; buy and sell shares; small dividends |
-| Bonds       |     $1 M | Lend any amount; it earns 1% a minute, withdrawable any time                            |
+| Bonds       |     $1 M | Lend up to one hour of business income; it earns 1% an hour, withdrawable any time      |
 | Real estate |    $10 M | Eight properties on the city map; each pays rent per second and can be sold at 90%      |
 | Commodities |    $50 M | Gold (calm), oil (moves with the news) and coffee; bought and sold by the unit          |
 | Crypto      |   $250 M | Three coins with wild swings                                                            |
@@ -178,8 +179,7 @@ Pennycoin (PNY), Hashbrown (HSH), Stardust (SDT). No real brand appears in the g
   each business with a manager, rents, bond interest and park income, for the time away (at most
   12 hours), at the offline rate: 10%, plus 15 points with the _Night manager_ partner, plus
   _Night owl_ managers for their business. Market prices move on meanwhile.
-- **Collect** adds it. (On iPhone, a rewarded ad will double it; on the web the button is
-  absent.)
+- **Collect** adds it. (Doubling it with a rewarded ad comes later, on iPhone.)
 
 ## Achievements
 
@@ -191,13 +191,14 @@ secret until earned. A new one arrives with a stamp on the screen.
 
 ## Closing the volume (the reset)
 
-- **Goodwill** is earned from the money made in all volumes:
+- **Goodwill** is earned from the money made in all volumes (business income, stamps, rents,
+  interest, dividends and trading profits):
   `total = floor(150 × sqrt(lifetime earnings / 10^13))`; closing a volume claims
   `total − claimed so far`.
 - Each goodwill point held adds **2%** to all business profit.
 - Closing the volume resets cash, businesses, managers, upgrades and investments; it keeps
-  goodwill, partners, achievements, the shelf and the settings. The first volume of a new book is
-  the next number: Vol. I, II, III…
+  goodwill, partners, achievements, the shelf and the settings. Volumes are numbered in order:
+  Vol. I, II, III…
 - A pencilled note in the ledger suggests closing when the claim would at least double the
   goodwill held (and is at least 10).
 - **The ceremony:** the book closes, a wax seal drops on it and it goes to the **shelf**, where
