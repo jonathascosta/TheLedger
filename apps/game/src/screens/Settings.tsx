@@ -39,7 +39,7 @@ export function Settings({ state }: { state: GameState }) {
             <p class="hand loss" style={{ fontSize: '20px' }}>
               {t('settings.eraseConfirm')}
             </p>
-            <div class="row">
+            <div class="row wrap">
               <button
                 type="button"
                 class="stamp-btn red"
@@ -191,7 +191,7 @@ function Backup() {
               <p class="hand loss" style={{ fontSize: '20px' }}>
                 {t('settings.restoreConfirm')}
               </p>
-              <div class="row">
+              <div class="row wrap">
                 <button type="button" class="stamp-btn red" onClick={() => restore(decoded.state)}>
                   {t('settings.restoreYes')}
                 </button>

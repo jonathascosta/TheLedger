@@ -77,6 +77,8 @@ test('a backup code copied on one device restores the game on another', async ({
   await expect(second.getByText(/Vol\. IV/)).toBeVisible();
   const restore = second.getByRole('button', { name: pt ? /^Restaurar$/ : /^Restore$/ });
   await expect(restore).toBeInViewport();
+  // The stamp's word stays inside its frame.
+  expect(await restore.evaluate((b) => b.scrollWidth <= b.clientWidth)).toBe(true);
   await restore.click();
   await expect(second.getByRole('status')).toHaveText(pt ? /Restaurado/ : /Restored/);
   const restored = await readSave(second);
