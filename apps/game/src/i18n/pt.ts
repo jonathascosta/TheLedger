@@ -13,6 +13,8 @@ export const pt: Record<StringKey, string> = {
   'common.level': 'nív. {level}',
   'common.new': 'Nova!',
 
+  'strip.cash': 'Caixa {amount}',
+  'strip.income': '+{amount}/s',
   'tab.ledger': 'Livro',
   'tab.market': 'Bolsa',
   'tab.portfolio': 'Carteira',
