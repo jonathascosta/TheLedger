@@ -97,10 +97,21 @@ export function applyAway(state: GameState, now: number): AwayReceipt | null {
   state.lastTick = now;
   state.volume.lastSampleAt = now;
   if (seconds >= AWAY_MAX_SECONDS) grant(state, 'insomniac', now);
-  if (receipt.total > 0) state.away = receipt;
+  if (receipt.total > 0) state.away = state.away ? mergeReceipts(state.away, receipt) : receipt;
   advanceWorld(state, now, 0);
   checkAchievements(state, now);
-  return receipt.total > 0 ? receipt : null;
+  return receipt.total > 0 ? state.away : null;
+}
+
+/** An uncollected receipt and a new one become one: nothing earned is lost. */
+function mergeReceipts(a: AwayReceipt, b: AwayReceipt): AwayReceipt {
+  const lines = a.lines.map((l) => ({ ...l }));
+  for (const line of b.lines) {
+    const same = lines.find((l) => l.kind === line.kind && l.id === line.id);
+    if (same) same.amount += line.amount;
+    else lines.push({ ...line });
+  }
+  return { seconds: a.seconds + b.seconds, rate: b.rate, lines, total: a.total + b.total };
 }
 
 export { netWorth };

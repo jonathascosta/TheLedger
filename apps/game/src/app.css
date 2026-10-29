@@ -627,6 +627,7 @@ p {
   animation: toast-in 0.35s ease-out both;
   max-width: 90%;
   text-align: center;
+  pointer-events: none;
 }
 
 .modal {

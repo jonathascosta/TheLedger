@@ -66,16 +66,21 @@ function catchUp(): void {
 export function boot(custom?: Storage): void {
   if (custom) storage = custom;
   const text = storage.load();
+  let loaded = !text;
   if (text) {
     try {
-      state = migrate(JSON.parse(text), Date.now()) ?? newGame(Date.now());
+      const migrated = migrate(JSON.parse(text), Date.now());
+      if (migrated) {
+        state = migrated;
+        loaded = true;
+      }
     } catch {
-      state = newGame(Date.now());
+      // A broken save: start anew, but leave it in place until the first action.
     }
   }
   catchUp();
   notify();
-  save();
+  if (loaded) save();
 
   let last = 0;
   const loop = (time: number): void => {

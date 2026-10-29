@@ -42,7 +42,7 @@ export function Market({ state, kind }: { state: GameState; kind: InstrumentKind
     <Page>
       <div class="between">
         <h1 class="h1">{t('market.title')}</h1>
-        <p class="small">{t('market.marketOpen', { tick: state.volume.market.tick })}</p>
+        {open && <p class="small">{t('market.marketOpen', { tick: state.volume.market.tick })}</p>}
       </div>
       <div class="row" role="tablist" style={{ gap: '4px' }}>
         {(['stock', 'commodity', 'coin'] as const).map((k) => (
