@@ -19,7 +19,7 @@ export function currentCombo(state: GameState, now: number): number {
 }
 
 function deskFactor(state: GameState): number {
-  let factor = hasPartner(state, 'stampMaker') ? 5 : 1;
+  let factor = hasPartner(state, 'stampMaker') ? 3 : 1;
   for (const id of state.volume.upgrades) {
     const def = UPGRADE_BY_ID.get(id);
     if (def?.effect.kind === 'desk') factor *= def.effect.factor;
@@ -27,9 +27,14 @@ function deskFactor(state: GameState): number {
   return factor;
 }
 
+/** A stamp pays this share of the income per second (PRODUCT.md, The front desk). */
+export const STAMP_SHARE = 0.003;
+/** The least a stamp pays, before the desk upgrades. */
+export const STAMP_FLOOR = 2;
+
 /** What one stamp pays before the combo. */
 export function stampBase(state: GameState): number {
-  return Math.max(2, businessIncome(state) * 0.2) * deskFactor(state);
+  return Math.max(STAMP_FLOOR, businessIncome(state) * STAMP_SHARE) * deskFactor(state);
 }
 
 export interface StampResult {

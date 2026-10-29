@@ -83,8 +83,11 @@ The approved mock-ups live in the design canvas (owner's link). The rules:
 
 ## The front desk (the clicker)
 
-- An invoice sits on the desk. Each tap stamps it and pays its value: the larger of $2 and 20%
+- An invoice sits on the desk. Each tap stamps it and pays its value: the larger of $2 and 0.3%
   of the current income per second, times the combo multiplier, times the desk upgrades.
+- **The desk is a boost, not the game.** Early on the $2 floor gets the first businesses open;
+  later, fully upgraded and at full combo, stamping 3 to 6 times a second roughly doubles the
+  income while the player taps, and without desk upgrades it adds about a tenth.
 - Ten stamps fill an invoice; the next one slides in.
 - **Combo:** taps less than 1.2 s apart add a tally mark (up to 20). The multiplier is ×1, ×1.5
   from 5 marks, ×1.75 from 10 and ×2 from 15. A pause resets it.
@@ -200,7 +203,7 @@ secret until earned. A new one arrives with a stamp on the screen.
   goodwill, partners, achievements, the shelf and the settings. Volumes are numbered in order:
   Vol. I, II, III…
 - A pencilled note in the ledger suggests closing when the claim would at least double the
-  goodwill held (and is at least 25), which a steady player reaches in about a day.
+  goodwill held (and is at least 25), which a steady player reaches in about 20 hours of play.
 - **The ceremony:** the book closes, a wax seal drops on it and it goes to the **shelf**, where
   every past volume shows its number, its peak net worth and the goodwill it earned.
 - **Partners** are bought with goodwill (spent goodwill no longer adds its 2%):
@@ -208,7 +211,7 @@ secret until earned. A new one arrives with a stamp on the screen.
 | Partner       | Goodwill | Effect                                      |
 | :------------ | -------: | :------------------------------------------ |
 | Night manager |       10 | Offline earnings +15 points                 |
-| Stamp maker   |       15 | Stamps ×5                                   |
+| Stamp maker   |       15 | Stamps ×3                                   |
 | Head start    |       25 | Every volume starts with $10,000            |
 | Old friends   |       50 | Managers half price                         |
 | Bond desk     |       60 | Bonds earn twice as much                    |
