@@ -154,12 +154,13 @@ describe('the backup code', () => {
 
   it('leaves the Gold Edition out', () => {
     const state = played();
-    (state.meta as { gold?: boolean }).gold = true;
-    const decoded = decodeBackup(encodeBackup(state, T0), T0);
+    state.meta.gold = true;
+    const code = encodeBackup(state, T0);
+    const decoded = decodeBackup(code, T0);
     if (!decoded.ok) throw new Error(decoded.error);
-    expect('gold' in decoded.state.meta).toBe(false);
+    expect(decoded.state.meta.gold).toBe(false);
     // Encoding left the game itself untouched.
-    expect((state.meta as { gold?: boolean }).gold).toBe(true);
+    expect(state.meta.gold).toBe(true);
     expect(state.volume.history.length).toBeGreaterThan(1);
   });
 });

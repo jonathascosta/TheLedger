@@ -97,8 +97,8 @@ export function encodeBackup(state: GameState, now: number): string {
   const volume = save.volume as Partial<GameState['volume']>;
   delete volume.history;
   delete (save.volume.market as Partial<GameState['volume']['market']>).history;
-  // The Gold Edition belongs to the device (the field arrives with the purchase).
-  delete (save.meta as { gold?: unknown }).gold;
+  // The Gold Edition belongs to the device.
+  delete (save.meta as Partial<GameState['meta']>).gold;
   const payload: Payload = { made: now, save };
   const body = PREFIX + toBase64Url(scramble(utf8(JSON.stringify(payload))));
   return `${body}.${sign(body)}`;
@@ -132,7 +132,8 @@ export function decodeBackup(text: string, now: number = Date.now()): Decoded {
     return { ok: false, error: 'version' };
   const state = migrate(save, now);
   if (!state || typeof state.volume.market !== 'object') return { ok: false, error: 'broken' };
-  delete (state.meta as { gold?: unknown }).gold;
+  // Not in the code: the device's own Gold Edition comes back with the restore.
+  state.meta.gold = false;
   const market = state.volume.market;
   market.history = Object.fromEntries(
     Object.entries(market.prices).map(([id, price]) => [id, [price]]),

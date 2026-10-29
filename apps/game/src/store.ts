@@ -62,8 +62,7 @@ export function eraseSave(): void {
  * it at once.
  */
 export function restoreGame(next: GameState): void {
-  const gold = (state.meta as { gold?: unknown }).gold;
-  if (gold !== undefined) (next.meta as { gold?: unknown }).gold = gold;
+  next.meta.gold = state.meta.gold;
   // The player may have looked at the preview for a while: the game starts from now.
   restartClock(next, Date.now());
   state = next;
