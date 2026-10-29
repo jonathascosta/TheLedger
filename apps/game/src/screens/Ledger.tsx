@@ -48,7 +48,9 @@ function BusinessRow({ state, index }: { state: GameState; index: number }) {
           <BusinessDoodle index={index} />
         </button>
         <div class="grow">
-          <p class="h3">{name}</p>
+          <p class="h3 biz-title" style={{ '--chars': name.length }}>
+            {name}
+          </p>
           <p class="small">
             {t('common.perSecond', {
               amount: moneyShort(BUSINESSES[index]!.baseRevenue / BUSINESSES[index]!.cycle),
@@ -90,7 +92,9 @@ function BusinessRow({ state, index }: { state: GameState; index: number }) {
           style={{ minHeight: 0, padding: 0 }}
           onClick={() => go({ name: 'business', index })}
         >
-          <span class="h3 biz-title">{name}</span>
+          <span class="h3 biz-title" style={{ '--chars': name.length }}>
+            {name}
+          </span>
         </button>
         <p class="small">
           {t('common.level', { level: b.level })} ·{' '}

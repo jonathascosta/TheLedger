@@ -4,7 +4,22 @@ import type { Trait } from '../data/people.ts';
 import type { Lang } from '../format/format.ts';
 
 /** The save format's version; `migrate` brings older saves up to it. */
-export const SAVE_VERSION = 1;
+export const SAVE_VERSION = 2;
+
+/** Version 2 renamed five businesses; their upgrades' ids follow the new names. */
+const RENAMED_BUSINESSES: Readonly<Record<string, string>> = {
+  pizza: 'print',
+  cinema: 'insurance',
+  club: 'shipyard',
+  bank: 'railway',
+  refinery: 'airline',
+};
+
+function renameUpgrade(id: string): string {
+  const [business = '', rest] = id.split('.');
+  const renamed = RENAMED_BUSINESSES[business];
+  return renamed !== undefined && rest !== undefined ? `${renamed}.${rest}` : id;
+}
 
 export type BuyMode = 1 | 10 | 100 | 'max';
 
@@ -251,9 +266,14 @@ export function migrate(raw: unknown, now: number): GameState | null {
   const save = raw as Partial<GameState>;
   if (typeof save.version !== 'number' || save.version > SAVE_VERSION) return null;
   if (!save.volume || !save.meta) return null;
-  // Version 1 is the first: fill any field a development build may have missed.
+  // Fill any field a development build may have missed.
   const fresh = newGame(now);
   const volume = { ...newVolume(save.volume.number, now), ...save.volume };
+  if (save.version < 2 && Array.isArray(volume.upgrades)) {
+    volume.upgrades = (volume.upgrades as unknown[])
+      .filter((id): id is string => typeof id === 'string')
+      .map(renameUpgrade);
+  }
   return {
     ...fresh,
     ...save,

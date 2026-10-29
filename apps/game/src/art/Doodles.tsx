@@ -47,11 +47,10 @@ export const BUSINESS_DOODLES: readonly ((p: Props) => JSX.Element)[] = [
   ),
   (p) => (
     <Svg {...p}>
-      <path d="M6 9 L34 9 L20 35 Z" style={fill('--sticker-warm')} />
-      <path d="M6 9 q14 -6 28 0" />
-      <circle cx="16" cy="15" r="2.4" style={fill('--loss')} />
-      <circle cx="23" cy="20" r="2.4" style={fill('--loss')} />
-      <circle cx="19" cy="26" r="2" style={fill('--loss')} />
+      <rect x="9" y="14" width="22" height="22" rx="1" style={fill('--paper-white')} />
+      <path d="M13 20h14M13 25h14M13 30h9" />
+      <rect x="5" y="5" width="28" height="8" rx="4" style={fill('--spiral')} />
+      <path d="M33 9h3M20 13v1" />
     </Svg>
   ),
   (p) => (
@@ -71,34 +70,37 @@ export const BUSINESS_DOODLES: readonly ((p: Props) => JSX.Element)[] = [
   ),
   (p) => (
     <Svg {...p}>
-      <rect x="5" y="14" width="30" height="20" rx="2" style={fill('--ink')} />
-      <path d="M5 14l4-8 26 0-4 8z" style={fill('--paper-white')} />
-      <path d="M13 6l-4 8M21 6l-4 8M29 6l-4 8" />
+      <circle cx="20" cy="20" r="16" style={fill('--water')} />
+      <circle cx="20" cy="9" r="3" style={fill('--gold')} />
+      <path d="M20 12v20M14 16h12M9 25c1 5 6 8 11 8s10-3 11-8M7 28l2-3 3 2M33 28l-2-3-3 2" />
+    </Svg>
+  ),
+  (p) => (
+    <Svg {...p}>
+      <path d="M32 26V5H17M32 9l-4-4M21 5v7" />
+      <path d="M4 24h32l-5 9H9z" style={fill('--loss')} />
+      <rect x="11" y="17" width="10" height="7" style={fill('--paper-white')} />
+      <path d="M3 37q4-2 8 0t8 0t8 0t8 0" />
+    </Svg>
+  ),
+  (p) => (
+    <Svg {...p}>
+      <rect x="5" y="12" width="15" height="17" style={fill('--spiral')} />
+      <rect x="9" y="16" width="7" height="5" style={fill('--paper-white')} />
+      <path d="M20 18h14v11H20z" style={fill('--sticker-roof')} />
+      <path d="M27 18v-6h4v6M29 8c-2-2 2-3 0-5M3 36h34" />
+      <circle cx="10" cy="31" r="3.5" style={fill('--paper-white')} />
+      <circle cx="19" cy="31" r="3.5" style={fill('--paper-white')} />
+      <circle cx="29" cy="31" r="3.5" style={fill('--paper-white')} />
+    </Svg>
+  ),
+  (p) => (
+    <Svg {...p}>
       <path
-        d="M17 20l7 4-7 4z"
-        style={{ fill: 'var(--paper-white)', stroke: 'var(--paper-white)' }}
+        d="M20 4c2 0 3 2 3 5v8l12 7v4l-12-3v7l4 3v3l-7-2-7 2v-3l4-3v-7L5 28v-4l12-7V9c0-3 1-5 3-5z"
+        style={fill('--water')}
       />
-    </Svg>
-  ),
-  (p) => (
-    <Svg {...p}>
-      <circle cx="20" cy="20" r="14" style={fill('--paper-white')} />
-      <path d="M20 13l6 4-2 7h-8l-2-7z" style={fill('--ink')} />
-      <path d="M20 13V6M26 17l7-2M24 24l4 6M16 24l-4 6M14 17l-7-2" />
-    </Svg>
-  ),
-  (p) => (
-    <Svg {...p}>
-      <path d="M5 15L20 6l15 9z" style={fill('--sticker-roof')} />
-      <path d="M9 18v11M16 18v11M24 18v11M31 18v11" />
-      <path d="M5 32h30" />
-    </Svg>
-  ),
-  (p) => (
-    <Svg {...p}>
-      <path d="M7 35V16h7v19M18 35V10h7v25" style={fill('--pencil')} />
-      <path d="M28 35V20h6v15M4 35h32" />
-      <path d="M21 10c-2-3 2-5 0-8M10 16c-2-3 2-4 0-7" />
+      <path d="M18 10h4" />
     </Svg>
   ),
 ];
