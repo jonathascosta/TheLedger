@@ -1,6 +1,7 @@
 import { applyAway, migrate, newGame, tick, type GameState } from '@ledger/engine';
 import { useEffect, useState } from 'preact/hooks';
 import { newGameKeepingGold } from './gold/gold.ts';
+import { restartClock } from './persist/backup.ts';
 import { webStorage, type Storage } from './persist/storage.ts';
 
 /** The game state, owned by the engine; screens read it and call `act`. */
@@ -53,6 +54,20 @@ export function act<T>(fn: (s: GameState) => T): T {
 export function eraseSave(): void {
   storage.erase();
   state = newGameKeepingGold(state, Date.now());
+  notify();
+  save();
+}
+
+/**
+ * Replaces the game with one from a backup code, keeping this device's Gold Edition, and saves
+ * it at once.
+ */
+export function restoreGame(next: GameState): void {
+  next.meta.gold = state.meta.gold;
+  // The player may have looked at the preview for a while: the game starts from now.
+  restartClock(next, Date.now());
+  state = next;
+  catchUp();
   notify();
   save();
 }
