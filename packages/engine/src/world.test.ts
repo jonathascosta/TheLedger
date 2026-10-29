@@ -11,10 +11,17 @@ describe('world', () => {
   it("carries the renamed businesses' upgrades into a version 2 save", () => {
     const old = newGame(T0);
     old.version = 1;
-    old.volume.upgrades = ['cafe.0', 'pizza.1', 'refinery.7', 'all.0', 'desk.2'];
+    old.volume.upgrades = ['cafe.0', 'pizza.1', 'cinema.3', 'refinery.7', 'all.0', 'desk.2'];
     const save = migrate(JSON.parse(JSON.stringify(old)), T0);
     expect(save?.version).toBe(2);
-    expect(save?.volume.upgrades).toEqual(['cafe.0', 'print.1', 'airline.7', 'all.0', 'desk.2']);
+    expect(save?.volume.upgrades).toEqual([
+      'cafe.0',
+      'print.1',
+      'newspaper.3',
+      'airline.7',
+      'all.0',
+      'desk.2',
+    ]);
   });
 
   it('replays the same market for the same volume', () => {

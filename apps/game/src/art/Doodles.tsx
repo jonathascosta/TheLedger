@@ -70,11 +70,11 @@ export const BUSINESS_DOODLES: readonly ((p: Props) => JSX.Element)[] = [
   ),
   (p) => (
     <Svg {...p}>
-      <path d="M30 14h4v18a3 3 0 0 1-3 3" />
-      <path d="M6 7h24v25a3 3 0 0 0 1 3H9a3 3 0 0 1-3-3z" style={fill('--paper-white')} />
-      <rect x="10" y="11" width="16" height="5" style={fill('--ink')} />
-      <path d="M10 21h6M10 25h6M10 29h6" />
-      <rect x="19" y="20" width="7" height="10" style={fill('--water')} />
+      <g transform="rotate(-30 20 20)">
+        <rect x="2" y="10" width="36" height="20" rx="10" style={fill('--paper-white')} />
+        <path d="M8 16h7M8 20h7M8 24h7M26 16h6M26 20h6M26 24h6" />
+        <rect x="17" y="10" width="6" height="20" style={fill('--loss')} />
+      </g>
     </Svg>
   ),
   (p) => (

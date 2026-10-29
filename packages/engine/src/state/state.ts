@@ -9,7 +9,7 @@ export const SAVE_VERSION = 2;
 /** Version 2 renamed five businesses; their upgrades' ids follow the new names. */
 const RENAMED_BUSINESSES: Readonly<Record<string, string>> = {
   pizza: 'print',
-  cinema: 'gazette',
+  cinema: 'newspaper',
   club: 'shipyard',
   bank: 'railway',
   refinery: 'airline',
@@ -270,7 +270,9 @@ export function migrate(raw: unknown, now: number): GameState | null {
   const fresh = newGame(now);
   const volume = { ...newVolume(save.volume.number, now), ...save.volume };
   if (save.version < 2 && Array.isArray(volume.upgrades)) {
-    volume.upgrades = volume.upgrades.map(renameUpgrade);
+    volume.upgrades = (volume.upgrades as unknown[])
+      .filter((id): id is string => typeof id === 'string')
+      .map(renameUpgrade);
   }
   return {
     ...fresh,

@@ -395,12 +395,21 @@ p {
   min-height: 64px;
 }
 
-.biz-title {
-  font-size: 22px;
+/* A name shrinks (to 15 px at least) just enough to keep to one line in its column. */
+.biz .grow {
+  container-type: inline-size;
 }
 
-.biz-title.long {
-  font-size: 18px;
+.biz-title {
+  --title-size: 22px;
+  font-size: max(15px, min(var(--title-size), calc(100cqi / (var(--chars) * 0.4))));
+}
+
+/* Below 340 px the column is too narrow for one line: names wrap at full size. */
+@media (max-width: 340px) {
+  .biz-title {
+    font-size: var(--title-size);
+  }
 }
 
 .sticker {
@@ -863,11 +872,7 @@ p {
   }
 
   .biz-title {
-    font-size: 20px;
-  }
-
-  .biz-title.long {
-    font-size: 16px;
+    --title-size: 20px;
   }
 }
 

@@ -81,7 +81,7 @@ export function UpgradeIcon({
         aria-hidden="true"
         style={{ position: 'relative', width: `${size}px`, height: `${size}px`, flex: 'none' }}
       >
-        {[0, 1, 8].map((business, i) => (
+        {[0, 1, 9].map((business, i) => (
           <span
             key={business}
             class="sticker"

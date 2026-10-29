@@ -18,7 +18,7 @@ export const BUSINESSES: readonly BusinessDef[] = [
   { id: 'print', baseCost: 8_640, growth: 1.13, baseRevenue: 4_320, cycle: 12 },
   { id: 'taxi', baseCost: 103_680, growth: 1.12, baseRevenue: 51_840, cycle: 24 },
   { id: 'hotel', baseCost: 1_244_160, growth: 1.11, baseRevenue: 622_080, cycle: 96 },
-  { id: 'gazette', baseCost: 14_929_920, growth: 1.1, baseRevenue: 7_464_960, cycle: 384 },
+  { id: 'newspaper', baseCost: 14_929_920, growth: 1.1, baseRevenue: 7_464_960, cycle: 384 },
   { id: 'shipyard', baseCost: 179_159_040, growth: 1.09, baseRevenue: 89_579_520, cycle: 1_536 },
   {
     id: 'railway',
