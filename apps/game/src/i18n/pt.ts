@@ -412,7 +412,7 @@ export const pt: Record<StringKey, string> = {
   'partner.nightManager.name': 'Gerente noturno',
   'partner.nightManager.desc': 'ganhos offline +15 pontos',
   'partner.stampMaker.name': 'Fabricante de carimbos',
-  'partner.stampMaker.desc': 'carimbos ×5',
+  'partner.stampMaker.desc': 'carimbos ×3',
   'partner.headStart.name': 'Largada',
   'partner.headStart.desc': 'cada volume começa com $10.000',
   'partner.oldFriends.name': 'Velhos amigos',
