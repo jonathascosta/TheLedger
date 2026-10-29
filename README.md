@@ -32,7 +32,7 @@ pnpm, which Corepack provides at the version pinned in `package.json`.
 ```sh
 corepack enable
 pnpm install
-pnpm test
+pnpm dev   # the game at http://localhost:5173
 ```
 
 | Command                                        | What it does                                      |

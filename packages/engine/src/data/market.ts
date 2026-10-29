@@ -32,7 +32,7 @@ export const INSTRUMENTS: readonly InstrumentDef[] = [
     start: 120,
     drift: 1.5e-5,
     vol: 0.012,
-    dividend: 1e-5,
+    dividend: 1e-6,
   },
   {
     id: 'irnb',
@@ -42,7 +42,7 @@ export const INSTRUMENTS: readonly InstrumentDef[] = [
     start: 45,
     drift: 1e-5,
     vol: 0.015,
-    dividend: 2e-5,
+    dividend: 2e-6,
   },
   {
     id: 'gldc',
@@ -52,7 +52,7 @@ export const INSTRUMENTS: readonly InstrumentDef[] = [
     start: 80,
     drift: 1e-5,
     vol: 0.008,
-    dividend: 2e-5,
+    dividend: 2e-6,
   },
   {
     id: 'nmbs',
@@ -72,7 +72,7 @@ export const INSTRUMENTS: readonly InstrumentDef[] = [
     start: 60,
     drift: 8e-6,
     vol: 0.016,
-    dividend: 1e-5,
+    dividend: 1e-6,
   },
   {
     id: 'patl',
@@ -82,7 +82,7 @@ export const INSTRUMENTS: readonly InstrumentDef[] = [
     start: 95,
     drift: 1e-5,
     vol: 0.012,
-    dividend: 3e-5,
+    dividend: 3e-6,
   },
   {
     id: 'gold',

@@ -29,7 +29,7 @@ export default defineConfig([
 
   {
     name: 'repo/typescript',
-    files: ['**/*.ts'],
+    files: ['**/*.{ts,tsx}'],
     extends: [tseslint.configs.strictTypeChecked, tseslint.configs.stylisticTypeChecked],
     languageOptions: {
       parserOptions: {
@@ -57,7 +57,7 @@ export default defineConfig([
 
   {
     name: 'repo/no-math-random',
-    files: ['**/*.{ts,js,mjs}'],
+    files: ['**/*.{ts,tsx,js,mjs}'],
     rules: {
       'no-restricted-properties': [
         'error',
@@ -97,7 +97,7 @@ export default defineConfig([
 
   {
     name: 'repo/browser',
-    files: ['apps/**/*.ts'],
+    files: ['apps/**/*.{ts,tsx}'],
     languageOptions: { globals: globals.browser },
   },
 

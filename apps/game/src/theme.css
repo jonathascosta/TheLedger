@@ -1,0 +1,53 @@
+/* Every colour, font and size of the notebook (docs/PRODUCT.md, Art direction). */
+:root {
+  --paper: #f4eddc;
+  --paper-dark: #eadfc6;
+  --paper-white: #fffdf7;
+  --newsprint: #ece6d5;
+  --desk: #d9cfb6;
+  --rule: #d3dde4;
+  --margin: #e2a79c;
+  --ink: #1f2a44;
+  --ink-soft: #5a5243;
+  --pencil: #6b6457;
+  --profit: #2f6b3a;
+  --loss: #a8322a;
+  --highlight: #f2d24b;
+  --gold: #c9a44c;
+  --gold-dark: #7d6226;
+  --wax: #8e2a2a;
+  --tape: rgba(216, 190, 118, 0.7);
+  --kraft: #c49c69;
+  --spiral: #2e4a6b;
+  --leather: #1f3a2c;
+  --shadow: rgba(60, 45, 20, 0.3);
+  --tab-ledger: #e9d49a;
+  --tab-market: #cfe0d2;
+  --tab-portfolio: #dad3e8;
+  --tab-achievements: #eccdc3;
+  --pie-1: #1f2a44;
+  --pie-2: #2f6b3a;
+  --pie-3: #b4532a;
+  --pie-4: #6b6457;
+  --pie-5: #5b3f75;
+  --pie-6: #b08d3c;
+  --pie-7: #a8322a;
+  --pie-8: #2c6e73;
+  --pie-9: #6b7a2e;
+  --sticker-cafe: #e7c27a;
+  --sticker-warm: #d9a05b;
+  --sticker-roof: #c97b5a;
+  --water: #b9cfdb;
+  --water-line: #5f7f95;
+
+  --hand: 'Caveat', 'Comic Sans MS', cursive;
+  --type: 'Courier Prime', 'Courier New', monospace;
+  --print: 'IM Fell English', Georgia, serif;
+
+  --page-width: 430px;
+  --line: 28px;
+  --margin-left: 40px;
+  --gutter: 16px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
