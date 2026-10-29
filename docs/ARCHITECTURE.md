@@ -106,8 +106,11 @@ start; heavy SVG filters are kept to static pieces, so the 10 Hz render stays ch
   (`src/persist/sha256.ts`), synchronous, because the iOS 15 web view may lack WebCrypto.
 - Decoding ignores white space, checks the prefix, then the signature (a changed or cut code fails
   here), unscrambles, refuses a save version newer than `SAVE_VERSION`, runs the engine's
-  `migrate`, and starts the histories again from the current prices and net worth. The store then
-  keeps this device's `meta.gold` and saves.
+  `migrate`, and starts the histories again from the current prices and net worth.
+- The clock restarts at the restore (`restartClock`): `lastTick`, the net-worth sample, the
+  market's and the paper's `nextAt` move to now, as after an absence, so the time since the code
+  was made earns no receipt (those hours earned on the other device). An uncollected receipt
+  already in the save stays. The store then keeps this device's `meta.gold` and saves.
 
 The key is a constant in the app, so anyone with the app's code can sign a code: the signature
 stops casual edits, not a determined player.

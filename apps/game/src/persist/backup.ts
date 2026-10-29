@@ -138,5 +138,20 @@ export function decodeBackup(text: string, now: number = Date.now()): Decoded {
     Object.entries(market.prices).map(([id, price]) => [id, [price]]),
   );
   state.volume.history = [netWorth(state)];
+  restartClock(state, now);
   return { ok: true, state, madeAt: payload.made };
+}
+
+/**
+ * A restored game goes on from `now`: the time since the code was made earns nothing (the same
+ * hours went on earning on the device it came from), so there is no absence to receipt. The
+ * market and the paper restart from now, as after an absence; an uncollected receipt that was
+ * already in the save stays.
+ */
+export function restartClock(state: GameState, now: number): void {
+  const v = state.volume;
+  state.lastTick = now;
+  v.lastSampleAt = now;
+  v.market.nextAt = Math.max(v.market.nextAt, now);
+  v.paper.nextAt = Math.max(v.paper.nextAt, now + 30_000);
 }

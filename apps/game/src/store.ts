@@ -1,5 +1,6 @@
 import { applyAway, migrate, newGame, tick, type GameState } from '@ledger/engine';
 import { useEffect, useState } from 'preact/hooks';
+import { restartClock } from './persist/backup.ts';
 import { webStorage, type Storage } from './persist/storage.ts';
 
 /** The game state, owned by the engine; screens read it and call `act`. */
@@ -63,6 +64,8 @@ export function eraseSave(): void {
 export function restoreGame(next: GameState): void {
   const gold = (state.meta as { gold?: unknown }).gold;
   if (gold !== undefined) (next.meta as { gold?: unknown }).gold = gold;
+  // The player may have looked at the preview for a while: the game starts from now.
+  restartClock(next, Date.now());
   state = next;
   catchUp();
   notify();

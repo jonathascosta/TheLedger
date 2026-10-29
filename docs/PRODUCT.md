@@ -304,7 +304,9 @@ game rebuilds (the price and net-worth histories) and the Gold Edition, which be
 device (Restore purchases brings it back). The code is scrambled and signed: a code changed by
 hand, or cut short, is refused. The signature stops casual edits, not a determined player with
 the app's code. Before restoring, the game shows what the code holds (volume, net worth, the date
-it was made) and asks to confirm, since it replaces the game on this device.
+it was made) and asks to confirm, since it replaces the game on this device. The restored game
+goes on from the moment it is restored: the time since the code was made earns nothing there,
+since it earned on the other device.
 
 ## Later (not in the first release)
 

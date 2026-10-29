@@ -1,7 +1,7 @@
 import { createHmac, createHash } from 'node:crypto';
-import { newGame, SAVE_VERSION, tick, type GameState } from '@ledger/engine';
+import { applyAway, newGame, SAVE_VERSION, tick, type GameState } from '@ledger/engine';
 import { describe, expect, it } from 'vitest';
-import { decodeBackup, encodeBackup } from './backup.ts';
+import { decodeBackup, encodeBackup, restartClock } from './backup.ts';
 import { hmacSha256, sha256 } from './sha256.ts';
 
 const T0 = 1_750_000_000_000;
@@ -54,18 +54,52 @@ describe('the backup code', () => {
     const decoded = decodeBackup(code, T0 + 800_000);
     if (!decoded.ok) throw new Error(decoded.error);
     expect(decoded.madeAt).toBe(T0 + 700_000);
-    const { history: _h, market: m1, ...volume } = state.volume;
+    // Everything but the histories and the clock, which restarts at the restore.
+    const expected = JSON.parse(JSON.stringify(state)) as GameState;
+    restartClock(expected, T0 + 800_000);
+    const { history: _h, market: m1, ...volume } = expected.volume;
     const { history: _h2, market: m2, ...restored } = decoded.state.volume;
     expect(restored).toEqual(volume);
     expect({ ...m2, history: undefined }).toEqual({ ...m1, history: undefined });
-    expect(decoded.state.meta).toEqual(state.meta);
-    expect(decoded.state.settings).toEqual(state.settings);
-    expect(decoded.state.lastTick).toBe(state.lastTick);
+    expect({ ...decoded.state, volume: null }).toEqual({ ...expected, volume: null });
     // The histories start again from now.
-    for (const [id, prices] of Object.entries(decoded.state.volume.market.history))
-      expect(prices).toEqual([m1.prices[id]]);
+    for (const [id, prices] of Object.entries(m2.history)) expect(prices).toEqual([m1.prices[id]]);
     expect(decoded.state.volume.history).toHaveLength(1);
     expect(decoded.state.volume.history[0]).toBeGreaterThan(0);
+  });
+
+  it('restores hours later without an absence receipt', () => {
+    const state = played();
+    state.volume.managers[0] = { name: 'Rosa', trait: 'perfectionist', face: 7 };
+    const made = state.lastTick;
+    const later = made + 5 * 3600_000;
+    const decoded = decodeBackup(encodeBackup(state, made), later);
+    if (!decoded.ok) throw new Error(decoded.error);
+    const restored = decoded.state;
+    expect(restored.lastTick).toBe(later);
+    expect(restored.volume.market.nextAt).toBeGreaterThanOrEqual(later);
+    expect(restored.volume.paper.nextAt).toBeGreaterThanOrEqual(later + 30_000);
+    const marketTick = restored.volume.market.tick;
+    expect(applyAway(restored, later + 1000)).toBeNull();
+    expect(restored.away).toBeNull();
+    // At most the one market tick due now, not five hours of them.
+    expect(restored.volume.market.tick).toBeLessThanOrEqual(marketTick + 1);
+    // The same save without the restart would have earned for the five hours.
+    const control = JSON.parse(JSON.stringify(state)) as GameState;
+    expect(applyAway(control, later)).not.toBeNull();
+  });
+
+  it('keeps an uncollected receipt that was in the save', () => {
+    const state = played();
+    state.away = {
+      seconds: 120,
+      rate: 1,
+      lines: [{ kind: 'business', id: '0', amount: 99 }],
+      total: 99,
+    };
+    const decoded = decodeBackup(encodeBackup(state, T0), T0 + 3600_000);
+    if (!decoded.ok) throw new Error(decoded.error);
+    expect(decoded.state.away).toEqual(state.away);
   });
 
   it('survives spaces and line breaks', () => {
