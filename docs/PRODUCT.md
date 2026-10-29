@@ -138,6 +138,8 @@ costs `baseCost × growth^level`. A cycle pays `baseRevenue × level × multipli
 - **Traits:** _Perfectionist_ (+10% profit for that business), _Negotiator_ (levels of that
   business 10% cheaper), _Night owl_ (that business earns offline at +15 points).
 - A manager collects every cycle by itself, while playing and while away.
+- A dot on the ledger's Classifieds card says a candidate can be hired with the cash at hand;
+  candidates the player cannot pay for yet are listed without it.
 - Managers leave when the volume is closed; the _Old friends_ partner halves their price.
 
 ## Upgrades

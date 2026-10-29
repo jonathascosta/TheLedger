@@ -123,3 +123,47 @@ test('an absence prints a receipt that collects', async ({ page, context }) => {
   await expect.poll(cash, { timeout: 5000 }).toBeGreaterThan(before + 1000);
   expect(errors).toEqual([]);
 });
+
+test('the Classifieds dot shows only when an applicant can be paid', async ({ browser }) => {
+  const pt = test.info().project.name.endsWith('-pt');
+  /** A game with the café managed and the bakery open (its applicant asks $15,000). */
+  async function dotWith(cash: number): Promise<number> {
+    const context = await browser.newContext({
+      baseURL: test.info().project.use.baseURL ?? '',
+      locale: pt ? 'pt-BR' : 'en-US',
+    });
+    const first = await context.newPage();
+    await first.goto('./');
+    await first.waitForFunction(() => localStorage.getItem('theledger.save'));
+    const save = await first.evaluate(
+      () =>
+        JSON.parse(localStorage.getItem('theledger.save') ?? 'null') as {
+          volume: { businesses: unknown[]; managers: unknown[]; cash: number };
+          lastTick: number;
+        },
+    );
+    save.volume.businesses[0] = { level: 10, progress: 0, till: 0 };
+    save.volume.businesses[1] = { level: 1, progress: 0, till: 0 };
+    save.volume.managers[0] = { name: 'Rosa M.', trait: 'perfectionist', face: 7 };
+    save.volume.cash = cash;
+    save.lastTick = Date.now();
+    const page = await context.newPage();
+    await page.addInitScript((text) => {
+      if (!sessionStorage.getItem('seeded')) {
+        localStorage.setItem('theledger.save', text);
+        sessionStorage.setItem('seeded', '1');
+      }
+    }, JSON.stringify(save));
+    await first.close();
+    await page.goto('./');
+    const card = page
+      .locator('.card-link')
+      .filter({ hasText: pt ? /Classificados/ : /Classifieds/ });
+    await expect(card).toBeVisible();
+    const dots = await card.locator('.badge-dot').count();
+    await context.close();
+    return dots;
+  }
+  expect(await dotWith(2000)).toBe(0);
+  expect(await dotWith(20_000)).toBe(1);
+});
