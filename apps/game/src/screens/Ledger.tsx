@@ -57,7 +57,7 @@ function BusinessRow({ state, index }: { state: GameState; index: number }) {
         </div>
         <button
           type="button"
-          class="btn"
+          class="btn buy-btn"
           disabled={state.volume.cash < cost}
           onClick={() => act((s) => buyBusiness(s, index))}
         >
