@@ -2,6 +2,7 @@ import type { GameState, Lang } from '@ledger/engine';
 import { useState } from 'preact/hooks';
 import { setLang, deviceLang, t } from '../i18n/index.ts';
 import { act, eraseSave } from '../store.ts';
+import { platform } from '../platform/index.ts';
 import { switchTab } from '../router.ts';
 import { Page } from '../ui/Page.tsx';
 
@@ -59,6 +60,16 @@ export function Settings({ state }: { state: GameState }) {
           </button>
         )}
       </div>
+      {platform().privacy.required() && (
+        <button
+          type="button"
+          class="btn"
+          style={{ alignSelf: 'flex-start' }}
+          onClick={() => void platform().privacy.show()}
+        >
+          {t('settings.privacy')}
+        </button>
+      )}
       <p class="tiny" style={{ marginTop: '24px' }}>
         {t('settings.about', { version: VERSION })}
       </p>

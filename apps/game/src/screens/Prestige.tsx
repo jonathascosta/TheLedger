@@ -2,20 +2,28 @@ import {
   buyPartner,
   claimable,
   closeVolume,
+  closingBonus,
   GOODWILL_BONUS,
   PARTNERS,
   type GameState,
 } from '@ledger/engine';
-import { useState } from 'preact/hooks';
+import { useRef, useState } from 'preact/hooks';
 import { Cover, coverFor } from '../art/Covers.tsx';
 import { roman, t, tk } from '../i18n/index.ts';
-import { act } from '../store.ts';
+import { sponsorsOffered, useWatching } from '../sponsor.ts';
+import { act, grant } from '../store.ts';
 import { switchTab } from '../router.ts';
 import { Page } from '../ui/Page.tsx';
+import { Sponsor } from '../ui/Sponsor.tsx';
 import { moneyShort, percent, plain } from '../ui/format.ts';
 
 export function Close({ state }: { state: GameState }) {
   const [sealed, setSealed] = useState<{ number: number; goodwill: number } | null>(null);
+  // Confirmed, and the closing sponsor on offer before the seal.
+  const [asking, setAsking] = useState(false);
+  // The volume closes once, whatever a late ad answers.
+  const closed = useRef(false);
+  const watching = useWatching();
   const claim = claimable(state);
   const v = state.volume;
   if (sealed) {
@@ -81,6 +89,13 @@ export function Close({ state }: { state: GameState }) {
     );
   }
   const after = GOODWILL_BONUS * (state.meta.goodwill + claim);
+  const seal = (sponsored: boolean): void => {
+    if (closed.current) return;
+    closed.current = true;
+    const number = state.volume.number;
+    const goodwill = (sponsored ? grant : act)((s) => closeVolume(s, Date.now(), sponsored));
+    setSealed({ number, goodwill });
+  };
   return (
     <Page>
       <h1 class="h1">{t('close.title')}</h1>
@@ -112,16 +127,29 @@ export function Close({ state }: { state: GameState }) {
           width={150}
         />
       </div>
-      {claim > 0 ? (
+      {claim > 0 && asking ? (
+        <div class="stack" style={{ alignItems: 'center' }}>
+          <Sponsor
+            title={t('closing.sponsorTitle')}
+            reward={t('closing.sponsorReward', { goodwill: plain(closingBonus(claim)) })}
+            onEarned={() => seal(true)}
+            onSkipped={() => seal(false)}
+          />
+          <button
+            type="button"
+            class="stamp-btn red"
+            disabled={watching}
+            onClick={() => seal(false)}
+          >
+            {t('closing.without')}
+          </button>
+        </div>
+      ) : claim > 0 ? (
         <button
           type="button"
           class="stamp-btn red"
           style={{ alignSelf: 'center', marginTop: '10px' }}
-          onClick={() => {
-            const number = state.volume.number;
-            const goodwill = act((s) => closeVolume(s, Date.now()));
-            setSealed({ number, goodwill });
-          }}
+          onClick={() => (sponsorsOffered() ? setAsking(true) : seal(false))}
         >
           {t('close.confirm')}
         </button>

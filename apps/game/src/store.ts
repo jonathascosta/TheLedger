@@ -56,6 +56,16 @@ export function eraseSave(): void {
   save();
 }
 
+/**
+ * Grants a sponsor's reward (docs/ARCHITECTURE.md, Sponsors): the game is ticked up to now first,
+ * so the time the ad took is paid at the rates it had (as play, never as an absence, however long
+ * the ad), then the reward applies.
+ */
+export function grant<T>(fn: (s: GameState) => T): T {
+  tick(state, Date.now());
+  return act(fn);
+}
+
 /** Brings the game up to now: a normal tick, or an absence with its receipt. */
 function catchUp(): void {
   const now = Date.now();

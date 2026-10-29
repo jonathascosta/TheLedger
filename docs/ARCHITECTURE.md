@@ -126,3 +126,30 @@ iOS build runs on macOS only (the `iOS` workflow builds it for the simulator, un
 `src/platform/` hides what differs: on the website the save lives in `localStorage`; in the app
 `platform/native.ts` (loaded only there, with a dynamic import) keeps it in Capacitor
 Preferences, taps the haptic engine on each stamp and styles the status bar.
+
+### Sponsors in the app
+
+`src/ads/` holds the ads layer, ported from Arrows (rewarded ads only):
+
+- `AdProvider` (`ads.ts`): `available` and `showRewarded()`, which resolves with whether the
+  reward was earned and rejects when no ad could be shown.
+- `AdMobAds` (`admob.ts`, iOS): keeps the next ad loaded, reloads one older than 55 minutes, waits
+  up to 6 s for one still loading, tries a failed load once more.
+- `AdConsent` (`consent.ts`): Google's consent form where the law asks for one, then Apple's
+  tracking prompt, then the SDK starts; nothing loads before. The plugin carries a patch
+  (`patches/`) so its forms can show before the SDK starts; `consent.test.ts` fails without it,
+  so an upgrade of `@capacitor-community/admob` must carry it over.
+- `DebugAds` (`debug.ts`): the test card on the website with `?ads=test`, for the end-to-end
+  tests. Without it the website gets `NO_ADS` and shows no sponsor; only `platform/native.ts`
+  imports AdMob (`bundle.test.ts` checks the sources, and an end-to-end test that the built entry
+  script holds none of it).
+
+`src/sponsor.ts` gives the screens `sponsorsOffered()`, `today()` (the device's date for the
+engine's daily limits) and `watch()`; `ui/Sponsor.tsx` is the clipping, `ui/Golden.tsx` the golden
+invoice and its choice. One ad plays at a time: while it loads or plays, `useWatching()` disables
+the alternatives (Take, Collect, Seal without a sponsor) and a second tap does nothing. A reward
+goes through `grant` in the store, which ticks the game up to now (as play, never as an absence)
+before the engine's action. The closing sponsor's ad closed early seals without the bonus; the
+seal runs once. The owner's ad unit comes in at build time
+(`VITE_ADMOB_REWARDED_ID`) and the AdMob app id through the `ADMOB_APP_ID` build setting; both are
+Google's test ids until then (docs/STORE.md).

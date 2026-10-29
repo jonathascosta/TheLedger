@@ -78,7 +78,7 @@ Playwright on the production build, phone profile: the first session (stamp, ope
 collect, buy) and a tour of every tab, in CI on every pull request, with the Chromium that cloud
 sessions already have.
 
-### T10. Engine: sponsor rewards and the Gold Edition's effects
+### T10. Engine: sponsor rewards and the Gold Edition's effects — done
 
 PRODUCT.md, Sponsors and The Gold Edition, in the engine, with no ad or store in sight: the app
 calls an action once a reward is earned.
@@ -93,7 +93,7 @@ calls an action once a reward is earned.
   the golden invoice's schedule replays for a seed, the closing bonus leaves later claims alone,
   an old save loads.
 
-### T11. App: sponsors on iPhone
+### T11. App: sponsors on iPhone — done
 
 - The ads layer, ported from Arrows to this app (Arrows' is plain DOM, this one is Preact):
   `AdProvider` with rewarded ads only, AdMob on iOS (loading ahead), the consent form and the
