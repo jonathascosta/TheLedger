@@ -48,7 +48,9 @@ export default defineConfig([
       '@typescript-eslint/switch-exhaustiveness-check': 'error',
       // noUncheckedIndexedAccess is on; a local, obvious `!` beats defensive noise.
       '@typescript-eslint/no-non-null-assertion': 'off',
-      eqeqeq: ['error', 'always'],
+      // Its rewrites of `!x || x.y !== null` change the meaning; keep the explicit checks.
+      '@typescript-eslint/prefer-optional-chain': 'off',
+      eqeqeq: ['error', 'always', { null: 'ignore' }],
       'no-console': ['error', { allow: ['warn', 'error'] }],
     },
   },

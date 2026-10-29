@@ -19,20 +19,48 @@ export type { UpgradeDef, UpgradeEffect } from './data/upgrades.ts';
 export { TRAITS } from './data/people.ts';
 export type { Trait } from './data/people.ts';
 export { PARTNERS, GOODWILL_BONUS } from './data/partners.ts';
+export {
+  CLASS_UNLOCKS,
+  INSTRUMENTS,
+  INSTRUMENT_BY_ID,
+  MARKET_TICK_SECONDS,
+} from './data/market.ts';
+export type { AssetClass, InstrumentDef, InstrumentKind } from './data/market.ts';
+export {
+  ART_LOT_SECONDS,
+  BOND_RATE,
+  PARKS,
+  PROPERTIES,
+  PROPERTY_SALE,
+  STARTUP_OUTCOMES,
+} from './data/assets.ts';
+export type { ParkDef, PropertyDef } from './data/assets.ts';
+export { CHOICES, EDITION_SECONDS, EVENTS } from './data/events.ts';
+export type { ChoiceId, EventDef, Shock } from './data/events.ts';
+export { ACHIEVEMENTS } from './data/achievements.ts';
+export type { AchievementDef, AchievementStyle } from './data/achievements.ts';
 export type { PartnerDef, PartnerId } from './data/partners.ts';
 
 export { SAVE_VERSION, migrate, newGame, newVolume } from './state/state.ts';
 export type {
+  ArtLot,
+  ArtPiece,
   AwayLine,
   AwayReceipt,
   BusinessState,
   BuyMode,
   DeskState,
   GameState,
+  Holding,
   Manager,
+  MarketState,
+  PaperResult,
+  PaperState,
   Meta,
   Settings,
   ShelfEntry,
+  StartupPitch,
+  StartupResult,
   Volume,
 } from './state/state.ts';
 
@@ -72,4 +100,44 @@ export type { Candidate } from './managers/managers.ts';
 
 export { AWAY_MAX_SECONDS, collectAway, offlineRate } from './away/away.ts';
 
+export {
+  affordableUnits,
+  buyUnits,
+  instrumentsValue,
+  price,
+  sellUnits,
+  unitsHeld,
+} from './market/market.ts';
+export type { SaleResult } from './market/market.ts';
+export {
+  artValue,
+  bondCap,
+  bondRate,
+  buyArt,
+  buyPark,
+  buyProperty,
+  investStartup,
+  lend,
+  lotInfo,
+  parkRate,
+  passStartup,
+  passiveRate,
+  pitchInfo,
+  rentRate,
+  sellArt,
+  sellProperty,
+  withdraw,
+} from './assets/assets.ts';
+export type { LotInfo, PitchInfo } from './assets/assets.ts';
+export { answer, boldWins, eventOf, markRead } from './paper/paper.ts';
+export type { AnswerResult } from './paper/paper.ts';
+export { checkAchievements, grant } from './achievements/achievements.ts';
+export {
+  buyPartner,
+  claimable,
+  closeVolume,
+  goodwillTotal,
+  shouldClose,
+} from './prestige/prestige.ts';
+export { classValues, isUnlocked } from './worth.ts';
 export { applyAway, netWorth, tick } from './game.ts';
