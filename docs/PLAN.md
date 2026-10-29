@@ -55,7 +55,7 @@ they would only slow the release down.
 - The Gazette with the event and its coupons; achievements page and the stamp that announces a
   new one; closing the volume (ceremony), Partners, the Shelf, the covers.
 
-### T6. Website
+### T6. Website — done
 
 - The `Website` workflow publishes `apps/game/dist` to GitHub Pages; the game works offline once
   loaded (fonts bundled). A smoke test in a real browser of the first session's steps.

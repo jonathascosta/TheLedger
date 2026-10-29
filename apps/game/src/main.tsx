@@ -16,3 +16,8 @@ boot();
 setLang(game().settings.lang ?? deviceLang());
 paintGrain();
 render(<App />, document.getElementById('app')!);
+
+// Offline play on the website (the iOS app ships its files and needs no service worker).
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  void navigator.serviceWorker.register('./sw.js').catch(() => undefined);
+}
