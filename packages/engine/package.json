@@ -1,0 +1,20 @@
+{
+  "name": "@ledger/engine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pure, deterministic engine of The Ledger: seeded RNG, and later the economy, the markets, the events and the achievements. Zero dependencies, no DOM.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "node --eval \"fs.rmSync('dist', { recursive: true, force: true })\" && tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.build.json --noEmit",
+    "test": "vitest run"
+  }
+}
