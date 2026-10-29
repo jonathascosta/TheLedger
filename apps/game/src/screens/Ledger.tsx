@@ -14,8 +14,11 @@ import {
   isUnlocked,
   levelCost,
   netWorth,
+  offerLeft,
   passiveRate,
   shouldClose,
+  sponsorshipLeft,
+  startSponsorship,
   UPGRADES,
   type BuyMode,
   type GameState,
@@ -23,10 +26,13 @@ import {
 import { BusinessDoodle, Icon } from '../art/Doodles.tsx';
 import { InkChart } from '../art/InkChart.tsx';
 import { roman, t, tk } from '../i18n/index.ts';
-import { act } from '../store.ts';
+import { act, grant } from '../store.ts';
 import { go } from '../router.ts';
+import { sponsorsOffered, today } from '../sponsor.ts';
+import { GoldenInvoice } from '../ui/Golden.tsx';
 import { Page, Underline } from '../ui/Page.tsx';
-import { money, moneyShort, plain } from '../ui/format.ts';
+import { Sponsor } from '../ui/Sponsor.tsx';
+import { duration, money, moneyShort, plain } from '../ui/format.ts';
 
 const MODES: readonly BuyMode[] = [1, 10, 100, 'max'];
 
@@ -135,6 +141,7 @@ function BusinessRow({ state, index }: { state: GameState; index: number }) {
 
 export function Ledger({ state }: { state: GameState }) {
   const v = state.volume;
+  const now = Date.now();
   const worth = netWorth(state);
   const income = businessIncome(state) + passiveRate(state);
   const open = v.businesses.filter((b) => b.level > 0).length;
@@ -184,6 +191,7 @@ export function Ledger({ state }: { state: GameState }) {
           </span>
         </Underline>
       </div>
+      <GoldenInvoice state={state} />
       {v.history.length > 2 && (
         <InkChart values={[...v.history, worth]} label={t('ledger.chartLabel')} height={120} />
       )}
@@ -253,6 +261,21 @@ export function Ledger({ state }: { state: GameState }) {
           </button>
         )}
       </div>
+      {open > 0 && sponsorsOffered() && (
+        <Sponsor
+          title={t('sponsorship.title')}
+          reward={t('sponsorship.reward')}
+          detail={
+            <>
+              {sponsorshipLeft(state, now) > 0 &&
+                `${t('sponsorship.running', { time: duration(sponsorshipLeft(state, now) / 1000) })} · `}
+              {t('sponsor.left', { count: offerLeft(state, 'sponsorship', today(now)) })}
+            </>
+          }
+          spent={offerLeft(state, 'sponsorship', today(now)) === 0}
+          onEarned={() => grant((s) => startSponsorship(s, Date.now(), today()))}
+        />
+      )}
       {hint && (
         <div class="note">
           <Icon.pencilArrow />

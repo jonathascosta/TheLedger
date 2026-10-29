@@ -1,6 +1,8 @@
 import { BUSINESSES, collectAway, type AwayReceipt } from '@ledger/engine';
 import { t, tk } from '../i18n/index.ts';
-import { act } from '../store.ts';
+import { sponsorsOffered, useWatching } from '../sponsor.ts';
+import { act, grant } from '../store.ts';
+import { Sponsor } from '../ui/Sponsor.tsx';
 import { duration, moneyShort, percent } from '../ui/format.ts';
 
 const NAMES: Record<string, () => string> = {
@@ -11,6 +13,7 @@ const NAMES: Record<string, () => string> = {
 
 /** The adding machine's receipt for an absence. */
 export function Away({ receipt }: { receipt: AwayReceipt }) {
+  const watching = useWatching();
   return (
     <div class="modal page">
       <div class="scroll">
@@ -104,10 +107,20 @@ export function Away({ receipt }: { receipt: AwayReceipt }) {
             type="button"
             class="stamp-btn green"
             style={{ alignSelf: 'center', marginTop: '22px', minWidth: '240px' }}
+            disabled={watching}
             onClick={() => act((s) => collectAway(s))}
           >
             {t('away.collect', { amount: moneyShort(receipt.total) })}
           </button>
+          {sponsorsOffered() && (
+            <div style={{ alignSelf: 'center', marginTop: '12px' }}>
+              <Sponsor
+                title={t('audit.title')}
+                reward={t('audit.reward', { amount: moneyShort(receipt.total * 2) })}
+                onEarned={() => grant((s) => collectAway(s, true))}
+              />
+            </div>
+          )}
           <p class="note" style={{ marginTop: '8px' }}>
             {t('away.tip')}
           </p>

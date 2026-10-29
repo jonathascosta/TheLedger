@@ -2,6 +2,7 @@ import { netWorth, type GameState, type Lang } from '@ledger/engine';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { setLang, deviceLang, lang, roman, t } from '../i18n/index.ts';
 import { decodeBackup, encodeBackup, type Decoded } from '../persist/backup.ts';
+import { platform } from '../platform/index.ts';
 import { act, eraseSave, game, restoreGame } from '../store.ts';
 import { switchTab } from '../router.ts';
 import { money } from '../ui/format.ts';
@@ -62,6 +63,16 @@ export function Settings({ state }: { state: GameState }) {
           </button>
         )}
       </div>
+      {platform().privacy.required() && (
+        <button
+          type="button"
+          class="btn"
+          style={{ alignSelf: 'flex-start' }}
+          onClick={() => void platform().privacy.show()}
+        >
+          {t('settings.privacy')}
+        </button>
+      )}
       <p class="tiny" style={{ marginTop: '24px' }}>
         {t('settings.about', { version: VERSION })}
       </p>

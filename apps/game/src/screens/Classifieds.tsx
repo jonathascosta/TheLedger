@@ -1,8 +1,10 @@
-import { BUSINESSES, candidates, hire, type GameState } from '@ledger/engine';
+import { BUSINESSES, candidates, headhunt, hire, offerLeft, type GameState } from '@ledger/engine';
 import { Portrait } from '../art/Portrait.tsx';
 import { t, tk } from '../i18n/index.ts';
-import { act } from '../store.ts';
+import { sponsorsOffered, today } from '../sponsor.ts';
+import { act, grant } from '../store.ts';
 import { Page } from '../ui/Page.tsx';
+import { Sponsor } from '../ui/Sponsor.tsx';
 import { moneyShort } from '../ui/format.ts';
 
 export function Classifieds({ state }: { state: GameState }) {
@@ -26,6 +28,15 @@ export function Classifieds({ state }: { state: GameState }) {
         <p class="hand center" style={{ fontSize: '20px' }}>
           {t('classifieds.none')}
         </p>
+      )}
+      {sponsorsOffered() && list.length > 0 && (
+        <Sponsor
+          title={t('headhunter.title')}
+          reward={t('headhunter.reward')}
+          detail={t('sponsor.left', { count: offerLeft(state, 'headhunter', today()) })}
+          spent={offerLeft(state, 'headhunter', today()) === 0}
+          onEarned={() => grant((s) => headhunt(s, today()))}
+        />
       )}
       <div class="grid2" style={{ gap: '8px' }}>
         {list.map((c) => (
@@ -56,6 +67,11 @@ export function Classifieds({ state }: { state: GameState }) {
               {t('classifieds.cv', { years: c.years, trait: tk(`trait.${c.trait}`) })} —{' '}
               {tk(`trait.${c.trait}.desc`)}.
             </p>
+            {c.star && (
+              <p class="hand loss" style={{ fontWeight: 700, fontSize: '18px', lineHeight: 1.1 }}>
+                {t('classifieds.star')}
+              </p>
+            )}
             <button
               type="button"
               class="btn"
@@ -77,6 +93,7 @@ export function Classifieds({ state }: { state: GameState }) {
             <div key={m.business} class="row">
               <Portrait seed={m.face} size={36} />
               <p class="hand" style={{ fontSize: '19px' }}>
+                {m.star ? '★ ' : ''}
                 {m.name} · {tk(`biz.${BUSINESSES[m.business]!.id}`)} · {tk(`trait.${m.trait}`)}
               </p>
             </div>

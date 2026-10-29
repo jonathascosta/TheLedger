@@ -17,6 +17,8 @@ import { Close, Partners, Shelf } from './screens/Prestige.tsx';
 import { Settings } from './screens/Settings.tsx';
 import { Upgrades } from './screens/Upgrades.tsx';
 import { Defs } from './ui/Defs.tsx';
+import { GoldenOffer } from './ui/Golden.tsx';
+import { SponsorNotice } from './ui/Sponsor.tsx';
 import { Tabs } from './ui/Tabs.tsx';
 
 function Screen({ route, state }: { route: Route; state: GameState }) {
@@ -97,7 +99,9 @@ export function App() {
       <Screen key={JSON.stringify(route)} route={route} state={state} />
       <Tabs state={state} />
       {state.away && <Away receipt={state.away} />}
+      <GoldenOffer state={state} />
       <Toast state={state} />
+      <SponsorNotice />
     </div>
   );
 }
