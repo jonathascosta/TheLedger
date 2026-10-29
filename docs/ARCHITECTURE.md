@@ -85,11 +85,32 @@ that re-render at 10 Hz), CSS with custom properties.
 | `src/screens/`  | Ledger, Desk, Business, Upgrades, Market (stocks, commodities, crypto), Portfolio and the class pages, Achievements, Gazette and Classifieds, Away receipt, Close the volume, Partners, Shelf, Settings |
 | `src/art/`      | SVG pieces: stickers and doodles, ink charts, the donut, stamps and seals, covers, the city map, portraits                                                                                              |
 | `src/i18n/`     | `en.ts` and `pt.ts`, one key set; `t(key, params)`; the language follows the device and Settings                                                                                                        |
-| `src/persist/`  | `Storage` interface: `localStorage` on the web, Capacitor Preferences on iOS                                                                                                                            |
+| `src/persist/`  | `Storage` interface: `localStorage` on the web, Capacitor Preferences on iOS; the backup code                                                                                                           |
 | `src/theme.css` | Every colour, font and size as a custom property                                                                                                                                                        |
 
 Art is drawn with inline SVG and CSS. The paper grain is one small noise texture made once at
 start; heavy SVG filters are kept to static pieces, so the 10 Hz render stays cheap on a phone.
+
+### Backup code
+
+`src/persist/backup.ts` turns the save into one line of text and back (PRODUCT.md, Saving):
+`LEDGER1.<body>.<signature>`.
+
+- `LEDGER1.` names the format; a code with a newer number is refused as "newer version".
+- The body is `{"made": <ms>, "save": <GameState>}` as JSON, without what the game rebuilds (the
+  price histories `volume.market.history` and the net-worth history `volume.history`) and without
+  the Gold Edition (`meta.gold`, which belongs to the device). Its UTF-8 bytes are XORed with a
+  keystream (SHA-256 of the key and a block counter) and written in base64url, so it is not
+  readable JSON.
+- The signature is HMAC-SHA-256 of `LEDGER1.<body>`, in base64url. The hash is plain TypeScript
+  (`src/persist/sha256.ts`), synchronous, because the iOS 15 web view may lack WebCrypto.
+- Decoding ignores white space, checks the prefix, then the signature (a changed or cut code fails
+  here), unscrambles, refuses a save version newer than `SAVE_VERSION`, runs the engine's
+  `migrate`, and starts the histories again from the current prices and net worth. The store then
+  keeps this device's `meta.gold` and saves.
+
+The key is a constant in the app, so anyone with the app's code can sign a code: the signature
+stops casual edits, not a determined player.
 
 ### Routing
 

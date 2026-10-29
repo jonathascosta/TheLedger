@@ -56,6 +56,19 @@ export function eraseSave(): void {
   save();
 }
 
+/**
+ * Replaces the game with one from a backup code, keeping this device's Gold Edition, and saves
+ * it at once.
+ */
+export function restoreGame(next: GameState): void {
+  const gold = (state.meta as { gold?: unknown }).gold;
+  if (gold !== undefined) (next.meta as { gold?: unknown }).gold = gold;
+  state = next;
+  catchUp();
+  notify();
+  save();
+}
+
 /** Brings the game up to now: a normal tick, or an absence with its receipt. */
 function catchUp(): void {
   const now = Date.now();

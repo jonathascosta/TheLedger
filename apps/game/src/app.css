@@ -926,3 +926,21 @@ p {
 .cash-strip.on {
   transform: none;
 }
+
+/* ---------- Backup code ---------- */
+
+.code-box {
+  width: 100%;
+  min-height: 72px;
+  padding: 6px 8px;
+  border: 1.5px dashed var(--ink-soft);
+  border-radius: 4px;
+  background: var(--paper-white);
+  color: var(--ink);
+  font-family: var(--type);
+  /* 16px keeps iOS from zooming in on focus. */
+  font-size: 16px;
+  line-height: 1.3;
+  word-break: break-all;
+  resize: vertical;
+}

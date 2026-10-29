@@ -439,6 +439,26 @@ export const pt: Record<StringKey, string> = {
   'settings.erase': 'Apagar o jogo salvo',
   'settings.eraseConfirm': 'Apagar tudo e recomeçar? Isso não pode ser desfeito.',
   'settings.eraseYes': 'Apagar',
+  'settings.backup': 'Backup',
+  'settings.backupNote':
+    'Um código de backup guarda o jogo inteiro numa linha de texto. Cole-o em outro aparelho, iPhone ou site, para continuar lá.',
+  'settings.copy': 'Copiar código de backup',
+  'settings.copied': 'Copiado. Guarde-o num lugar seguro.',
+  'settings.copyManual': 'Selecione o código abaixo e copie-o.',
+  'settings.codeLabel': 'Seu código de backup',
+  'settings.restore': 'Restaurar de um código',
+  'settings.pasteLabel': 'Cole um código de backup aqui',
+  'settings.read': 'Ler o código',
+  'settings.preview': 'Vol. {roman} · patrimônio {worth} · feito em {date}',
+  'settings.restoreConfirm':
+    'Substituir o jogo deste aparelho por este? Isso não pode ser desfeito.',
+  'settings.restoreYes': 'Restaurar',
+  'settings.restored': 'Restaurado.',
+  'settings.error.format': 'Isso não é um código de backup.',
+  'settings.error.signature': 'Este código foi alterado ou cortado. Copie-o de novo, inteiro.',
+  'settings.error.version':
+    'Este código vem de uma versão mais nova do jogo. Atualize o jogo primeiro.',
+  'settings.error.broken': 'Este código guarda um jogo que não pode ser carregado.',
   'settings.about': 'The Ledger: Simulador de Negócios · versão {version}',
   'settings.credits': 'Fontes: Caveat, Courier Prime e IM Fell English (SIL Open Font License).',
 
