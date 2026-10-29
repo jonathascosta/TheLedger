@@ -210,7 +210,7 @@ export function Desk({ state }: { state: GameState }) {
                 style={{ opacity: state.volume.cash < u.cost ? 0.55 : 1 }}
                 onClick={() => act((s) => buyUpgrade(s, u.id))}
               >
-                <UpgradeIcon upgrade={u} size={40} />
+                <UpgradeIcon upgrade={u} size={34} />
                 <span class="grow">
                   <span class="h3" style={{ display: 'block', fontSize: '19px' }}>
                     {tk(`upgrade.${u.id}`)}

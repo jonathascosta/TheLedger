@@ -2,14 +2,14 @@ import type { UpgradeDef } from '@ledger/engine';
 import { BusinessDoodle, Icon } from './Doodles.tsx';
 
 /** The red ink stamp in the corner that marks an upgrade: "×3", "×2", or a green tick once bought. */
-function Mark({ text, bought }: { text: string; bought: boolean }) {
+function Mark({ text, bought, size }: { text: string; bought: boolean; size: number }) {
   const ink = bought ? 'var(--profit)' : 'var(--loss)';
   return (
     <svg
       aria-hidden="true"
       viewBox="0 0 30 30"
-      width="26"
-      height="26"
+      width={size}
+      height={size}
       style={{ position: 'absolute', right: '-6px', bottom: '-5px', transform: 'rotate(-12deg)' }}
     >
       <circle cx="15" cy="15" r="13" style={{ fill: 'var(--paper-white)' }} />
@@ -70,11 +70,14 @@ export function UpgradeIcon({
   size?: number;
 }) {
   const e = upgrade.effect;
-  const mark = <Mark text={`×${e.factor}`} bought={bought} />;
+  const mark = (
+    <Mark text={`×${e.factor}`} bought={bought} size={Math.max(21, Math.round(size * 0.56))} />
+  );
   if (e.kind === 'all') {
     const mini = Math.round(size * 0.62);
     return (
       <span
+        class="upgrade-icon"
         aria-hidden="true"
         style={{ position: 'relative', width: `${size}px`, height: `${size}px`, flex: 'none' }}
       >
@@ -100,6 +103,7 @@ export function UpgradeIcon({
   }
   return (
     <span
+      class="upgrade-icon"
       aria-hidden="true"
       style={{ position: 'relative', width: `${size}px`, height: `${size}px`, flex: 'none' }}
     >
