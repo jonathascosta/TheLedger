@@ -1,5 +1,6 @@
 import { BUSINESSES } from '../data/businesses.ts';
 import { INSTRUMENTS } from '../data/market.ts';
+import { goldenGap, type CountedOffer } from '../data/sponsors.ts';
 import type { Trait } from '../data/people.ts';
 import type { Lang } from '../format/format.ts';
 
@@ -37,6 +38,8 @@ export interface Manager {
   trait: Trait;
   /** Seed of the pencil portrait's parts. */
   face: number;
+  /** A headhunter's star: the trait counts twice. */
+  star?: boolean;
 }
 
 export interface DeskState {
@@ -131,6 +134,29 @@ export interface PaperState {
   unread: boolean;
 }
 
+/** The golden invoice's schedule (PRODUCT.md, The front desk). */
+export interface GoldenState {
+  /** Golden invoices so far in this volume (seeds the next gap). */
+  count: number;
+  /** Game time (ms) the next one arrives. */
+  nextAt: number;
+  /** While one is on the desk: the game time (ms) it leaves. */
+  until: number | null;
+  /** Taken by a tap and not yet paid (a sponsor's ad may be playing). */
+  taken: boolean;
+}
+
+/** The sponsors' timers and today's counts; kept when a volume closes. */
+export interface SponsorState {
+  /** The device's date the counts belong to (`YYYY-MM-DD`). */
+  day: string;
+  counts: Partial<Record<CountedOffer, number>>;
+  /** Game time (ms) overtime ends. */
+  overtimeUntil: number;
+  /** Game time (ms) the banked sponsorship ends. */
+  sponsoredUntil: number;
+}
+
 /** Everything that a closed volume resets. */
 export interface Volume {
   number: number;
@@ -158,6 +184,11 @@ export interface Volume {
   art: ArtPiece[];
   artLot: ArtLot | null;
   paper: PaperState;
+  golden: GoldenState;
+  /** Headhunts so far in this volume (seeds the candidates). */
+  headhunts: number;
+  /** The business whose candidate is a star, until hired or the next headhunt. */
+  star: number | null;
 }
 
 export interface ShelfEntry {
@@ -179,6 +210,8 @@ export interface Meta {
   totalStamps: number;
   bestCombo: number;
   editionsAnswered: number;
+  /** The Gold Edition (PRODUCT.md): set by the app from the store. */
+  gold: boolean;
 }
 
 export interface Settings {
@@ -199,12 +232,14 @@ export interface GameState {
   away: AwayReceipt | null;
   /** Achievements earned but not yet announced. */
   fresh: string[];
+  sponsors: SponsorState;
 }
 
 export function newVolume(number: number, now: number, startCash = 0): Volume {
+  const seed = `vol:${number}:${now}`;
   return {
     number,
-    seed: `vol:${number}:${now}`,
+    seed,
     startedAt: now,
     cash: startCash,
     earned: 0,
@@ -231,6 +266,9 @@ export function newVolume(number: number, now: number, startCash = 0): Volume {
     art: [],
     artLot: null,
     paper: { edition: 0, event: null, nextAt: now + 60_000, answer: null, unread: false },
+    golden: { count: 0, nextAt: now + goldenGap(seed, 0), until: null, taken: false },
+    headhunts: 0,
+    star: null,
   };
 }
 
@@ -250,10 +288,12 @@ export function newGame(now: number): GameState {
       totalStamps: 0,
       bestCombo: 0,
       editionsAnswered: 0,
+      gold: false,
     },
     settings: { lang: null, buyMode: 1 },
     away: null,
     fresh: [],
+    sponsors: { day: '', counts: {}, overtimeUntil: 0, sponsoredUntil: 0 },
   };
 }
 
@@ -269,6 +309,16 @@ export function migrate(raw: unknown, now: number): GameState | null {
   // Fill any field a development build may have missed.
   const fresh = newGame(now);
   const volume = { ...newVolume(save.volume.number, now), ...save.volume };
+  // Nested records are filled field by field, so a partial one keeps working.
+  const seed = typeof volume.seed === 'string' ? volume.seed : `vol:${volume.number}:${now}`;
+  const golden = save.volume.golden as Partial<GoldenState> | undefined;
+  volume.golden = {
+    count: 0,
+    nextAt: now + goldenGap(seed, golden?.count ?? 0),
+    until: null,
+    taken: false,
+    ...golden,
+  };
   if (save.version < 2 && Array.isArray(volume.upgrades)) {
     volume.upgrades = (volume.upgrades as unknown[])
       .filter((id): id is string => typeof id === 'string')
@@ -280,6 +330,11 @@ export function migrate(raw: unknown, now: number): GameState | null {
     version: SAVE_VERSION,
     volume,
     meta: { ...fresh.meta, ...save.meta },
+    sponsors: {
+      ...fresh.sponsors,
+      ...save.sponsors,
+      counts: { ...save.sponsors?.counts },
+    },
     settings: { ...fresh.settings, ...save.settings },
   };
 }

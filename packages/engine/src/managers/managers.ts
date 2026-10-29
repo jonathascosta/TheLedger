@@ -13,9 +13,13 @@ export interface Candidate extends Manager {
 
 /** The classifieds' candidate for a business, drawn from the volume's seed. */
 export function candidateFor(state: GameState, business: number): Candidate {
-  const rng = createRng(state.volume.seed).fork('managers').fork(String(business));
+  const { headhunts, star } = state.volume;
+  // Each headhunt brings new people; before the first, the volume's original candidates.
+  const label = headhunts === 0 ? String(business) : `${business}:${headhunts}`;
+  const rng = createRng(state.volume.seed).fork('managers').fork(label);
   return {
     business,
+    star: star === business,
     name: `${rng.pick(FIRST_NAMES)} ${rng.pick(SURNAME_INITIALS)}.`,
     trait: rng.pick(TRAITS),
     face: rng.int(1_000_000),
@@ -40,6 +44,9 @@ export function hire(state: GameState, business: number): ActionResult {
   if (state.volume.managers[business]) return { ok: false, reason: 'owned' };
   const c = candidateFor(state, business);
   if (!spend(state, c.cost)) return { ok: false, reason: 'cash' };
-  state.volume.managers[business] = { name: c.name, trait: c.trait, face: c.face };
+  state.volume.managers[business] = c.star
+    ? { name: c.name, trait: c.trait, face: c.face, star: true }
+    : { name: c.name, trait: c.trait, face: c.face };
+  if (state.volume.star === business) state.volume.star = null;
   return OK;
 }

@@ -27,8 +27,11 @@ Workspace packages export their TypeScript sources (`"exports": "./src/index.ts"
 
 `GameState` is one plain, JSON-serialisable object: the save. It holds the current volume
 (cash, businesses, managers, upgrades, holdings, market prices and history, the paper, the
-desk), the meta progress that survives a reset (goodwill, partners, achievements, the shelf,
-lifetime earnings) and a save version.
+desk, the golden invoice's schedule, the headhunter's count and star), the meta progress that
+survives a reset (goodwill, partners, achievements, the shelf, lifetime earnings, the Gold
+Edition flag), the sponsors' timers and daily counts (also kept across volumes) and a save
+version. A save without a newer field loads with its default (`migrate` fills it from a new
+game), so adding a field needs no version bump.
 
 Actions are functions `(state, …args) => result` that **mutate** the state they are given and
 return what happened (for example `{ ok: false, reason: 'cash' }`). Mutation keeps a 10 Hz tick
@@ -59,8 +62,21 @@ cheap; the app treats the state as owned by the engine and re-renders after each
 | `paper/`        | Editions, events, choices and their seeded outcomes                                                                                                 |
 | `achievements/` | Predicates over the state, checked on tick and after actions                                                                                        |
 | `prestige/`     | Goodwill, closing the volume, partners, the shelf                                                                                                   |
-| `away/`         | Offline receipt                                                                                                                                     |
+| `away/`         | Offline receipt, the audit (Collect ×2)                                                                                                             |
+| `sponsors/`     | Sponsor rewards: overtime, the golden invoice (take, then pay), the sponsorship, the headhunter, daily limits keyed by the date the app passes in   |
 | `game.ts`       | `tick`, `applyAway`, and the public actions                                                                                                         |
+
+### Sponsors
+
+The engine knows nothing of ads or the store. When the app has a reward (an ad watched, or a tap
+with the Gold Edition) it calls the reward's action with the time and the device's date
+(`YYYY-MM-DD`), which keys the daily limits. The multipliers live where they apply: the
+sponsorship and the Gold Edition in `profitPerCycle` (so stamps, the golden invoice and the
+receipt's business lines follow), overtime in `stamp`, the star's weight on each trait, the
+closing bonus in `closeVolume` (added to the goodwill held, not to the goodwill claimed). The
+app ticks the game to now before granting a reward, so time spent watching the ad is not paid at
+the new rate. `tick` moves `lastTick` second by second, so a sponsorship that ends inside a tick
+doubles only the seconds before its end; the bond cap leaves the sponsorship out.
 
 ### Numbers
 

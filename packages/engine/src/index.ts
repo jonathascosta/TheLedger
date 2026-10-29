@@ -42,6 +42,30 @@ export type { AchievementDef, AchievementStyle } from './data/achievements.ts';
 export type { PartnerDef, PartnerId } from './data/partners.ts';
 
 export { SAVE_VERSION, migrate, newGame, newVolume } from './state/state.ts';
+export {
+  CLOSING_BONUS,
+  DAILY_LIMITS,
+  GOLD_FACTOR,
+  GOLDEN_SHOWN_MS,
+  OVERTIME_FACTOR,
+  OVERTIME_MS,
+  SPONSORSHIP_MS,
+} from './data/sponsors.ts';
+export type { CountedOffer, SponsorOffer } from './data/sponsors.ts';
+export {
+  advanceGolden,
+  goldenOnDesk,
+  goldenValue,
+  headhunt,
+  payGolden,
+  offerLeft,
+  overtimeFactor,
+  setGold,
+  sponsorshipLeft,
+  startOvertime,
+  startSponsorship,
+  takeGolden,
+} from './sponsors/sponsors.ts';
 export type {
   ArtLot,
   ArtPiece,
@@ -51,6 +75,7 @@ export type {
   BuyMode,
   DeskState,
   GameState,
+  GoldenState,
   Holding,
   Manager,
   MarketState,
@@ -59,6 +84,7 @@ export type {
   Meta,
   Settings,
   ShelfEntry,
+  SponsorState,
   StartupPitch,
   StartupResult,
   Volume,
@@ -136,6 +162,7 @@ export {
   buyPartner,
   claimable,
   closeVolume,
+  closingBonus,
   goodwillTotal,
   shouldClose,
 } from './prestige/prestige.ts';

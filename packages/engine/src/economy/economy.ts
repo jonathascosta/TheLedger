@@ -1,11 +1,12 @@
 import { BUSINESSES, MANAGER_COST_FACTOR, MILESTONES, MIN_CYCLE } from '../data/businesses.ts';
 import { GOODWILL_BONUS, type PartnerId } from '../data/partners.ts';
 import { NEGOTIATOR_DISCOUNT, PERFECTIONIST_BONUS } from '../data/people.ts';
+import { GOLD_FACTOR, SPONSORSHIP_FACTOR, STAR_FACTOR } from '../data/sponsors.ts';
 import { UPGRADE_BY_ID } from '../data/upgrades.ts';
-import type { GameState } from '../state/state.ts';
+import type { GameState, Manager } from '../state/state.ts';
 
 export type ActionResult =
-  { ok: true } | { ok: false; reason: 'cash' | 'locked' | 'owned' | 'none' };
+  { ok: true } | { ok: false; reason: 'cash' | 'locked' | 'owned' | 'none' | 'limit' };
 
 export const OK: ActionResult = { ok: true };
 
@@ -30,6 +31,21 @@ export function spend(state: GameState, amount: number): boolean {
 
 export function goodwillMultiplier(state: GameState): number {
   return 1 + GOODWILL_BONUS * state.meta.goodwill;
+}
+
+/** The sponsorship's factor on business profit, at the game's current time. */
+export function sponsorshipFactor(state: GameState): number {
+  return state.lastTick < state.sponsors.sponsoredUntil ? SPONSORSHIP_FACTOR : 1;
+}
+
+/** The Gold Edition's factor on business profit. */
+export function goldFactor(state: GameState): number {
+  return state.meta.gold ? GOLD_FACTOR : 1;
+}
+
+/** How many times a manager's trait counts: twice for a headhunter's star. */
+export function traitWeight(manager: Manager | null | undefined): number {
+  return manager?.star ? STAR_FACTOR : 1;
 }
 
 function upgradeFactors(state: GameState, business: number): number {
@@ -72,13 +88,16 @@ export function profitPerCycle(state: GameState, business: number): number {
   const level = state.volume.businesses[business]!.level;
   if (level === 0) return 0;
   const manager = state.volume.managers[business];
-  const perfectionist = manager?.trait === 'perfectionist' ? PERFECTIONIST_BONUS : 1;
+  const perfectionist =
+    manager?.trait === 'perfectionist' ? 1 + (PERFECTIONIST_BONUS - 1) * traitWeight(manager) : 1;
   return (
     BUSINESSES[business]!.baseRevenue *
     level *
     upgradeFactors(state, business) *
     perfectionist *
     goodwillMultiplier(state) *
+    sponsorshipFactor(state) *
+    goldFactor(state) *
     cycleOf(state, business).extra
   );
 }
@@ -97,7 +116,8 @@ export function businessIncome(state: GameState): number {
 }
 
 function priceFactor(state: GameState, business: number): number {
-  return state.volume.managers[business]?.trait === 'negotiator' ? NEGOTIATOR_DISCOUNT : 1;
+  const manager = state.volume.managers[business];
+  return manager?.trait === 'negotiator' ? 1 - (1 - NEGOTIATOR_DISCOUNT) * traitWeight(manager) : 1;
 }
 
 /** Cost of the next `count` levels of a business. */
