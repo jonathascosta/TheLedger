@@ -20,7 +20,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "prepare": "husky",
-    "ios:sync": "pnpm --filter @ledger/game build && pnpm --filter @ledger/game exec cap sync ios"
+    "ios:sync": "pnpm --filter @ledger/game build && pnpm --filter @ledger/game exec cap sync ios",
+    "test:e2e": "pnpm --filter @ledger/game test:e2e"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
