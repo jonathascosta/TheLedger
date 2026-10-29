@@ -870,6 +870,12 @@ p {
   }
 }
 
+/* An upgrade's doodles keep the size the icon gives them, not the ledger sticker's. */
+.upgrade-icon .sticker svg {
+  width: auto;
+  height: auto;
+}
+
 /* The cash strip: cash and income pinned at the top of a scrolled page. */
 .cash-strip {
   position: absolute;

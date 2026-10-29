@@ -9,8 +9,8 @@ import {
   type GameState,
 } from '@ledger/engine';
 import { useState } from 'preact/hooks';
-import { Icon } from '../art/Doodles.tsx';
 import { PaidMark } from '../art/Badges.tsx';
+import { UpgradeIcon } from '../art/UpgradeIcon.tsx';
 import { t, tk } from '../i18n/index.ts';
 import { platform } from '../platform/index.ts';
 import { act } from '../store.ts';
@@ -210,7 +210,7 @@ export function Desk({ state }: { state: GameState }) {
                 style={{ opacity: state.volume.cash < u.cost ? 0.55 : 1 }}
                 onClick={() => act((s) => buyUpgrade(s, u.id))}
               >
-                <Icon.stamp size={26} />
+                <UpgradeIcon upgrade={u} size={34} />
                 <span class="grow">
                   <span class="h3" style={{ display: 'block', fontSize: '19px' }}>
                     {tk(`upgrade.${u.id}`)}

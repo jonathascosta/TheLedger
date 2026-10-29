@@ -1,5 +1,5 @@
 import { BUSINESSES, buyUpgrade, UPGRADES, type GameState, type UpgradeDef } from '@ledger/engine';
-import { Icon } from '../art/Doodles.tsx';
+import { UpgradeIcon } from '../art/UpgradeIcon.tsx';
 import { t, tk } from '../i18n/index.ts';
 import { act } from '../store.ts';
 import { Page } from '../ui/Page.tsx';
@@ -30,7 +30,7 @@ export function Upgrades({ state }: { state: GameState }) {
       <div class="stack" style={{ gap: '6px' }}>
         {offer.map((u) => (
           <div key={u.id} class="row" style={{ minHeight: '52px' }}>
-            <Icon.arrowUp size={26} />
+            <UpgradeIcon upgrade={u} />
             <div class="grow">
               <p class="h3" style={{ fontSize: '20px' }}>
                 {tk(`upgrade.${u.id}`)}
@@ -57,10 +57,12 @@ export function Upgrades({ state }: { state: GameState }) {
           </p>
           <div class="stack" style={{ gap: 0 }}>
             {bought.map((u) => (
-              <p key={u.id} class="hand" style={{ fontSize: '19px', textDecoration: 'none' }}>
-                <span class="profit">✓</span> {tk(`upgrade.${u.id}`)}{' '}
-                <span class="tiny">· {effectText(u)}</span>
-              </p>
+              <div key={u.id} class="row" style={{ minHeight: '44px' }}>
+                <UpgradeIcon upgrade={u} bought size={34} />
+                <p class="hand" style={{ fontSize: '19px' }}>
+                  {tk(`upgrade.${u.id}`)} <span class="tiny">· {effectText(u)}</span>
+                </p>
+              </div>
             ))}
           </div>
         </>

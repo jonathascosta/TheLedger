@@ -14,8 +14,9 @@ import {
   UPGRADES,
   type GameState,
 } from '@ledger/engine';
-import { BusinessDoodle, Icon } from '../art/Doodles.tsx';
+import { BusinessDoodle } from '../art/Doodles.tsx';
 import { Portrait } from '../art/Portrait.tsx';
+import { UpgradeIcon } from '../art/UpgradeIcon.tsx';
 import { Storefront } from '../art/Storefront.tsx';
 import { t, tk } from '../i18n/index.ts';
 import { act } from '../store.ts';
@@ -130,7 +131,7 @@ export function Business({ state, index }: { state: GameState; index: number }) 
               style={owned ? { opacity: 1 } : undefined}
               onClick={() => act((s) => buyUpgrade(s, u.id))}
             >
-              {owned ? <Icon.check /> : <Icon.box />}
+              <UpgradeIcon upgrade={u} bought={owned} size={34} />
               <span class="grow">{tk(`upgrade.${u.id}`)} · ×3</span>
               <span class={owned ? 'cost profit' : 'cost'}>{owned ? '✓' : moneyShort(u.cost)}</span>
             </button>
