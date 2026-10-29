@@ -13,6 +13,7 @@ import {
   type InstrumentKind,
 } from '@ledger/engine';
 import { useState } from 'preact/hooks';
+import { Icon } from '../art/Doodles.tsx';
 import { InkChart, Sparkline } from '../art/InkChart.tsx';
 import { t, tk } from '../i18n/index.ts';
 import { act } from '../store.ts';
@@ -59,9 +60,23 @@ export function Market({ state, kind }: { state: GameState; kind: InstrumentKind
         ))}
       </div>
       {!open ? (
-        <p class="hand" style={{ fontSize: '22px' }}>
-          {t('common.locked', { amount: moneyShort(at) })}
-        </p>
+        <div class="stack" style={{ gap: '6px' }}>
+          <div class="locked-card">
+            <Icon.lock />
+            <span class="hand" style={{ fontSize: '21px' }}>
+              {t('common.locked', { amount: moneyShort(at) })}
+            </span>
+          </div>
+          <p class="small">
+            {t('market.progress', {
+              now: moneyShort(state.volume.peakNetWorth),
+              at: moneyShort(at),
+            })}
+          </p>
+          <div class="bar">
+            <div style={{ width: `${Math.min(100, (state.volume.peakNetWorth / at) * 100)}%` }} />
+          </div>
+        </div>
       ) : (
         <div class="stack" style={{ gap: '4px' }}>
           {list.map((i) => {
@@ -113,9 +128,6 @@ export function Market({ state, kind }: { state: GameState; kind: InstrumentKind
             );
           })}
         </div>
-      )}
-      {!open && kind === 'stock' && (
-        <p class="small">{t('market.lockedTitle', { amount: moneyShort(at) })}</p>
       )}
     </Page>
   );

@@ -65,6 +65,19 @@ they would only slow the release down.
 - Capacitor config, `apps/game/ios` (Swift Package Manager), Preferences storage on iOS, safe
   areas, status bar, `pnpm ios:sync`, an `iOS` workflow building on macOS.
 
+### T8. Playtest polish — done
+
+A new player's first minutes at 375 px, in Portuguese and English: business rows that keep one
+line where they can, ledger cards that say what they count ("2 on offer", "3 applicants"), the
+manager hint before the collect hint once three businesses are open, the locked market showing
+how far the player is from opening it, the portfolio's wording.
+
+### T9. End-to-end test in CI
+
+Playwright on the production build, phone profile: the first session (stamp, open the café,
+collect, buy) and a tour of every tab, in CI on every pull request, with the Chromium that cloud
+sessions already have.
+
 ### Later
 
 Everything in PRODUCT.md, Later: the dynasty, special editions, more classes, rules on post-its,

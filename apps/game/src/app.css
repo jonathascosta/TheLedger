@@ -395,6 +395,16 @@ p {
   min-height: 64px;
 }
 
+.biz-title {
+  font-size: 22px;
+}
+
+.biz-meta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .sticker {
   flex: none;
   width: 48px;
@@ -830,5 +840,31 @@ p {
   *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Small phones (375 px and below): tighter business rows so names fit on one line more often. */
+@media (max-width: 380px) {
+  .biz {
+    gap: 8px;
+  }
+
+  .biz .sticker {
+    width: 42px;
+    height: 42px;
+  }
+
+  .biz .sticker svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .buy-btn {
+    width: 100px;
+    font-size: 17px;
+  }
+
+  .biz-title {
+    font-size: 20px;
   }
 }

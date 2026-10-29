@@ -34,6 +34,9 @@ export const en = {
   'ledger.nextBusiness': 'Next: {name} at {amount}',
   'ledger.desk': 'Front desk',
   'ledger.deskHint': 'Stamp invoices to get paid',
+  'ledger.deskShort': 'stamp invoices',
+  'ledger.onOffer': '{count} on offer',
+  'ledger.applicants': '{count} applicants',
   'ledger.upgrades': 'Upgrades',
   'ledger.paper': 'The Gazette',
   'ledger.classifieds': 'Classifieds',
@@ -122,6 +125,7 @@ export const en = {
   'market.commodities': 'Commodities',
   'market.crypto': 'Crypto',
   'market.lockedTitle': 'The market opens at {amount} of net worth.',
+  'market.progress': 'Peak net worth {now} of {at}',
   'market.marketOpen': 'tick {tick} · market open',
   'market.today': '{change} lately',
   'market.youOwn': 'You own {units} · avg {avg}',
@@ -141,7 +145,7 @@ export const en = {
 
   // Portfolio
   'portfolio.title': 'Portfolio',
-  'portfolio.classes': '{open} classes · {locked} to unlock',
+  'portfolio.classes': '{open} of {total} classes open',
   'portfolio.invested': 'invested',
   'portfolio.diversify': 'diversify!',
   'portfolio.toUnlock': 'To unlock',
