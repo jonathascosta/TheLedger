@@ -1,5 +1,6 @@
 import { UPGRADE_BY_ID } from '../data/upgrades.ts';
 import { businessIncome, earn, hasPartner } from '../economy/economy.ts';
+import { overtimeFactor } from '../sponsors/sponsors.ts';
 import type { GameState } from '../state/state.ts';
 
 /** Taps closer than this keep the combo going. */
@@ -48,7 +49,7 @@ export interface StampResult {
 export function stamp(state: GameState, now: number): StampResult {
   const desk = state.volume.desk;
   const combo = Math.min(COMBO_MAX, currentCombo(state, now) + 1);
-  const value = stampBase(state) * comboMultiplier(combo);
+  const value = stampBase(state) * comboMultiplier(combo) * overtimeFactor(state, now);
   earn(state, value);
   desk.combo = combo;
   desk.lastStampAt = now;

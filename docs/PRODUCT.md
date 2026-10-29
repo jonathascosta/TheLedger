@@ -299,8 +299,8 @@ a confirmation.
 
 **Backup:** Settings can copy a **backup code**, one line of text that holds the game, to paste on
 another device, iPhone or website alike (Settings, Restore from a code, into a text field). It
-holds everything in the save (the daily counts and running sponsorship included) except what the
-game rebuilds (the price and net-worth histories) and the Gold Edition, which belongs to the
+holds everything in the save (the daily counts and running sponsorship included) except the price and
+net-worth histories (they start again from the restored prices) and the Gold Edition, which belongs to the
 device (Restore purchases brings it back). The code is scrambled and signed: a code changed by
 hand, or cut short, is refused. The signature stops casual edits, not a determined player with
 the app's code. Before restoring, the game shows what the code holds (volume, net worth, the date
