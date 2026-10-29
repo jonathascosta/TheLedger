@@ -9,6 +9,7 @@ function words(page: Page) {
     back: pt ? /Voltar/ : /Back/,
     open: pt ? /^Abrir/ : /^Open/,
     collect: pt ? /Recolher/ : /Collect/,
+    level2: pt ? /nív\. 2\b/ : /lvl 2\b/,
     tabs: pt
       ? [/Livro/, /Bolsa/, /Carteira/, /Conquistas/]
       : [/Ledger/, /Market/, /Portfolio/, /Achievements/],
@@ -44,9 +45,15 @@ test('the first session: stamp, open the café, collect, buy', async ({ page }) 
   await expect(page.locator('.bar-btn.full')).toHaveCount(1, { timeout: 5000 });
   const after = await row.boundingBox();
   expect(after?.height).toBe(before?.height);
-  // The save survives a reload.
+  // Buy the café's second level.
+  const buy = row.locator('.buy-btn');
+  await expect(buy).toBeEnabled({ timeout: 10_000 });
+  await buy.click();
+  await expect(row).toContainText(w.level2);
+  // The save survives a reload: the café is still open, at level 2.
   await page.reload();
-  await expect(page.locator('.biz').first()).toContainText(/1/);
+  await expect(page.locator('.biz').first()).toContainText(w.level2);
+  await expect(page.locator('.biz .bar-btn')).toHaveCount(1);
   expect(errors).toEqual([]);
 });
 
@@ -87,7 +94,19 @@ test('an absence prints a receipt that collects', async ({ page, context }) => {
   await second.goto('./');
   const modal = second.locator('.modal');
   await expect(modal).toBeVisible();
+  const cash = (): Promise<number> =>
+    second.evaluate(
+      () =>
+        (
+          JSON.parse(localStorage.getItem('theledger.save') ?? '{}') as {
+            volume?: { cash?: number };
+          }
+        ).volume?.cash ?? 0,
+    );
+  const before = await cash();
   await modal.getByRole('button').click();
   await expect(modal).toHaveCount(0);
+  // The receipt's money reaches the cash (saved within half a second).
+  await expect.poll(cash, { timeout: 5000 }).toBeGreaterThan(before + 1000);
   expect(errors).toEqual([]);
 });
