@@ -193,7 +193,6 @@ export function Ledger({ state }: { state: GameState }) {
             <span class="gold-ribbon" title={t('gold.ribbon')} aria-label={t('gold.ribbon')} />
           )}
         </p>
-        <p class="small">{t('ledger.cash', { amount: moneyShort(v.cash) })}</p>
       </div>
       <div>
         <p class="caps">{t('ledger.netWorth')}</p>

@@ -25,7 +25,6 @@ export const en = {
   'ledger.header': 'The Ledger · Vol. {roman}',
   'ledger.netWorth': 'Net worth',
   'ledger.perSecond': '+ {amount} per second',
-  'ledger.cash': 'Cash {amount}',
   'ledger.businesses': 'Businesses',
   'ledger.count': '{open} of {total}',
   'ledger.buyMode': 'Buy',
@@ -145,7 +144,6 @@ export const en = {
   'market.dividend': 'pays dividends',
   'market.sold': 'Sold for {amount}',
   'market.bought': 'Bought {units}',
-  'market.cash': 'Cash {amount}',
 
   // Portfolio
   'portfolio.title': 'Portfolio',

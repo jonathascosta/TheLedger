@@ -155,9 +155,7 @@ export function Instrument({ state, id }: { state: GameState; id: string }) {
   const hi = Math.max(...history);
   const unlocked = isUnlocked(state, KIND_CLASS[def.kind]);
   return (
-    <Page
-      right={<p class="small">{t('market.cash', { amount: moneyShort(state.volume.cash) })}</p>}
-    >
+    <Page>
       <div>
         <p
           class="type"
