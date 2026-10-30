@@ -413,6 +413,7 @@ export const en = {
   'close.claim': 'Goodwill to claim',
   'close.held': 'Goodwill held',
   'close.after': 'Profit bonus after closing',
+  'close.nextPoint': 'Next goodwill point: {amount} to earn, about {time}',
   'close.bonus': '+{percent}',
   'close.confirm': 'Seal it',
   'close.nothing': 'Earn more before closing: nothing to claim yet.',

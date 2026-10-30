@@ -186,6 +186,7 @@ export {
   closeVolume,
   closingBonus,
   goodwillTotal,
+  nextGoodwill,
   shouldClose,
 } from './prestige/prestige.ts';
 export { classValues, isUnlocked } from './worth.ts';

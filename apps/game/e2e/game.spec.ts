@@ -330,3 +330,52 @@ test('a running trend shows its headline and the badge on its row', async ({ bro
   await expect(page.locator('.biz').nth(1).locator('.trend-badge')).toHaveCount(0);
   await context.close();
 });
+
+test('the closing page shows the next goodwill point only while it takes over a minute', async ({
+  browser,
+}) => {
+  const pt = test.info().project.name.endsWith('-pt');
+  async function closing(level: number) {
+    const context = await browser.newContext({
+      baseURL: test.info().project.use.baseURL ?? '',
+      locale: pt ? 'pt-BR' : 'en-US',
+    });
+    const first = await context.newPage();
+    await first.goto('./');
+    await first.waitForFunction(() => localStorage.getItem('theledger.save'));
+    const save = await first.evaluate(
+      () =>
+        JSON.parse(localStorage.getItem('theledger.save') ?? 'null') as {
+          volume: { businesses: unknown[]; managers: unknown[] };
+          meta: { lifetimeEarnings: number };
+          lastTick: number;
+        },
+    );
+    await first.close();
+    // 20 goodwill to claim and a quarter of the way to the next point.
+    save.meta.lifetimeEarnings = 1e15 * (20.25 / 150) ** 2;
+    save.volume.businesses[9] = { level, progress: 0, till: 0 };
+    save.volume.businesses[0] = { level: 1, progress: 0, till: 0 };
+    save.volume.managers[9] = { name: 'Rosa M.', trait: 'perfectionist', face: 1 };
+    save.lastTick = Date.now();
+    const page = await context.newPage();
+    await page.addInitScript((text) => {
+      if (!sessionStorage.getItem('seeded')) {
+        localStorage.setItem('theledger.save', text);
+        sessionStorage.setItem('seeded', '1');
+      }
+    }, JSON.stringify(save));
+    await page.goto('./');
+    await page.getByRole('button', { name: pt ? /Fechar o volume/ : /Close the volume/ }).click();
+    const shown = page.locator('.goodwill-next');
+    return { context, shown };
+  }
+  // A slow income: a point takes hours, so its bar shows.
+  const slow = await closing(0);
+  await expect(slow.shown).toContainText(pt ? /Próximo ponto de goodwill/ : /Next goodwill point/);
+  await slow.context.close();
+  // The airline at level 2000: a point takes seconds, so no bar.
+  const fast = await closing(2000);
+  await expect(fast.shown).toHaveCount(0);
+  await fast.context.close();
+});

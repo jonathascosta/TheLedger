@@ -1212,3 +1212,8 @@ p {
   color: var(--profit);
   font-weight: 700;
 }
+
+/* The way to the next goodwill point on the closing page. */
+.goodwill-next .bar {
+  display: block;
+}

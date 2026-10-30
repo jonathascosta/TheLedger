@@ -8,6 +8,20 @@ export function goodwillTotal(lifetimeEarnings: number): number {
   return Math.floor(150 * Math.sqrt(Math.max(0, lifetimeEarnings) / 1e15));
 }
 
+/** The lifetime earnings at which the goodwill total reaches `points`. */
+export function earningsFor(points: number): number {
+  return 1e15 * (points / 150) ** 2;
+}
+
+/** The way to the next goodwill point: the earnings it spans, how far in, and what is left. */
+export function nextGoodwill(state: GameState): { span: number; into: number; left: number } {
+  const earned = Math.max(0, state.meta.lifetimeEarnings);
+  const points = goodwillTotal(earned);
+  const from = earningsFor(points);
+  const to = earningsFor(points + 1);
+  return { span: to - from, into: earned - from, left: to - earned };
+}
+
 /** Goodwill that closing the volume now would claim. */
 export function claimable(state: GameState): number {
   return Math.max(0, goodwillTotal(state.meta.lifetimeEarnings) - state.meta.goodwillClaimed);
