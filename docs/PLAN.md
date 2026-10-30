@@ -164,7 +164,7 @@ calls an action once a reward is earned.
   earnings within 15% of half a park's over 10,000 seeded match days, no profit from buying and
   selling back); an end-to-end test buying a club.
 
-### T18. Post-its
+### T18. Post-its — done
 
 - A post-it with each investment's rule on its page, folded away per class and kept in the
   settings; Settings brings them back.
