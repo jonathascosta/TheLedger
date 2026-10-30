@@ -167,7 +167,8 @@ export type AssetClass =
   | 'crypto'
   | 'startups'
   | 'art'
-  | 'energy';
+  | 'energy'
+  | 'clubs';
 
 export const CLASS_UNLOCKS: readonly { readonly id: AssetClass; readonly at: number }[] = [
   { id: 'businesses', at: 0 },
@@ -179,4 +180,5 @@ export const CLASS_UNLOCKS: readonly { readonly id: AssetClass; readonly at: num
   { id: 'startups', at: 1e9 },
   { id: 'art', at: 1e10 },
   { id: 'energy', at: 1e11 },
+  { id: 'clubs', at: 1e12 },
 ];

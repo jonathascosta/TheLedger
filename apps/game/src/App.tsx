@@ -6,7 +6,7 @@ import { act, useGame } from './store.ts';
 import { Achievements } from './screens/Achievements.tsx';
 import { Away } from './screens/Away.tsx';
 import { Business } from './screens/Business.tsx';
-import { Art, Bonds, Energy, Estate, Startups } from './screens/Classes.tsx';
+import { Art, Bonds, Clubs, Energy, Estate, Startups } from './screens/Classes.tsx';
 import { Classifieds } from './screens/Classifieds.tsx';
 import { Desk } from './screens/Desk.tsx';
 import { Gazette } from './screens/Gazette.tsx';
@@ -51,6 +51,8 @@ function Screen({ route, state }: { route: Route; state: GameState }) {
       return <Art state={state} />;
     case 'energy':
       return <Energy state={state} />;
+    case 'clubs':
+      return <Clubs state={state} />;
     case 'achievements':
       return <Achievements state={state} />;
     case 'close':

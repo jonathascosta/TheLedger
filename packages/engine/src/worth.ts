@@ -1,5 +1,6 @@
 import { artValue, parksValue, propertiesValue } from './assets/assets.ts';
 import { CLASS_UNLOCKS, type AssetClass } from './data/market.ts';
+import { clubsValue } from './clubs/clubs.ts';
 import { instrumentsValue } from './market/market.ts';
 import type { GameState } from './state/state.ts';
 
@@ -13,7 +14,8 @@ export function netWorth(state: GameState): number {
     propertiesValue(state) +
     parksValue(state) +
     (v.startup?.maturesAt != null ? v.startup.ask : 0) +
-    artValue(state)
+    artValue(state) +
+    clubsValue(state)
   );
 }
 
@@ -36,5 +38,6 @@ export function classValues(state: GameState, businessHour: number): Record<Asse
     startups: v.startup?.maturesAt != null ? v.startup.ask : 0,
     art: artValue(state),
     energy: parksValue(state),
+    clubs: clubsValue(state),
   };
 }

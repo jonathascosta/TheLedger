@@ -59,6 +59,7 @@ cheap; the app treats the state as owned by the engine and re-renders after each
 | `managers/`     | Candidates (seeded from the volume), hiring                                                                                                         |
 | `market/`       | Price walks, shocks, buying and selling stocks, commodities and coins                                                                               |
 | `assets/`       | Bonds, real estate, startups, art, energy                                                                                                           |
+| `clubs/`        | Sports clubs: seeded strengths, match days in play (restarting after an absence), prizes, values, buying at value and selling at 90%                |
 | `paper/`        | Editions, events, choices and their seeded outcomes                                                                                                 |
 | `achievements/` | Predicates over the state, checked on tick and after actions                                                                                        |
 | `prestige/`     | Goodwill, closing the volume, partners, the shelf                                                                                                   |

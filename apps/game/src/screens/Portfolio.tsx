@@ -24,6 +24,7 @@ const ROUTES: Record<AssetClass, Route> = {
   startups: { name: 'startups' },
   art: { name: 'art' },
   energy: { name: 'energy' },
+  clubs: { name: 'clubs' },
 };
 
 export function Portfolio({ state }: { state: GameState }) {

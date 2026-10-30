@@ -39,6 +39,7 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   { id: 'unicorn', style: 'seal' },
   { id: 'firstArt', style: 'diamond' },
   { id: 'firstPark', style: 'diamond' },
+  { id: 'chairman', style: 'diamond' },
   { id: 'collector', style: 'seal' },
   { id: 'reader', style: 'box' },
   { id: 'firstVolume', style: 'seal' },
