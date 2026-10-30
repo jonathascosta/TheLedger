@@ -126,6 +126,7 @@ export const pt: Record<StringKey, string> = {
   'market.marketOpen': 'pregão {tick} · bolsa aberta',
   'market.today': '{change} recentemente',
   'market.youOwn': 'Você tem {units} · média {avg}',
+  'market.paid': 'pago {avg}',
   'market.youOwnNone': 'Você ainda não tem nenhuma.',
   'market.profit': '{amount}',
   'market.buy': 'Comprar',

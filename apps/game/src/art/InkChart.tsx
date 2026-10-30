@@ -6,6 +6,7 @@ export function InkChart({
   label,
   highlightLast = 0,
   marks,
+  reference = null,
 }: {
   values: readonly number[];
   width?: number;
@@ -15,6 +16,8 @@ export function InkChart({
   highlightLast?: number;
   /** Labels on the right edge: [value, text]. */
   marks?: readonly (readonly [number, string])[];
+  /** A reference price (the average paid): a dashed line, or an arrow on the edge it is past. */
+  reference?: { readonly value: number; readonly text: string } | null;
 }) {
   const pad = 6;
   const right = marks ? 52 : 6;
@@ -84,6 +87,7 @@ export function InkChart({
         />
         <circle cx={x(data.length - 1)} cy={y(last)} r="3.5" style={{ fill: 'var(--ink)' }} />
       </g>
+      {reference && <Reference {...reference} min={min} max={max} y={y} x0={pad} x1={pad + w} />}
       {marks?.map(([v, text]) => (
         <text
           key={text}
@@ -97,6 +101,70 @@ export function InkChart({
         </text>
       ))}
     </svg>
+  );
+}
+
+/**
+ * Where a reference price falls against the chart's range. A price paid at the high or the low is
+ * often a hair off it (cost / units), so it counts as in range.
+ */
+export function referenceSide(
+  value: number,
+  min: number,
+  max: number,
+): { above: boolean; below: boolean } {
+  const slack = (max - min) * 1e-9;
+  return { above: value > max + slack, below: value < min - slack };
+}
+
+/** The reference line inside the range; outside it, an arrow and the price on that edge. */
+function Reference({
+  value,
+  text,
+  min,
+  max,
+  y,
+  x0,
+  x1,
+}: {
+  value: number;
+  text: string;
+  min: number;
+  max: number;
+  y: (v: number) => number;
+  x0: number;
+  x1: number;
+}) {
+  const { above, below } = referenceSide(value, min, max);
+  const at = y(Math.min(max, Math.max(min, value)));
+  const label = above ? `↑ ${text}` : below ? `↓ ${text}` : text;
+  // Below the line when there is no room above it (the top edge), above it otherwise.
+  const under = above || at - 16 < 0;
+  return (
+    <g class="chart-reference">
+      {!above && !below && (
+        <path
+          d={`M${x0} ${at} H${x1}`}
+          fill="none"
+          style={{ stroke: 'var(--profit)' }}
+          stroke-width="1.4"
+          stroke-dasharray="6 4"
+        />
+      )}
+      <text
+        x={x0 + 4}
+        y={under ? at + 14 : at - 6}
+        font-family="Caveat, cursive"
+        font-size="16"
+        font-weight="700"
+        paint-order="stroke"
+        stroke-width="4"
+        stroke-linejoin="round"
+        style={{ fill: 'var(--profit)', stroke: 'var(--paper)' }}
+      >
+        {label}
+      </text>
+    </g>
   );
 }
 

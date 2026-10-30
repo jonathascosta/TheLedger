@@ -191,6 +191,9 @@ export function Instrument({ state, id }: { state: GameState; id: string }) {
           [hi, moneyShort(hi)],
           [lo, moneyShort(lo)],
         ]}
+        reference={
+          held > 0 ? { value: avg, text: t('market.paid', { avg: moneyShort(avg) }) } : null
+        }
       />
       <div class="between">
         <p class="hand" style={{ fontSize: '21px' }}>

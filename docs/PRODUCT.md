@@ -205,7 +205,10 @@ A trend makes one small business the talk of the town for a while.
 
 Each class unlocks the first time the volume's **peak net worth** reaches its threshold. Prices
 move on a market tick every 5 seconds, drawn from random walks seeded by the volume, so a volume's
-market can be replayed exactly (in tests and in support). The Portfolio tab shows the split as a pie coloured in
+market can be replayed exactly (in tests and in support). An instrument's chart marks the
+average price paid while the player holds it, with a dashed green line; when that price is
+outside the chart's range, an arrow on the top or bottom edge gives it instead, so the chart
+keeps its scale. The Portfolio tab shows the split as a pie coloured in
 pencil, the classes, and the locked ones.
 
 | Class       | Opens at | Rule                                                                                                   |

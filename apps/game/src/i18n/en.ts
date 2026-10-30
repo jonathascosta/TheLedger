@@ -133,6 +133,7 @@ export const en = {
   'market.marketOpen': 'tick {tick} · market open',
   'market.today': '{change} lately',
   'market.youOwn': 'You own {units} · avg {avg}',
+  'market.paid': 'paid {avg}',
   'market.youOwnNone': 'You own none yet.',
   'market.profit': '{amount}',
   'market.buy': 'Buy',
