@@ -35,6 +35,7 @@ export function closeVolume(state: GameState, now: number, sponsored = false): n
   state.meta.goodwill += earned;
   state.meta.goodwillClaimed += claim;
   state.meta.shelf.push({
+    era: state.meta.era,
     number: v.number,
     peakNetWorth: v.peakNetWorth,
     goodwill: earned,

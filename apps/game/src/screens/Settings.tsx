@@ -274,7 +274,8 @@ function Backup() {
           (decoded.ok ? (
             <div class="stack">
               <p class="hand" style={{ fontSize: '20px' }}>
-                {t('settings.preview', {
+                {t('settings.previewEra', {
+                  era: roman(decoded.state.meta.era),
                   roman: roman(decoded.state.volume.number),
                   worth: money(netWorth(decoded.state)),
                   date: madeOn(decoded.madeAt),

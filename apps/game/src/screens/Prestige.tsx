@@ -1,5 +1,11 @@
 import {
   buyPartner,
+  canRetire,
+  eraClaimed,
+  heirOf,
+  LEGACY_BONUS,
+  legacyClaim,
+  retire,
   claimable,
   closeVolume,
   closingBonus,
@@ -12,7 +18,7 @@ import { Cover, coverFor } from '../art/Covers.tsx';
 import { roman, t, tk } from '../i18n/index.ts';
 import { sponsorsOffered, useWatching } from '../sponsor.ts';
 import { act, grant } from '../store.ts';
-import { switchTab } from '../router.ts';
+import { go, switchTab } from '../router.ts';
 import { Page } from '../ui/Page.tsx';
 import { Sponsor } from '../ui/Sponsor.tsx';
 import { moneyShort, percent, plain } from '../ui/format.ts';
@@ -162,11 +168,145 @@ export function Close({ state }: { state: GameState }) {
   );
 }
 
+/** The pencilled line on how close the founder is to retiring. */
+function RetireProgress({ state }: { state: GameState }) {
+  return (
+    <p class="hand muted" style={{ fontSize: '19px' }}>
+      {t('retire.progress', { claimed: plain(eraClaimed(state)) })}
+    </p>
+  );
+}
+
+/** Retire, on the Partners page once it is open (docs/PRODUCT.md, The dynasty). */
+function RetireCard({ state }: { state: GameState }) {
+  if (!canRetire(state)) return <RetireProgress state={state} />;
+  const legacy = legacyClaim(state);
+  return (
+    <button
+      type="button"
+      class="index-card"
+      style={{ textAlign: 'left' }}
+      onClick={() => go({ name: 'retire' })}
+    >
+      <p class="h3">{t('retire.title')}</p>
+      <p class="hand" style={{ fontSize: '19px', lineHeight: 1.15 }}>
+        {t('retire.cardLead', {
+          legacy: plain(legacy),
+          factor: plain(1 + LEGACY_BONUS * (state.meta.legacy + legacy), 1),
+        })}
+      </p>
+    </button>
+  );
+}
+
+/** Retiring: what the heir gets, then the ceremony. */
+export function Retire({ state }: { state: GameState }) {
+  const [done, setDone] = useState<{ era: number; legacy: number } | null>(null);
+  const once = useRef(false);
+  if (done) {
+    const heir = heirOf(state, done.era);
+    return (
+      <Page>
+        <h1 class="h1 center">{t('retire.begins', { era: roman(done.era) })}</h1>
+        <div style={{ position: 'relative', alignSelf: 'center', marginTop: '10px' }}>
+          <Cover
+            kind="leather"
+            title={t('app.title')}
+            subtitle={`Era ${roman(done.era - 1)}`}
+            width={170}
+          />
+          <svg
+            class="seal-in"
+            aria-hidden="true"
+            viewBox="0 0 120 30"
+            width="150"
+            height="38"
+            style={{
+              position: 'absolute',
+              left: '10px',
+              bottom: '40px',
+              transform: 'rotate(-18deg)',
+            }}
+          >
+            <g style={{ stroke: 'var(--ink)' }} stroke-width="2" stroke-linejoin="round">
+              <path d="M6 15 L86 9 L104 15 L86 21 Z" style={{ fill: 'var(--ink)' }} />
+              <path d="M104 15 L116 15" />
+              <path d="M24 13.5 L24 16.5" style={{ stroke: 'var(--gold)' }} />
+            </g>
+          </svg>
+        </div>
+        <p
+          class="hand profit center"
+          style={{ fontWeight: 700, fontSize: '26px', marginTop: '18px' }}
+        >
+          {heir.first} {heir.surname} · +{plain(done.legacy)}
+        </p>
+        <button
+          type="button"
+          class="stamp-btn green"
+          style={{ alignSelf: 'center' }}
+          onClick={() => switchTab('ledger')}
+        >
+          {t('retire.open')}
+        </button>
+      </Page>
+    );
+  }
+  const legacy = legacyClaim(state);
+  const heir = heirOf(state, state.meta.era + 1);
+  const confirm = (): void => {
+    if (once.current) return;
+    once.current = true;
+    const era = state.meta.era + 1;
+    const result = act((s) => retire(s, Date.now()));
+    if (result.ok) setDone({ era, legacy: result.legacy ?? legacy });
+  };
+  return (
+    <Page>
+      <h1 class="h1">{t('retire.title')}</h1>
+      <p class="hand" style={{ fontSize: '20px', lineHeight: 1.2 }}>
+        {t('retire.lead')}
+      </p>
+      <div class="stack" style={{ gap: '2px' }}>
+        <p class="dotted">
+          <span>{t('retire.legacy')}</span>
+          <span class="leader" />
+          <b class="profit">+{plain(legacy)}</b>
+        </p>
+        <p class="dotted">
+          <span>{t('retire.factor')}</span>
+          <span class="leader" />
+          <b>×{plain(1 + LEGACY_BONUS * (state.meta.legacy + legacy), 1)}</b>
+        </p>
+        <p class="dotted">
+          <span>{t('retire.heir')}</span>
+          <span class="leader" />
+          <b>
+            {heir.first} {heir.surname}
+          </b>
+        </p>
+      </div>
+      <p class="small">{t('retire.keeps')}</p>
+      {canRetire(state) && (
+        <button
+          type="button"
+          class="stamp-btn red"
+          style={{ alignSelf: 'center', marginTop: '10px' }}
+          onClick={confirm}
+        >
+          {t('retire.confirm')}
+        </button>
+      )}
+    </Page>
+  );
+}
+
 export function Partners({ state }: { state: GameState }) {
   const gw = state.meta.goodwill;
   return (
     <Page>
       <h1 class="h1">{t('partners.title')}</h1>
+      <RetireCard state={state} />
       <p class="small">{t('partners.subtitle')}</p>
       <p class="hand profit" style={{ fontWeight: 700, fontSize: '23px' }}>
         {t('partners.goodwill', {
@@ -211,6 +351,28 @@ export function Partners({ state }: { state: GameState }) {
 
 export function Shelf({ state }: { state: GameState }) {
   const shelf = state.meta.shelf;
+  const eras = [...new Set([...shelf.map((e) => e.era ?? 1), state.meta.era])].sort(
+    (a, b) => a - b,
+  );
+  const book = (number: number, peak: number, open = false) => (
+    <div
+      key={number}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '4px',
+        opacity: open ? 0.55 : 1,
+      }}
+    >
+      <Cover
+        kind={coverFor(peak)}
+        title={t('app.title')}
+        subtitle={t('shelf.volume', { roman: roman(number) })}
+        width={80}
+      />
+    </div>
+  );
   return (
     <Page>
       <h1 class="h1">{t('shelf.title')}</h1>
@@ -219,55 +381,51 @@ export function Shelf({ state }: { state: GameState }) {
           {t('shelf.empty')}
         </p>
       )}
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '14px',
-          alignItems: 'flex-end',
-          borderBottom: '6px solid var(--sticker-warm)',
-          paddingBottom: '4px',
-        }}
-      >
-        {shelf.map((e) => (
-          <div
-            key={e.number}
-            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}
-          >
-            <Cover
-              kind={coverFor(e.peakNetWorth)}
-              title={t('app.title')}
-              subtitle={t('shelf.volume', { roman: roman(e.number) })}
-              width={80}
-            />
+      {eras.map((era) => {
+        const heir = heirOf(state, era);
+        return (
+          <div key={era} class="stack" style={{ gap: '6px' }}>
+            <p class="caps">
+              {t('shelf.era', { era: roman(era), name: `${heir.first} ${heir.surname}` })}
+            </p>
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '14px',
+                alignItems: 'flex-end',
+                borderBottom: '6px solid var(--sticker-warm)',
+                paddingBottom: '4px',
+              }}
+            >
+              {shelf.filter((e) => (e.era ?? 1) === era).map((e) => book(e.number, e.peakNetWorth))}
+              {era === state.meta.era && book(state.volume.number, state.volume.peakNetWorth, true)}
+            </div>
+            <div class="stack" style={{ gap: '2px' }}>
+              {shelf
+                .filter((e) => (e.era ?? 1) === era)
+                .map((e) => (
+                  <p key={e.number} class="dotted">
+                    <span>{t('shelf.volume', { roman: roman(e.number) })}</span>
+                    <span class="leader" />
+                    <span>
+                      {t('shelf.peak', { amount: moneyShort(e.peakNetWorth) })} ·{' '}
+                      <b class="profit">{t('shelf.goodwill', { goodwill: plain(e.goodwill) })}</b>
+                    </span>
+                  </p>
+                ))}
+              {era === state.meta.era && (
+                <p class="dotted muted">
+                  <span>{t('shelf.current', { roman: roman(state.volume.number) })}</span>
+                  <span class="leader" />
+                  <span>{t('shelf.peak', { amount: moneyShort(state.volume.peakNetWorth) })}</span>
+                </p>
+              )}
+            </div>
           </div>
-        ))}
-        <div style={{ opacity: 0.55 }}>
-          <Cover
-            kind={coverFor(state.volume.peakNetWorth)}
-            title={t('app.title')}
-            subtitle={t('shelf.volume', { roman: roman(state.volume.number) })}
-            width={80}
-          />
-        </div>
-      </div>
-      <div class="stack" style={{ gap: '2px' }}>
-        {shelf.map((e) => (
-          <p key={e.number} class="dotted">
-            <span>{t('shelf.volume', { roman: roman(e.number) })}</span>
-            <span class="leader" />
-            <span>
-              {t('shelf.peak', { amount: moneyShort(e.peakNetWorth) })} ·{' '}
-              <b class="profit">{t('shelf.goodwill', { goodwill: plain(e.goodwill) })}</b>
-            </span>
-          </p>
-        ))}
-        <p class="dotted muted">
-          <span>{t('shelf.current', { roman: roman(state.volume.number) })}</span>
-          <span class="leader" />
-          <span>{t('shelf.peak', { amount: moneyShort(state.volume.peakNetWorth) })}</span>
-        </p>
-      </div>
+        );
+      })}
+      <RetireProgress state={state} />
     </Page>
   );
 }

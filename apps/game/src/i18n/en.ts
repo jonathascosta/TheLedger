@@ -397,6 +397,8 @@ export const en = {
   'ach.firstVolume.desc': 'close your first volume',
   'ach.fiveVolumes.name': 'A shelf of books',
   'ach.fiveVolumes.desc': 'close five volumes',
+  'ach.heir.name': 'Heir',
+  'ach.heir.desc': 'retire and hand the book to an heir',
   'ach.firstPartner.name': 'Partnership',
   'ach.firstPartner.desc': 'take on a partner',
   'ach.insomniac.name': 'Long night',
@@ -467,7 +469,6 @@ export const en = {
   'settings.restore': 'Restore from a code',
   'settings.pasteLabel': 'Paste a backup code here',
   'settings.read': 'Read the code',
-  'settings.preview': 'Vol. {roman} · net worth {worth} · made {date}',
   'settings.restoreConfirm':
     'Replace the game on this device with this one? This cannot be undone.',
   'settings.restoreYes': 'Restore',
@@ -652,6 +653,24 @@ export const en = {
   'gold.pending': 'Waiting for approval. It arrives once approved.',
   'gold.busy': 'One moment…',
   'gold.ribbon': 'Gold Edition',
+  // The dynasty
+  'ledger.headerEra': 'Era {era} · {name} · Vol. {roman}',
+  'retire.title': 'Retire',
+  'retire.cardLead':
+    'Hand the book to an heir: a new era, +{legacy} legacy points (business profit ×{factor} for good).',
+  'retire.progress': 'Retire at 1,000 goodwill claimed in this era: {claimed} so far.',
+  'retire.lead':
+    'The founder lays down the pen. The volume closes, the heir takes the book on in a new era of the notebook.',
+  'retire.legacy': 'Legacy points earned',
+  'retire.factor': 'Business profit from legacy',
+  'retire.heir': 'The heir',
+  'retire.keeps':
+    'The heir keeps the partners, achievements, the shelf and legacy; goodwill and the volume start again.',
+  'retire.confirm': 'Retire',
+  'retire.begins': 'Era {era} begins',
+  'retire.open': 'Open the new book',
+  'shelf.era': 'Era {era} · {name}',
+  'settings.previewEra': 'Era {era} · Vol. {roman} · net worth {worth} · made {date}',
 } as const;
 
 export type StringKey = keyof typeof en;
