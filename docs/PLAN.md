@@ -128,36 +128,47 @@ calls an action once a reward is earned.
 
 ### T14. Engine: the balance simulator — done
 
-- A simulated player in the engine (`sim/`): each second it collects, stamps at a given rate,
-  hires managers and buys the best value among levels and upgrades. Deterministic for a seed.
-- `pnpm test:calibration` (a separate Vitest project, `*.calibration.test.ts`, out of the
-  pre-commit hook) checks the bands of PRODUCT.md, Balance; CI runs it.
-- Done: the bands pass on main as it is; a test shows a deliberately broken economy fails them.
+- A simulated player in the engine (`sim/`), playing as PRODUCT.md, Balance says; deterministic.
+- `pnpm test:calibration`: a separate Vitest project for `*.calibration.test.ts`, which `pnpm test`
+  (and so the pre-commit hook) leaves out; a CI job runs it; CLAUDE.md lists the command.
+- Done: the bands pass on main; the simulation replays; a deliberately broken economy (a billion
+  at the start) fails them.
 
 ### T15. The dynasty
 
-- Engine: legacy, eras, the heir's name, retiring (what is kept and what starts again), the
-  legacy factor on business profit; old saves are era I with no legacy.
-- App: Retire on the Partners page with the ceremony, the shelf grouped by era, the eras' paper
-  and ink as theme variables chosen by the era, the heir on the ledger's header.
-- Done: engine tests (the threshold, the legacy formula, what is kept, the factor), an
-  end-to-end test retiring a seeded save and seeing era II's paper.
+- Engine: era and legacy in the save (old saves are era I with no legacy), the family's surname
+  and the heirs' names, Retire (closes the volume first, then what is kept and what starts
+  again), the legacy factor on business profit, the shelf entries' era, _Heir_.
+- App: Retire on the Partners page (no closing sponsor) with the ceremony, the note on the
+  shelf, the shelf grouped by era, the eras' paper and ink as theme variables chosen by the era,
+  the header from era II, the era in the backup preview.
+- Done: engine tests (the threshold counting the pending claim, the legacy formula, what is kept,
+  the factor, an old save as era I, a backup code carrying era and legacy); an end-to-end test
+  retiring a seeded save and seeing era II's paper.
 
 ### T16. Notes from the night shift (iPhone)
 
-- A pure schedule (`notes(state, now)`) of the three notes with the quiet hours and the hour
-  between notes; `@capacitor/local-notifications` on iOS scheduling it on hide and cancelling on
-  show; the permission asked at the first hire; the Settings switch. None on the website.
-- Done: unit tests of the schedule (each note, quiet hours, spacing, none without a reason); the
-  iOS workflow builds.
+- A pure schedule (`notes(state, now)`): the three notes, quiet hours and the hour between notes;
+  `@capacitor/local-notifications` on iOS, scheduling on hide and removing pending and delivered
+  notes on show; the permission at a hire or at the first launch with a manager; the Settings
+  switch. None on the website. ARCHITECTURE.md describes the layer.
+- Done: unit tests of the schedule (each note, quiet hours, the spacing chain, none without a
+  reason) and of when permission is asked (new and existing players); the iOS workflow builds.
 
-### T17. Sports clubs and post-its
+### T17. Sports clubs
 
-- Engine: the clubs class (data, seeded strengths, match days in play, prizes, value moves,
-  buying and selling, net worth). App: the Clubs page with crests and the W/D/L row, the
-  Portfolio entry. Post-its with each class's rule, folded away per class, restored in Settings.
+- Engine: the clubs class (data, seeded strengths, match days in play and their restart after an
+  absence, prizes, value moves, buying at value and selling at 90%, net worth, _Chairman_). App:
+  the Clubs page (crests, stars, the W/D/L row), the Portfolio entry (ten classes).
 - Done: engine tests (unlock, a match day replays for a seed, prize and value bounds, average
-  earnings near half a park's); an end-to-end test buying a club and folding a post-it.
+  earnings within 15% of half a park's over 10,000 seeded match days, no profit from buying and
+  selling back); an end-to-end test buying a club.
+
+### T18. Post-its
+
+- A post-it with each investment's rule on its page, folded away per class and kept in the
+  settings; Settings brings them back.
+- Done: an end-to-end test folding a post-it, reloading, and bringing it back.
 
 ### Later
 
