@@ -167,3 +167,41 @@ test('the Classifieds dot shows only when an applicant can be paid', async ({ br
   expect(await dotWith(2000)).toBe(0);
   expect(await dotWith(20_000)).toBe(1);
 });
+
+test('Open buys the first level in the ×100 mode', async ({ browser }) => {
+  const pt = test.info().project.name.endsWith('-pt');
+  const context = await browser.newContext({
+    baseURL: test.info().project.use.baseURL ?? '',
+    locale: pt ? 'pt-BR' : 'en-US',
+  });
+  const first = await context.newPage();
+  await first.goto('./');
+  await first.waitForFunction(() => localStorage.getItem('theledger.save'));
+  const save = await first.evaluate(
+    () =>
+      JSON.parse(localStorage.getItem('theledger.save') ?? 'null') as {
+        volume: { businesses: unknown[]; cash: number };
+        settings: { buyMode: unknown };
+        lastTick: number;
+      },
+  );
+  // The café is open; the bakery's first level costs $60, a hundred levels far more.
+  save.volume.businesses[0] = { level: 10, progress: 0, till: 0 };
+  save.volume.cash = 1000;
+  save.settings.buyMode = 100;
+  save.lastTick = Date.now();
+  const page = await context.newPage();
+  await page.addInitScript((text) => {
+    if (!sessionStorage.getItem('seeded')) {
+      localStorage.setItem('theledger.save', text);
+      sessionStorage.setItem('seeded', '1');
+    }
+  }, JSON.stringify(save));
+  await first.close();
+  await page.goto('./');
+  const open = page.getByRole('button', { name: pt ? /^Abrir/ : /^Open/ });
+  await expect(open).toBeEnabled();
+  await open.click();
+  await expect(page.locator('.biz').nth(1)).toContainText(pt ? /nív\. 1\b/ : /lvl 1\b/);
+  await context.close();
+});

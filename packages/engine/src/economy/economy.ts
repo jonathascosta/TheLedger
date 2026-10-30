@@ -151,8 +151,10 @@ export function isAvailable(state: GameState, business: number): boolean {
   return business === 0 || state.volume.businesses[business - 1]!.level > 0;
 }
 
-/** What the buy button offers with the current buy mode. */
+/** What the buy button buys: the mode's levels, or one level when the business opens. */
 export function buyOffer(state: GameState, business: number): { count: number; cost: number } {
+  if (state.volume.businesses[business]!.level === 0)
+    return { count: 1, cost: levelCost(state, business, 1) };
   const mode = state.settings.buyMode;
   const count = mode === 'max' ? Math.max(1, maxAffordable(state, business)) : mode;
   return { count, cost: levelCost(state, business, count) };
