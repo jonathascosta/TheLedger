@@ -24,7 +24,6 @@ export const pt: Record<StringKey, string> = {
   'ledger.header': 'Livro-Razão · Vol. {roman}',
   'ledger.netWorth': 'Patrimônio',
   'ledger.perSecond': '+ {amount} por segundo',
-  'ledger.cash': 'Caixa {amount}',
   'ledger.businesses': 'Negócios',
   'ledger.count': '{open} de {total}',
   'ledger.buyMode': 'Comprar',
@@ -138,7 +137,6 @@ export const pt: Record<StringKey, string> = {
   'market.dividend': 'paga dividendos',
   'market.sold': 'Vendido por {amount}',
   'market.bought': 'Comprou {units}',
-  'market.cash': 'Caixa {amount}',
 
   'portfolio.title': 'Carteira',
   'portfolio.classes': '{open} de {total} classes abertas',

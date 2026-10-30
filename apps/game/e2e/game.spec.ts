@@ -57,17 +57,23 @@ test('the first session: stamp, open the café, collect, buy', async ({ page }) 
   expect(errors).toEqual([]);
 });
 
-test('the cash stays in sight when the page scrolls', async ({ page }) => {
+test('the cash stays in sight on every page, scrolled or not', async ({ page }) => {
   // A short window, so a new game's ledger has something to scroll.
   await page.setViewportSize({ width: 375, height: 420 });
   await page.goto('./');
   const strip = page.locator('.cash-strip');
-  await expect(strip).not.toHaveClass(/\bon\b/);
-  await page.locator('.scroll').evaluate((e) => e.scrollTo(0, 300));
-  await expect(strip).toHaveClass(/\bon\b/);
+  await expect(strip).toBeVisible();
   await expect(strip).toContainText('$');
-  await page.locator('.scroll').evaluate((e) => e.scrollTo(0, 0));
-  await expect(strip).not.toHaveClass(/\bon\b/);
+  const box = await strip.boundingBox();
+  expect(box?.y).toBe(0);
+  expect(box?.height).toBeGreaterThanOrEqual(44);
+  await page.locator('.scroll').evaluate((e) => e.scrollTo(0, 300));
+  expect((await strip.boundingBox())?.y).toBe(0);
+  // Every tab has it too.
+  for (const tab of await page.locator('.tabs button').all()) {
+    await tab.click();
+    await expect(page.locator('.cash-strip')).toBeVisible();
+  }
 });
 
 test('every tab opens without errors', async ({ page }) => {

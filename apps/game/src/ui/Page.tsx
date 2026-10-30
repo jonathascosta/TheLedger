@@ -1,20 +1,16 @@
 import { businessIncome, passiveRate } from '@ledger/engine';
 import type { ComponentChildren } from 'preact';
-import { useState } from 'preact/hooks';
 import { t } from '../i18n/index.ts';
 import { back, canGoBack } from '../router.ts';
 import { game } from '../store.ts';
 import { moneyShort } from './format.ts';
 
-/** How far a page scrolls before the cash strip shows. */
-const STRIP_AFTER = 120;
-
-/** The cash and the income, pinned at the top while the page is scrolled. */
-function CashStrip({ shown }: { shown: boolean }) {
+/** The cash and the income, pinned at the top of every page. */
+function CashStrip() {
   const state = game();
   const income = businessIncome(state) + passiveRate(state);
   return (
-    <div class={shown ? 'cash-strip on' : 'cash-strip'} aria-hidden={!shown}>
+    <div class="cash-strip">
       <span>{t('strip.cash', { amount: moneyShort(state.volume.cash) })}</span>
       <span class="profit">{t('strip.income', { amount: moneyShort(income) })}</span>
     </div>
@@ -33,15 +29,10 @@ export function Page({
   backLabel?: string;
   right?: ComponentChildren;
 }) {
-  const [scrolled, setScrolled] = useState(false);
   return (
     <>
-      <CashStrip shown={scrolled} />
-      <div
-        class="scroll"
-        key="scroll"
-        onScroll={(e) => setScrolled(e.currentTarget.scrollTop > STRIP_AFTER)}
-      >
+      <CashStrip />
+      <div class="scroll" key="scroll">
         <div class="stack">
           {(canGoBack() || right) && (
             <div class="between" style={{ alignItems: 'center', marginTop: '-8px' }}>

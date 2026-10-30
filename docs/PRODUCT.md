@@ -40,9 +40,8 @@ The approved mock-ups live in the design canvas (owner's link). The rules:
   through what was sold, rubber stamps for buttons that commit money (Buy, Sell, Collect), wax
   seals and stamps for achievements.
 - **Navigation:** index tabs at the bottom of the page: Ledger, Market, Portfolio, Achievements.
-- **The cash strip:** once a page scrolls past its top, a thin strip pinned at the top of the page
-  keeps the cash and the income per second in sight, so the player always knows what there is to
-  spend.
+- **The cash strip:** a strip pinned at the top of every page keeps the cash and the income per
+  second in sight, so the player always knows what there is to spend.
 - **The notebook grows with the player:** a recycled notepad under $1 million of net worth, a
   spiral notebook from $1 million, a leather-bound ledger with gold leaf from $1 billion.
 
