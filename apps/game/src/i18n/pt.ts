@@ -631,6 +631,27 @@ export const pt: Record<StringKey, string> = {
   'gold.pending': 'Aguardando aprovação. Ela chega assim que for aprovada.',
   'gold.busy': 'Um momento…',
   'gold.ribbon': 'Edição de Ouro',
+  // Sports clubs
+  'class.clubs': 'Clubes esportivos',
+  'clubs.title': 'Clubes esportivos',
+  'clubs.subtitle': 'Uma rodada a cada dez minutos: prêmios e um valor que muda com os resultados.',
+  'clubs.prize': 'vitória paga {amount}',
+  'clubs.value': 'vale {amount}',
+  'clubs.buy': 'Comprar {amount}',
+  'clubs.sell': 'Vender {amount}',
+  'clubs.stars': '{count} de 5 estrelas',
+  'clubs.results': 'Últimos resultados',
+  'clubs.result.W': 'V',
+  'clubs.result.D': 'E',
+  'clubs.result.L': 'D',
+  'club.millbrook': 'Atlético Moinho',
+  'club.harbour': 'Andarilhos do Porto',
+  'club.northgate': 'União Portão Norte',
+  'club.redfield': 'Cidade de Campo Rubro',
+  'club.ironbridge': 'Errantes da Ponte de Ferro',
+  'club.royalAlder': 'Real Amieiro',
+  'ach.chairman.name': 'Presidente do clube',
+  'ach.chairman.desc': 'compre um clube esportivo',
   // The dynasty
   'ledger.headerEra': 'Era\u00a0{era} · {name} · Vol.\u00a0{roman}',
   'retire.title': 'Aposentar-se',
@@ -686,4 +707,6 @@ export const pt: Record<StringKey, string> = {
   'postit.energy':
     'Cara para construir, depois renda estável para sempre, também enquanto você está fora.',
   'postit.businesses': 'Os negócios rendem pela renda deles.',
+  'postit.clubs':
+    'Uma rodada a cada dez minutos de jogo: a vitória paga um prêmio e valoriza o clube. Comprado pelo valor, vendido por 90% dele.',
 };

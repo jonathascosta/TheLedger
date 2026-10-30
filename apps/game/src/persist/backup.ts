@@ -5,6 +5,7 @@ import {
   migrate,
   netWorth,
   restartGolden,
+  restartMatchDays,
   SAVE_VERSION,
   tick,
   type GameState,
@@ -191,4 +192,5 @@ export function restartClock(state: GameState, now: number): void {
   v.market.nextAt = Math.min(Math.max(v.market.nextAt, now), now + MARKET_TICK_SECONDS * 1000);
   v.paper.nextAt = Math.min(Math.max(v.paper.nextAt, now + 30_000), now + EDITION_SECONDS * 1000);
   restartGolden(state, now);
+  restartMatchDays(state, now);
 }

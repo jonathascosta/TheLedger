@@ -79,7 +79,7 @@ export function Defs() {
         >
           <line x1="0" y1="0" x2="0" y2="4" style={{ stroke: 'var(--pie-3)' }} stroke-width="1.5" />
         </pattern>
-        {[30, -40, 60, 10, -20, 45, -60, 80, -10].map((angle, i) => (
+        {[30, -40, 60, 10, -20, 45, -60, 80, -10, 25].map((angle, i) => (
           <pattern
             key={i}
             id={`pie-${i + 1}`}

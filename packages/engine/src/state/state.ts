@@ -1,5 +1,6 @@
 import { BUSINESSES } from '../data/businesses.ts';
 import { INSTRUMENTS } from '../data/market.ts';
+import { MATCH_MS } from '../data/clubs.ts';
 import { goldenGap, type CountedOffer } from '../data/sponsors.ts';
 import type { Trait } from '../data/people.ts';
 import type { Lang } from '../format/format.ts';
@@ -157,6 +158,17 @@ export interface SponsorState {
   sponsoredUntil: number;
 }
 
+export type MatchResult = 'W' | 'D' | 'L';
+
+/** A sports club in this volume (PRODUCT.md, Investments). */
+export interface ClubState {
+  owned: boolean;
+  /** Its value: it moves only while owned and stays when sold. */
+  value: number;
+  /** The last results, oldest first. */
+  results: MatchResult[];
+}
+
 /** Everything that a closed volume resets. */
 export interface Volume {
   number: number;
@@ -189,6 +201,10 @@ export interface Volume {
   headhunts: number;
   /** The business whose candidate is a star, until hired or the next headhunt. */
   star: number | null;
+  /** Clubs bought at least once in this volume, by id. */
+  clubs: Record<string, ClubState>;
+  /** Match days so far and the time (game ms) of the next. */
+  matchday: { count: number; nextAt: number };
 }
 
 export interface ShelfEntry {
@@ -281,6 +297,8 @@ export function newVolume(number: number, now: number, startCash = 0): Volume {
     golden: { count: 0, nextAt: now + goldenGap(seed, 0), until: null, taken: false },
     headhunts: 0,
     star: null,
+    clubs: {},
+    matchday: { count: 0, nextAt: now + MATCH_MS },
   };
 }
 

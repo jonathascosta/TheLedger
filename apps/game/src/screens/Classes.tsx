@@ -1,4 +1,12 @@
 import {
+  buyClub,
+  CLUB_SALE,
+  CLUBS,
+  clubOf,
+  sellClub,
+  stars,
+  strength,
+  WIN_PRIZE,
   bondCap,
   bondRate,
   buyArt,
@@ -393,6 +401,105 @@ export function Energy({ state }: { state: GameState }) {
                   {t('energy.build', { amount: moneyShort(p.price) })}
                 </button>
               )}
+            </div>
+          );
+        })}
+      </Locked>
+    </Page>
+  );
+}
+
+/** A club's crest: a shield in the club's colours, a stripe and its initial. */
+function Crest({ index, name }: { index: number; name: string }) {
+  const colour = `var(--pie-${(index % 10) + 1})`;
+  return (
+    <svg aria-hidden="true" viewBox="0 0 40 46" width="38" height="44">
+      <g style={{ stroke: 'var(--ink)' }} stroke-width="2" stroke-linejoin="round">
+        <path
+          d="M4 5 L36 5 L36 22 C36 34 28 40 20 43 C12 40 4 34 4 22 Z"
+          style={{ fill: colour }}
+        />
+        <path d="M4 14 L36 14" style={{ stroke: 'var(--paper-white)' }} stroke-width="5" />
+      </g>
+      <text
+        x="20"
+        y="34"
+        text-anchor="middle"
+        font-family="IM Fell English, serif"
+        font-size="15"
+        style={{ fill: 'var(--paper-white)' }}
+      >
+        {name.charAt(0)}
+      </text>
+    </svg>
+  );
+}
+
+export function Clubs({ state }: { state: GameState }) {
+  const v = state.volume;
+  return (
+    <Page>
+      <h1 class="h1">{t('clubs.title')}</h1>
+      <p class="small">{t('clubs.subtitle')}</p>
+      <PostIt state={state} cls="clubs" />
+      <Locked state={state} cls="clubs">
+        {CLUBS.map((def, i) => {
+          const club = clubOf(state, def);
+          const name = tk(`club.${def.id}`);
+          const s = stars(strength(state, def.id));
+          return (
+            <div key={def.id} class="row" style={{ minHeight: '64px', alignItems: 'flex-start' }}>
+              <Crest index={i} name={name} />
+              <div class="grow stack" style={{ gap: '2px' }}>
+                <p class="h3">{name}</p>
+                <p class="small">
+                  <span aria-hidden="true">
+                    {'★'.repeat(s)}
+                    {'☆'.repeat(5 - s)}
+                  </span>
+                  <span class="sr-only">{t('clubs.stars', { count: s })}</span>
+                  {' · '}
+                  {t('clubs.prize', { amount: moneyShort(def.price * WIN_PRIZE) })}
+                </p>
+                <p class="small">
+                  {t('clubs.value', { amount: moneyShort(club.value) })}
+                  {club.results.length > 0 && (
+                    <>
+                      {' · '}
+                      <span class="sr-only">{t('clubs.results')}: </span>
+                      {club.results.map((r, k) => (
+                        <b
+                          key={k}
+                          class={r === 'W' ? 'profit' : r === 'L' ? 'loss' : ''}
+                          style={{ marginRight: '3px' }}
+                        >
+                          {tk(`clubs.result.${r}`)}
+                        </b>
+                      ))}
+                    </>
+                  )}
+                </p>
+                {club.owned ? (
+                  <button
+                    type="button"
+                    class="btn"
+                    style={{ alignSelf: 'flex-start' }}
+                    onClick={() => act((st) => sellClub(st, def.id))}
+                  >
+                    {t('clubs.sell', { amount: moneyShort(club.value * CLUB_SALE) })}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    class="btn"
+                    style={{ alignSelf: 'flex-start' }}
+                    disabled={v.cash < club.value}
+                    onClick={() => act((st) => buyClub(st, def.id))}
+                  >
+                    {t('clubs.buy', { amount: moneyShort(club.value) })}
+                  </button>
+                )}
+              </div>
             </div>
           );
         })}

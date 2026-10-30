@@ -42,6 +42,17 @@ export type { AchievementDef, AchievementStyle } from './data/achievements.ts';
 export type { PartnerDef, PartnerId } from './data/partners.ts';
 
 export { SAVE_VERSION, migrate, newGame, newVolume } from './state/state.ts';
+export { CLUBS, CLUB_SALE, MATCH_MS, WIN_PRIZE } from './data/clubs.ts';
+export type { ClubDef } from './data/clubs.ts';
+export {
+  buyClub,
+  clubOf,
+  clubsValue,
+  restartMatchDays,
+  sellClub,
+  stars,
+  strength,
+} from './clubs/clubs.ts';
 export { ERA_STYLES, LEGACY_BONUS, RETIRE_AT } from './data/dynasty.ts';
 export { canRetire, eraClaimed, eraStyle, heirOf, legacyClaim, retire } from './dynasty/dynasty.ts';
 export {
@@ -75,12 +86,14 @@ export type {
   AwayLine,
   AwayReceipt,
   BusinessState,
+  ClubState,
   BuyMode,
   DeskState,
   GameState,
   GoldenState,
   Holding,
   Manager,
+  MatchResult,
   MarketState,
   PaperResult,
   PaperState,

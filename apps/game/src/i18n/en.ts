@@ -653,6 +653,27 @@ export const en = {
   'gold.pending': 'Waiting for approval. It arrives once approved.',
   'gold.busy': 'One moment…',
   'gold.ribbon': 'Gold Edition',
+  // Sports clubs
+  'class.clubs': 'Sports clubs',
+  'clubs.title': 'Sports clubs',
+  'clubs.subtitle': 'A match day every ten minutes: prizes, and a value that moves with results.',
+  'clubs.prize': 'a win pays {amount}',
+  'clubs.value': 'worth {amount}',
+  'clubs.buy': 'Buy {amount}',
+  'clubs.sell': 'Sell {amount}',
+  'clubs.stars': '{count} of 5 stars',
+  'clubs.results': 'Last results',
+  'clubs.result.W': 'W',
+  'clubs.result.D': 'D',
+  'clubs.result.L': 'L',
+  'club.millbrook': 'Millbrook Athletic',
+  'club.harbour': 'Harbour Rovers',
+  'club.northgate': 'Northgate United',
+  'club.redfield': 'Redfield City',
+  'club.ironbridge': 'Ironbridge Wanderers',
+  'club.royalAlder': 'Royal Alder',
+  'ach.chairman.name': 'Chairman',
+  'ach.chairman.desc': 'buy a sports club',
   // The dynasty
   'ledger.headerEra': 'Era\u00a0{era} · {name} · Vol.\u00a0{roman}',
   'retire.title': 'Retire',
@@ -702,6 +723,8 @@ export const en = {
   'postit.art': 'A piece’s value creeps up with noise; at auction it sells for 80% to 130% of it.',
   'postit.energy': 'Dear to build, then steady income forever, also while you are away.',
   'postit.businesses': 'Businesses pay through their income.',
+  'postit.clubs':
+    'A match day every ten minutes of play: a win pays a prize and lifts the club’s value. Bought at its value, sold at 90% of it.',
 } as const;
 
 export type StringKey = keyof typeof en;

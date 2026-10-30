@@ -3,6 +3,7 @@ import {
   applyAway,
   EDITION_SECONDS,
   MARKET_TICK_SECONDS,
+  MATCH_MS,
   newGame,
   SAVE_VERSION,
   tick,
@@ -75,6 +76,20 @@ describe('the backup code', () => {
     for (const [id, prices] of Object.entries(m2.history)) expect(prices).toEqual([m1.prices[id]]);
     expect(decoded.state.volume.history).toHaveLength(1);
     expect(decoded.state.volume.history[0]).toBeGreaterThan(0);
+  });
+
+  it('a restore plays no match day missed since the code was made', () => {
+    const state = played();
+    state.volume.clubs = { millbrook: { owned: true, value: 1e12, results: [] } };
+    state.volume.matchday = { count: 3, nextAt: state.lastTick - 24 * 3600_000 };
+    const later = state.lastTick + 24 * 3600_000;
+    const decoded = decodeBackup(encodeBackup(state, state.lastTick), later);
+    if (!decoded.ok) throw new Error(decoded.error);
+    expect(decoded.state.volume.matchday.nextAt).toBe(later + MATCH_MS);
+    const cash = decoded.state.volume.cash;
+    tick(decoded.state, later + 1000);
+    expect(decoded.state.volume.matchday.count).toBe(3);
+    expect(decoded.state.volume.cash).toBeLessThan(cash + 1e9);
   });
 
   it('carries the dynasty: the era, legacy and the eras of the shelf', () => {
