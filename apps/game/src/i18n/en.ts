@@ -652,6 +652,27 @@ export const en = {
   'gold.pending': 'Waiting for approval. It arrives once approved.',
   'gold.busy': 'One moment…',
   'gold.ribbon': 'Gold Edition',
+  // Sports clubs
+  'class.clubs': 'Sports clubs',
+  'clubs.title': 'Sports clubs',
+  'clubs.subtitle': 'A match day every ten minutes: prizes, and a value that moves with results.',
+  'clubs.prize': 'win {amount}',
+  'clubs.value': 'worth {amount}',
+  'clubs.buy': 'Buy {amount}',
+  'clubs.sell': 'Sell {amount}',
+  'clubs.stars': '{count} of 5 stars',
+  'clubs.results': 'Last results',
+  'clubs.result.W': 'W',
+  'clubs.result.D': 'D',
+  'clubs.result.L': 'L',
+  'club.millbrook': 'Millbrook Athletic',
+  'club.harbour': 'Harbour Rovers',
+  'club.northgate': 'Northgate United',
+  'club.redfield': 'Redfield City',
+  'club.ironbridge': 'Ironbridge Wanderers',
+  'club.royalAlder': 'Royal Alder',
+  'ach.chairman.name': 'Chairman',
+  'ach.chairman.desc': 'buy a sports club',
 } as const;
 
 export type StringKey = keyof typeof en;

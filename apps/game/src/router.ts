@@ -17,6 +17,7 @@ export type Route =
   | { name: 'startups' }
   | { name: 'art' }
   | { name: 'energy' }
+  | { name: 'clubs' }
   | { name: 'achievements' }
   | { name: 'close' }
   | { name: 'partners' }

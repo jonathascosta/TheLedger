@@ -34,6 +34,7 @@ const CHECKS: Readonly<Record<string, (s: GameState) => boolean>> = {
     s.volume.startupResults.some((r) => r.stake > 0) || s.volume.startup?.maturesAt != null,
   firstArt: (s) => s.volume.art.length > 0,
   firstPark: (s) => s.volume.parks.length > 0,
+  chairman: (s) => Object.values(s.volume.clubs).some((c) => c.owned),
   collector: (s) =>
     s.volume.businesses.some((b) => b.level > 0) &&
     holdsKind(s, 'stock') &&

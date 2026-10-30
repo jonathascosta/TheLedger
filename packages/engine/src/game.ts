@@ -13,6 +13,7 @@ import { advanceBusinesses, earn } from './economy/economy.ts';
 import { advanceMarket } from './market/market.ts';
 import { advancePaper } from './paper/paper.ts';
 import type { AwayLine, AwayReceipt, GameState } from './state/state.ts';
+import { advanceClubs, restartMatchDays } from './clubs/clubs.ts';
 import { advanceGolden, restartGolden } from './sponsors/sponsors.ts';
 import { isUnlocked, netWorth } from './worth.ts';
 
@@ -43,6 +44,7 @@ function advanceWorld(state: GameState, now: number, dt: number): void {
     nextPitch(state, worth);
   }
   if (isUnlocked(state, 'art')) advanceAuction(state, now, worth);
+  advanceClubs(state, now);
 }
 
 /**
@@ -99,6 +101,7 @@ export function applyAway(state: GameState, now: number): AwayReceipt | null {
   advanceMarket(state, now, 0);
   state.volume.paper.nextAt = Math.max(state.volume.paper.nextAt, now + 30_000);
   restartGolden(state, now);
+  restartMatchDays(state, now);
   state.lastTick = now;
   state.volume.lastSampleAt = now;
   if (seconds >= AWAY_MAX_SECONDS) grant(state, 'insomniac', now);
