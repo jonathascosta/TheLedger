@@ -42,7 +42,7 @@ function BusinessRow({ state, index }: { state: GameState; index: number }) {
   const name = tk(`biz.${BUSINESSES[index]!.id}`);
   const managed = state.volume.managers[index] !== null;
   if (b.level === 0) {
-    const cost = levelCost(state, index, 1);
+    const { cost } = buyOffer(state, index);
     return (
       <div class="biz">
         <button

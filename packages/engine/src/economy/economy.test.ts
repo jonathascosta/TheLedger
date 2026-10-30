@@ -6,6 +6,7 @@ import { collectAway } from '../away/away.ts';
 import { newGame } from '../state/state.ts';
 import {
   buyBusiness,
+  buyOffer,
   businessIncome,
   businessRate,
   buyUpgrade,
@@ -29,6 +30,17 @@ describe('economy', () => {
     expect(s.volume.businesses[0]!.till).toBe(1);
     expect(collect(s, 0).ok).toBe(true);
     expect(s.volume.businesses[0]!.till).toBe(0);
+  });
+
+  it('opens a business with one level in every buy mode', () => {
+    for (const mode of [10, 100, 'max'] as const) {
+      const s = newGame(T0);
+      s.settings.buyMode = mode;
+      s.volume.cash = levelCost(s, 0, 1) * 50;
+      expect(buyOffer(s, 0)).toEqual({ count: 1, cost: levelCost(s, 0, 1) });
+      expect(buyBusiness(s, 0).ok).toBe(true);
+      expect(s.volume.businesses[0]!.level).toBe(1);
+    }
   });
 
   it('sums level costs geometrically and finds the max affordable', () => {
