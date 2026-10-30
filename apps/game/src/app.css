@@ -1098,3 +1098,29 @@ p {
   font-size: 9px;
   letter-spacing: 0.06em;
 }
+
+/* A post-it with an investment's rule (docs/PRODUCT.md, Investments). */
+.postit {
+  position: relative;
+  align-self: flex-start;
+  max-width: 300px;
+  padding: 10px 30px 12px 12px;
+  background: var(--highlight);
+  box-shadow: 1px 2px 5px var(--shadow);
+  transform: rotate(-1.5deg);
+  font-family: var(--hand);
+  font-size: 19px;
+  line-height: 1.15;
+}
+
+.postit-fold {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 32px;
+  min-height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 20px;
+}

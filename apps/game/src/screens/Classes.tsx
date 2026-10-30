@@ -27,6 +27,7 @@ import { Icon } from '../art/Doodles.tsx';
 import { t, tk } from '../i18n/index.ts';
 import { act } from '../store.ts';
 import { Page } from '../ui/Page.tsx';
+import { PostIt } from '../ui/PostIt.tsx';
 import { duration, money, moneyShort } from '../ui/format.ts';
 
 function Locked({
@@ -57,6 +58,7 @@ export function Bonds({ state }: { state: GameState }) {
     <Page>
       <h1 class="h1">{t('bonds.title')}</h1>
       <p class="small">{t('bonds.subtitle')}</p>
+      <PostIt state={state} cls="bonds" />
       <Locked state={state} cls="bonds">
         <div class="index-card stack" style={{ gap: '4px' }}>
           <p class="h2">{t('bonds.held', { amount: money(v.bonds) })}</p>
@@ -120,6 +122,7 @@ export function Estate({ state }: { state: GameState }) {
           })}
         </p>
       </div>
+      <PostIt state={state} cls="realEstate" />
       <Locked state={state} cls="realEstate">
         <div style={{ position: 'relative', transform: 'rotate(-0.8deg)', marginLeft: '-26px' }}>
           <span
@@ -198,6 +201,7 @@ export function Startups({ state }: { state: GameState }) {
     <Page>
       <h1 class="h1">{t('startups.title')}</h1>
       <p class="small">{t('startups.subtitle')}</p>
+      <PostIt state={state} cls="startups" />
       <Locked state={state} cls="startups">
         {pitch && info ? (
           <div class="index-card stack" style={{ gap: '6px' }}>
@@ -281,6 +285,7 @@ export function Art({ state }: { state: GameState }) {
     <Page>
       <h1 class="h1">{t('art.title')}</h1>
       <p class="small">{t('art.subtitle')}</p>
+      <PostIt state={state} cls="art" />
       <Locked state={state} cls="art">
         {lot && (
           <div class="index-card stack" style={{ gap: '6px' }}>
@@ -363,6 +368,7 @@ export function Energy({ state }: { state: GameState }) {
     <Page>
       <h1 class="h1">{t('energy.title')}</h1>
       <p class="small">{t('energy.subtitle')}</p>
+      <PostIt state={state} cls="energy" />
       <Locked state={state} cls="energy">
         {PARKS.map((p) => {
           const owned = v.parks.includes(p.id);

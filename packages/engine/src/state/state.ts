@@ -223,6 +223,8 @@ export interface Settings {
    * declined in iOS (the switch then points to the iPhone's Settings).
    */
   notes: 'unasked' | 'on' | 'off' | 'denied';
+  /** Investment classes whose post-it the player folded away (PRODUCT.md, Investments). */
+  postits: string[];
 }
 
 export interface GameState {
@@ -295,7 +297,7 @@ export function newGame(now: number): GameState {
       editionsAnswered: 0,
       gold: false,
     },
-    settings: { lang: null, buyMode: 1, notes: 'unasked' },
+    settings: { lang: null, buyMode: 1, notes: 'unasked', postits: [] },
     away: null,
     fresh: [],
     sponsors: { day: '', counts: {}, overtimeUntil: 0, sponsoredUntil: 0 },
