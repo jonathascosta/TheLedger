@@ -673,6 +673,17 @@ export const en = {
   'club.royalAlder': 'Royal Alder',
   'ach.chairman.name': 'Chairman',
   'ach.chairman.desc': 'buy a sports club',
+  // Notes from the night shift
+  'notes.title': 'Notes from the night shift',
+  'notes.on': 'On',
+  'notes.off': 'Off',
+  'notes.denied': 'Allow notifications for The Ledger in the iPhone’s Settings to get them.',
+  'notes.receipt.title': 'The receipt is full',
+  'notes.receipt.body': 'Twelve hours of the night shift are waiting to be collected.',
+  'notes.sponsorship.title': 'The sponsorship has ended',
+  'notes.sponsorship.body': 'Business profit is back to normal. A new sponsor can double it again.',
+  'notes.tills.title': 'The tills are full',
+  'notes.tills.body': 'Every business without a manager has money waiting.',
 } as const;
 
 export type StringKey = keyof typeof en;

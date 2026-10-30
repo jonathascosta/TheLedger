@@ -651,4 +651,17 @@ export const pt: Record<StringKey, string> = {
   'club.royalAlder': 'Real Amieiro',
   'ach.chairman.name': 'Presidente do clube',
   'ach.chairman.desc': 'compre um clube esportivo',
+  // Notes from the night shift
+  'notes.title': 'Bilhetes do turno da noite',
+  'notes.on': 'Ligados',
+  'notes.off': 'Desligados',
+  'notes.denied':
+    'Permita as notificações do The Ledger nos Ajustes do iPhone para receber os bilhetes.',
+  'notes.receipt.title': 'O recibo está cheio',
+  'notes.receipt.body': 'Doze horas do turno da noite esperam para ser recolhidas.',
+  'notes.sponsorship.title': 'O patrocínio acabou',
+  'notes.sponsorship.body':
+    'O lucro dos negócios voltou ao normal. Um novo patrocínio pode dobrá-lo de novo.',
+  'notes.tills.title': 'As caixas estão cheias',
+  'notes.tills.body': 'Todo negócio sem gerente tem dinheiro esperando.',
 };

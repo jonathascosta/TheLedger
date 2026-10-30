@@ -234,6 +234,11 @@ export interface Settings {
   /** Null follows the device. */
   lang: Lang | null;
   buyMode: BuyMode;
+  /**
+   * Notes from the night shift (PRODUCT.md, Away from the game): not asked yet, on, off, or
+   * declined in iOS (the switch then points to the iPhone's Settings).
+   */
+  notes: 'unasked' | 'on' | 'off' | 'denied';
 }
 
 export interface GameState {
@@ -308,7 +313,7 @@ export function newGame(now: number): GameState {
       editionsAnswered: 0,
       gold: false,
     },
-    settings: { lang: null, buyMode: 1 },
+    settings: { lang: null, buyMode: 1, notes: 'unasked' },
     away: null,
     fresh: [],
     sponsors: { day: '', counts: {}, overtimeUntil: 0, sponsoredUntil: 0 },

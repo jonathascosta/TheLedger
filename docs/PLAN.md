@@ -146,7 +146,7 @@ calls an action once a reward is earned.
   the factor, an old save as era I, a backup code carrying era and legacy); an end-to-end test
   retiring a seeded save and seeing era II's paper.
 
-### T16. Notes from the night shift (iPhone)
+### T16. Notes from the night shift (iPhone) — done
 
 - A pure schedule (`notes(state, now)`): the three notes, quiet hours and the hour between notes;
   `@capacitor/local-notifications` on iOS, scheduling on hide and removing pending and delivered
