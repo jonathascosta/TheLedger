@@ -1217,3 +1217,20 @@ p {
 .goodwill-next .bar {
   display: block;
 }
+
+/* The buy modes: pinned at the top of the ledger while it scrolls, on the page's own paper. */
+.buy-modes {
+  position: sticky;
+  top: -20px;
+  z-index: 2;
+  justify-content: space-between;
+  gap: 0;
+  margin: -8px 0 0;
+  padding: 2px 0;
+  background: var(--paper);
+}
+
+.buy-modes .chip {
+  min-width: 40px;
+  flex: 1 1 0;
+}

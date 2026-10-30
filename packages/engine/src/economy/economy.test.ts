@@ -34,15 +34,25 @@ describe('economy', () => {
     expect(s.volume.businesses[0]!.till).toBe(0);
   });
 
-  it('opens a business with one level in every buy mode', () => {
-    for (const mode of [10, 100, 'max'] as const) {
+  it('opens a business with the buy mode: its levels, or as many as Max pays', () => {
+    for (const mode of [5, 25] as const) {
       const s = newGame(T0);
       s.settings.buyMode = mode;
-      s.volume.cash = levelCost(s, 0, 1) * 50;
-      expect(buyOffer(s, 0)).toEqual({ count: 1, cost: levelCost(s, 0, 1) });
+      s.volume.cash = levelCost(s, 0, mode);
+      expect(buyOffer(s, 0)).toEqual({ count: mode, cost: levelCost(s, 0, mode) });
       expect(buyBusiness(s, 0).ok).toBe(true);
-      expect(s.volume.businesses[0]!.level).toBe(1);
+      expect(s.volume.businesses[0]!.level).toBe(mode);
     }
+    const s = newGame(T0);
+    s.settings.buyMode = 'max';
+    s.volume.cash = levelCost(s, 0, 7);
+    expect(buyBusiness(s, 0).ok).toBe(true);
+    expect(s.volume.businesses[0]!.level).toBe(7);
+    // Not enough for the mode's levels: nothing is bought.
+    const short = newGame(T0);
+    short.settings.buyMode = 10;
+    short.volume.cash = levelCost(short, 0, 9);
+    expect(buyBusiness(short, 0)).toEqual({ ok: false, reason: 'cash' });
   });
 
   it('sums level costs geometrically and finds the max affordable', () => {

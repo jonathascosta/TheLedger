@@ -30,6 +30,7 @@ export const en = {
   'ledger.buyMode': 'Buy',
   'ledger.buy': 'Buy ×{count}',
   'ledger.open': 'Open',
+  'ledger.openCount': 'Open ×{count}',
   'ledger.collect': 'Collect',
   'ledger.running': 'manager on duty',
   'ledger.nextBusiness': 'Next: {name} at {amount}',

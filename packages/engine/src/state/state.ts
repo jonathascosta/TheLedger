@@ -24,7 +24,7 @@ function renameUpgrade(id: string): string {
   return renamed !== undefined && rest !== undefined ? `${renamed}.${rest}` : id;
 }
 
-export type BuyMode = 1 | 10 | 100 | 'max';
+export type BuyMode = 1 | 5 | 10 | 25 | 100 | 'max';
 
 export interface BusinessState {
   /** Units owned; 0 means not opened. */

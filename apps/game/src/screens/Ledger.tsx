@@ -37,14 +37,14 @@ import { Page, Underline } from '../ui/Page.tsx';
 import { Sponsor } from '../ui/Sponsor.tsx';
 import { duration, factor, money, moneyShort, plain } from '../ui/format.ts';
 
-const MODES: readonly BuyMode[] = [1, 10, 100, 'max'];
+const MODES: readonly BuyMode[] = [1, 5, 10, 25, 100, 'max'];
 
 function BusinessRow({ state, index }: { state: GameState; index: number }) {
   const b = state.volume.businesses[index]!;
   const name = tk(`biz.${BUSINESSES[index]!.id}`);
   const managed = state.volume.managers[index] !== null;
   if (b.level === 0) {
-    const { cost } = buyOffer(state, index);
+    const { count, cost } = buyOffer(state, index);
     return (
       <div class="biz">
         <button
@@ -72,7 +72,7 @@ function BusinessRow({ state, index }: { state: GameState; index: number }) {
           disabled={state.volume.cash < cost}
           onClick={() => act((s) => buyBusiness(s, index))}
         >
-          {t('ledger.open')}
+          {count > 1 ? t('ledger.openCount', { count }) : t('ledger.open')}
           <br />
           <strong>{moneyShort(cost)}</strong>
         </button>
@@ -333,13 +333,7 @@ export function Ledger({ state }: { state: GameState }) {
         <h2 class="h2">{t('ledger.businesses')}</h2>
         <p class="small">{t('ledger.count', { open, total: BUSINESSES.length })}</p>
       </div>
-      <div
-        class="row"
-        role="group"
-        aria-label={t('ledger.buyMode')}
-        style={{ gap: '4px', marginTop: '-8px' }}
-      >
-        <span class="small">{t('ledger.buyMode')}</span>
+      <div class="row buy-modes" role="group" aria-label={t('ledger.buyMode')}>
         {MODES.map((m) => (
           <button
             key={String(m)}
