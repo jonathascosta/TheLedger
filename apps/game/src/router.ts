@@ -19,6 +19,7 @@ export type Route =
   | { name: 'energy' }
   | { name: 'achievements' }
   | { name: 'close' }
+  | { name: 'retire' }
   | { name: 'partners' }
   | { name: 'shelf' }
   | { name: 'settings' };

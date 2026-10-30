@@ -79,6 +79,43 @@ p {
   pointer-events: none;
 }
 
+/* The 1980s: grey bars three lines tall. */
+:root[data-era='3'] .page:not(.newsprint) {
+  background-image:
+    var(--grain, none),
+    repeating-linear-gradient(
+      to bottom,
+      var(--bar) 0,
+      var(--bar) calc(var(--line) * 3),
+      transparent calc(var(--line) * 3),
+      transparent calc(var(--line) * 6)
+    );
+}
+
+/* The 2010s: graph paper, lines both ways. */
+:root[data-era='4'] .page:not(.newsprint) {
+  background-image:
+    var(--grain, none),
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(var(--line) - 1px),
+      var(--rule) calc(var(--line) - 1px),
+      var(--rule) var(--line)
+    ),
+    repeating-linear-gradient(
+      to right,
+      transparent 0,
+      transparent calc(var(--line) - 1px),
+      var(--rule) calc(var(--line) - 1px),
+      var(--rule) var(--line)
+    );
+  background-position:
+    0 0,
+    0 6px,
+    0 0;
+}
+
 .page.newsprint {
   background-color: var(--newsprint);
   background-image: var(--grain, none);

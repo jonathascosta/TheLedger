@@ -42,6 +42,8 @@ export type { AchievementDef, AchievementStyle } from './data/achievements.ts';
 export type { PartnerDef, PartnerId } from './data/partners.ts';
 
 export { SAVE_VERSION, migrate, newGame, newVolume } from './state/state.ts';
+export { ERA_STYLES, LEGACY_BONUS, RETIRE_AT } from './data/dynasty.ts';
+export { canRetire, eraClaimed, eraStyle, heirOf, legacyClaim, retire } from './dynasty/dynasty.ts';
 export {
   CLOSING_BONUS,
   DAILY_LIMITS,
@@ -101,6 +103,7 @@ export {
   cycleOf,
   earn,
   goodwillMultiplier,
+  legacyFactor,
   hasPartner,
   isAvailable,
   levelCost,
