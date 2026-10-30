@@ -1173,3 +1173,21 @@ p {
   color: var(--profit);
   font-weight: 700;
 }
+
+/* A trend (PRODUCT.md, Trends): a headline cut from the paper, and a badge on the business's row. */
+.trend-headline {
+  align-self: flex-start;
+  padding: 6px 10px;
+  background: var(--paper-white);
+  border: 1.5px solid var(--ink-soft);
+  box-shadow: 1px 2px 4px var(--shadow);
+  transform: rotate(-1deg);
+  font-family: var(--print);
+  font-size: 17px;
+  line-height: 1.2;
+}
+
+.trend-badge {
+  color: var(--loss);
+  font-weight: 700;
+}

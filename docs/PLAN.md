@@ -182,7 +182,7 @@ calls an action once a reward is earned.
   upgrades); the calibration bands pass with the new one, and a test shows the new band fails
   without the orders; an end-to-end test buying the café's first order.
 
-### T20. Trends
+### T20. Trends — done
 
 - Engine: the trend clock in play, the seeded draw (volume seed and trend count) among the lower
   half by income, the capped factor in the business's profit, its end at an absence and its

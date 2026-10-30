@@ -182,16 +182,20 @@ A trend makes one small business the talk of the town for a while.
 - **When:** 25 minutes of play into a volume, and every 25 minutes of play after that (a close
   or a retirement starts the clock again with the new volume). Trends run only in play: a trend
   in progress ends when the player leaves (an absence, as for the golden invoice), never counts
-  in the absence receipt, and the clock starts again on return or after a restore. A reload
-  within a minute keeps a running trend (it is in the save).
+  in the absence receipt, and the clock starts again on return. After a restore, as after an
+  absence, a running trend ends and the clock starts again. A reload within a minute keeps a
+  running trend (it is in the save).
 - **Which business:** drawn with the volume's seed and the trend count among the lower half of
   the opened businesses (`floor(n/2)`, at least one; ties broken by order), ranked by income per
   second as if every till were collected, after the special orders and without the running
-  trend. Not the same business twice in a row, unless it is the only one.
+  trend. A business is not drawn again until as many other trends have passed as the smaller of
+  five and half the opened businesses; when the whole lower half had a recent trend, the draw
+  takes the next business up by income that did not.
 - **Effect:** **×50** profit for that business for 5 minutes, at most as much as lifts it to the
-  income of the best business outside the lower half (at least ×2). It multiplies on top of
-  every other factor (orders, upgrades, sponsorship, Gold Edition), so the stamps and the golden
-  invoice follow it; the bond cap leaves it out, as it does the sponsorship.
+  income of the best business (at least ×2). The factor is set when the trend starts. It
+  multiplies on top of every other factor (orders, upgrades, sponsorship, Gold Edition), so the
+  stamps and the golden invoice follow it; the bond cap leaves it out, as it does the
+  sponsorship.
 - **On the page:** a headline in the ledger, in EN and PT, one per business ("Filter coffee is
   all the rage"), and a badge with the time left on the business's row.
 
@@ -459,7 +463,7 @@ paper and sponsors alone. It plays better than most people, so a person reaches 
 
 The small businesses carry their weight: when closing is first suggested, the first four
 businesses make at least a fifth of the businesses' income per second (8% without the special
-orders, 24% with them when the band was set). The simulator plays trends (they come with the
+orders, 24% with them when the band was set), without a running trend. The simulator plays trends (they come with the
 clock) and buys special orders by payback, like upgrades.
 
 Stamps stay under half of all earnings at four taps a second, over the first 30 hours (43% when

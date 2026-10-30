@@ -16,11 +16,13 @@ import {
 import {
   type ActionResult,
   businessIncome,
+  businessRate,
   earn,
   hasPartner,
   OK,
   spend,
   sponsorshipFactor,
+  trendFactor,
 } from '../economy/economy.ts';
 import { createRng } from '../rng/rng.ts';
 import type { GameState, StartupResult } from '../state/state.ts';
@@ -36,7 +38,13 @@ export function bondRate(state: GameState): number {
  * sponsored hours do not leave larger bonds for the rest of the volume.
  */
 export function bondCap(state: GameState): number {
-  return Math.max(1e6, (businessIncome(state) / sponsorshipFactor(state)) * BOND_CAP_SECONDS);
+  const t = state.volume.trend;
+  const trend =
+    t.business === null
+      ? 0
+      : businessRate(state, t.business) * (1 - 1 / trendFactor(state, t.business));
+  const income = (businessIncome(state) - trend) / sponsorshipFactor(state);
+  return Math.max(1e6, income * BOND_CAP_SECONDS);
 }
 
 export function lend(state: GameState, amount: number): ActionResult {

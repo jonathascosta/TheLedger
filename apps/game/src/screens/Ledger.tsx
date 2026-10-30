@@ -20,6 +20,7 @@ import {
   shouldClose,
   sponsorshipLeft,
   startSponsorship,
+  trendFactor,
   upgradeUnlocked,
   UPGRADES,
   type BuyMode,
@@ -34,7 +35,7 @@ import { sponsorsOffered, today } from '../sponsor.ts';
 import { GoldenInvoice } from '../ui/Golden.tsx';
 import { Page, Underline } from '../ui/Page.tsx';
 import { Sponsor } from '../ui/Sponsor.tsx';
-import { duration, money, moneyShort, plain } from '../ui/format.ts';
+import { duration, factor, money, moneyShort, plain } from '../ui/format.ts';
 
 const MODES: readonly BuyMode[] = [1, 10, 100, 'max'];
 
@@ -115,6 +116,15 @@ function BusinessRow({ state, index }: { state: GameState; index: number }) {
           {t('common.level', { level: b.level })} ·{' '}
           {t('common.perSecond', { amount: moneyShort(businessRate(state, index)) })}
           {managed ? ` · ${t('ledger.managed')}` : ''}
+          {trendFactor(state, index) > 1 && (
+            <span class="trend-badge">
+              {' '}
+              {t('trend.badge', {
+                factor: factor(state.volume.trend.factor),
+                time: duration(Math.ceil((state.volume.trend.until - state.lastTick) / 1000)),
+              })}
+            </span>
+          )}
           {order && (
             <span class={b.level >= (order.level ?? 0) ? 'order-mark ready' : 'order-mark'}>
               {' · '}
@@ -166,6 +176,7 @@ export function Ledger({ state }: { state: GameState }) {
     (i) => v.businesses[i]!.level > 0 || isAvailable(state, i),
   );
   const nextLocked = BUSINESSES.findIndex((_, i) => !isAvailable(state, i));
+  const trend = trendFactor(state, v.trend.business ?? -1) > 1 ? v.trend.business : null;
   const affordableUpgrades = UPGRADES.filter(
     (u) => !v.upgrades.includes(u.id) && u.cost <= v.cash && upgradeUnlocked(state, u),
   ).length;
@@ -306,6 +317,11 @@ export function Ledger({ state }: { state: GameState }) {
           <Icon.pencilArrow />
           <span>{hint}</span>
         </div>
+      )}
+      {trend !== null && (
+        <p class="trend-headline" role="status">
+          <span class="caps">{t('trend.label')}</span> {tk(`trend.${BUSINESSES[trend]!.id}`)}
+        </p>
       )}
       <div class="between" style={{ marginTop: '4px', alignItems: 'center' }}>
         <h2 class="h2">{t('ledger.businesses')}</h2>

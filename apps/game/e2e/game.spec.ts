@@ -275,3 +275,48 @@ test("the café's first order: ready on its row, bought on the Upgrades page", a
   await expect(cafe.locator('.order-mark')).toHaveText(pt ? /nív\. 500/ : /lvl 500/);
   await context.close();
 });
+
+test('a running trend shows its headline and the badge on its row', async ({ browser }) => {
+  const pt = test.info().project.name.endsWith('-pt');
+  const context = await browser.newContext({
+    baseURL: test.info().project.use.baseURL ?? '',
+    locale: pt ? 'pt-BR' : 'en-US',
+  });
+  const first = await context.newPage();
+  await first.goto('./');
+  await first.waitForFunction(() => localStorage.getItem('theledger.save'));
+  const save = await first.evaluate(
+    () =>
+      JSON.parse(localStorage.getItem('theledger.save') ?? 'null') as {
+        volume: { businesses: unknown[]; trend: unknown };
+        lastTick: number;
+      },
+  );
+  await first.close();
+  const now = Date.now();
+  save.volume.businesses[0] = { level: 10, progress: 0, till: 0 };
+  save.volume.businesses[1] = { level: 10, progress: 0, till: 0 };
+  save.volume.trend = {
+    count: 1,
+    nextAt: now + 20 * 60_000,
+    business: 0,
+    factor: 50,
+    until: now + 4 * 60_000,
+    recent: [0],
+  };
+  save.lastTick = now;
+  const page = await context.newPage();
+  await page.addInitScript((text) => {
+    if (!sessionStorage.getItem('seeded')) {
+      localStorage.setItem('theledger.save', text);
+      sessionStorage.setItem('seeded', '1');
+    }
+  }, JSON.stringify(save));
+  await page.goto('./');
+  await expect(page.locator('.trend-headline')).toContainText(
+    pt ? /Café coado virou febre/ : /Filter coffee is all the rage/,
+  );
+  await expect(page.locator('.biz').first().locator('.trend-badge')).toContainText('×50');
+  await expect(page.locator('.biz').nth(1).locator('.trend-badge')).toHaveCount(0);
+  await context.close();
+});

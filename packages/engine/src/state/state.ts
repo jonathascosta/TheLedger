@@ -1,6 +1,7 @@
 import { BUSINESSES } from '../data/businesses.ts';
 import { INSTRUMENTS, type AssetClass } from '../data/market.ts';
 import { MATCH_MS } from '../data/clubs.ts';
+import { TREND_EVERY_MS } from '../data/trends.ts';
 import { goldenGap, type CountedOffer } from '../data/sponsors.ts';
 import type { Trait } from '../data/people.ts';
 import type { Lang } from '../format/format.ts';
@@ -205,6 +206,20 @@ export interface Volume {
   clubs: Record<string, ClubState>;
   /** Match days so far and the time (game ms) of the next. */
   matchday: { count: number; nextAt: number };
+  trend: TrendState;
+}
+
+/** Trends (PRODUCT.md, Trends). */
+export interface TrendState {
+  /** Trends so far in this volume (seeds the draw), and the time (game ms) of the next. */
+  count: number;
+  nextAt: number;
+  /** The running trend's business, its factor and its end (game ms); null when none runs. */
+  business: number | null;
+  factor: number;
+  until: number;
+  /** The businesses of the last trends, oldest first. */
+  recent: number[];
 }
 
 export interface ShelfEntry {
@@ -299,6 +314,14 @@ export function newVolume(number: number, now: number, startCash = 0): Volume {
     star: null,
     clubs: {},
     matchday: { count: 0, nextAt: now + MATCH_MS },
+    trend: {
+      count: 0,
+      nextAt: now + TREND_EVERY_MS,
+      business: null,
+      factor: 1,
+      until: 0,
+      recent: [],
+    },
   };
 }
 
@@ -350,6 +373,16 @@ export function migrate(raw: unknown, now: number): GameState | null {
     until: null,
     taken: false,
     ...golden,
+  };
+  const trend = save.volume.trend as Partial<TrendState> | undefined;
+  volume.trend = {
+    count: 0,
+    nextAt: now + TREND_EVERY_MS,
+    business: null,
+    factor: 1,
+    until: 0,
+    ...trend,
+    recent: Array.isArray(trend?.recent) ? trend.recent : [],
   };
   if (save.version < 2 && Array.isArray(volume.upgrades)) {
     volume.upgrades = (volume.upgrades as unknown[])
