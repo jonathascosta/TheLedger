@@ -126,8 +126,51 @@ calls an action once a reward is earned.
 - Done: unit tests for a round trip, a changed character, a cut code and a code from a newer
   version; an end-to-end test copies a code and restores it in a fresh page.
 
+### T14. Engine: the balance simulator
+
+- A simulated player in the engine (`sim/`), playing as PRODUCT.md, Balance says; deterministic.
+- `pnpm test:calibration`: a separate Vitest project for `*.calibration.test.ts`, which `pnpm test`
+  (and so the pre-commit hook) leaves out; a CI job runs it; CLAUDE.md lists the command.
+- Done: the bands pass on main; the simulation replays; a deliberately broken economy (a billion
+  at the start) fails them.
+
+### T15. The dynasty
+
+- Engine: era and legacy in the save (old saves are era I with no legacy), the family's surname
+  and the heirs' names, Retire (closes the volume first, then what is kept and what starts
+  again), the legacy factor on business profit, the shelf entries' era, _Heir_.
+- App: Retire on the Partners page (no closing sponsor) with the ceremony, the note on the
+  shelf, the shelf grouped by era, the eras' paper and ink as theme variables chosen by the era,
+  the header from era II, the era in the backup preview.
+- Done: engine tests (the threshold counting the pending claim, the legacy formula, what is kept,
+  the factor, an old save as era I, a backup code carrying era and legacy); an end-to-end test
+  retiring a seeded save and seeing era II's paper.
+
+### T16. Notes from the night shift (iPhone)
+
+- A pure schedule (`notes(state, now)`): the three notes, quiet hours and the hour between notes;
+  `@capacitor/local-notifications` on iOS, scheduling on hide and removing pending and delivered
+  notes on show; the permission at a hire or at the first launch with a manager; the Settings
+  switch. None on the website. ARCHITECTURE.md describes the layer.
+- Done: unit tests of the schedule (each note, quiet hours, the spacing chain, none without a
+  reason) and of when permission is asked (new and existing players); the iOS workflow builds.
+
+### T17. Sports clubs
+
+- Engine: the clubs class (data, seeded strengths, match days in play and their restart after an
+  absence, prizes, value moves, buying at value and selling at 90%, net worth, _Chairman_). App:
+  the Clubs page (crests, stars, the W/D/L row), the Portfolio entry (ten classes).
+- Done: engine tests (unlock, a match day replays for a seed, prize and value bounds, average
+  earnings within 15% of half a park's over 10,000 seeded match days, no profit from buying and
+  selling back); an end-to-end test buying a club.
+
+### T18. Post-its
+
+- A post-it with each investment's rule on its page, folded away per class and kept in the
+  settings; Settings brings them back.
+- Done: an end-to-end test folding a post-it, reloading, and bringing it back.
+
 ### Later
 
-Everything in PRODUCT.md, Later: the dynasty, special editions, more classes, rules on post-its,
-Game Center, cloud saves, ads on the website, more purchases, haptics, notifications, the
-big-number type, the balance simulator.
+Everything in PRODUCT.md, Later: special editions, royalties, satellites and the IPO, Game
+Center, cloud saves, ads on the website, more purchases, haptics, the big-number type.
