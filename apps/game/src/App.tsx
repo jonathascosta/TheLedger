@@ -1,4 +1,4 @@
-import { ACHIEVEMENTS, type GameState } from '@ledger/engine';
+import { ACHIEVEMENTS, eraStyle, type GameState } from '@ledger/engine';
 import { useEffect, useState } from 'preact/hooks';
 import { t, tk } from './i18n/index.ts';
 import { useRoute, type Route } from './router.ts';
@@ -13,7 +13,7 @@ import { Gazette } from './screens/Gazette.tsx';
 import { Ledger } from './screens/Ledger.tsx';
 import { Instrument, Market } from './screens/Market.tsx';
 import { Portfolio } from './screens/Portfolio.tsx';
-import { Close, Partners, Shelf } from './screens/Prestige.tsx';
+import { Close, Partners, Retire, Shelf } from './screens/Prestige.tsx';
 import { Settings } from './screens/Settings.tsx';
 import { Upgrades } from './screens/Upgrades.tsx';
 import { Defs } from './ui/Defs.tsx';
@@ -57,6 +57,8 @@ function Screen({ route, state }: { route: Route; state: GameState }) {
       return <Achievements state={state} />;
     case 'close':
       return <Close state={state} />;
+    case 'retire':
+      return <Retire state={state} />;
     case 'partners':
       return <Partners state={state} />;
     case 'shelf':
@@ -93,6 +95,11 @@ function Toast({ state }: { state: GameState }) {
 
 export function App() {
   const state = useGame();
+  // The era's paper and ink (theme.css): set on the root so every page follows.
+  const era = eraStyle(state.meta.era);
+  useEffect(() => {
+    document.documentElement.dataset.era = String(era);
+  }, [era]);
   const route = useRoute();
   const newsprint = route.name === 'gazette' || route.name === 'classifieds';
   return (

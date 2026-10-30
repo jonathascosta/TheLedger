@@ -9,6 +9,7 @@ import {
   collect,
   cycleOf,
   goodwillMultiplier,
+  heirOf,
   GOODWILL_BONUS,
   isAvailable,
   isUnlocked,
@@ -181,7 +182,13 @@ export function Ledger({ state }: { state: GameState }) {
             color: 'var(--ink-soft)',
           }}
         >
-          {t('ledger.header', { roman: roman(v.number) })}
+          {state.meta.era > 1
+            ? t('ledger.headerEra', {
+                era: roman(state.meta.era),
+                name: `${heirOf(state).first} ${heirOf(state).surname}`,
+                roman: roman(v.number),
+              })
+            : t('ledger.header', { roman: roman(v.number) })}
           {state.meta.gold && (
             <span class="gold-ribbon" title={t('gold.ribbon')} aria-label={t('gold.ribbon')} />
           )}

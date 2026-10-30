@@ -48,6 +48,7 @@ const CHECKS: Readonly<Record<string, (s: GameState) => boolean>> = {
   reader: (s) => s.meta.editionsAnswered >= 10,
   firstVolume: (s) => s.meta.shelf.length >= 1,
   fiveVolumes: (s) => s.meta.shelf.length >= 5,
+  heir: (s) => s.meta.era >= 2,
   firstPartner: (s) => s.meta.partners.length > 0,
   cafeTycoon: (s) => (s.volume.businesses[0]?.level ?? 0) >= 1000,
 };

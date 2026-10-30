@@ -20,6 +20,7 @@ export type Route =
   | { name: 'clubs' }
   | { name: 'achievements' }
   | { name: 'close' }
+  | { name: 'retire' }
   | { name: 'partners' }
   | { name: 'shelf' }
   | { name: 'settings' };

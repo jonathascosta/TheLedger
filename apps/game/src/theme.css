@@ -1,6 +1,8 @@
 /* Every colour, font and size of the notebook (docs/PRODUCT.md, Art direction). */
 :root {
   --paper: #f4eddc;
+  /* The newspaper's ink, the same in every era. */
+  --print-ink: #1f2a44;
   --paper-dark: #eadfc6;
   --paper-white: #fffdf7;
   --newsprint: #ece6d5;
@@ -51,4 +53,37 @@
   --gutter: 16px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Newspaper pages print in the same ink whatever the era. */
+.newsprint {
+  --ink: var(--print-ink);
+  /* Text inherits a colour computed on the body: set it again here, from the newsprint's ink. */
+  color: var(--ink);
+}
+
+/* The dynasty's eras (docs/PRODUCT.md, The dynasty): the paper and ink of every page. */
+:root[data-era='2'] {
+  /* The 1950s: green ledger paper, blue-black ink. */
+  --paper: #e9efdb;
+  --rule: #b7cda6;
+  --margin: #c88f86;
+  --ink: #1a2f55;
+}
+
+:root[data-era='3'] {
+  /* The 1980s: continuous printer paper with grey bars. */
+  --paper: #f5f5f0;
+  --rule: #d2d2cc;
+  --margin: #c6c6c0;
+  --ink: #2a2a2a;
+  --bar: #e3e5e0;
+}
+
+:root[data-era='4'] {
+  /* The 2010s: graph paper, ballpoint blue. */
+  --paper: #fafaf6;
+  --rule: #c9d8ea;
+  --margin: #e6a49e;
+  --ink: #1e3f8e;
 }

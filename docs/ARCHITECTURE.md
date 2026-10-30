@@ -63,6 +63,7 @@ cheap; the app treats the state as owned by the engine and re-renders after each
 | `paper/`        | Editions, events, choices and their seeded outcomes                                                                                                 |
 | `achievements/` | Predicates over the state, checked on tick and after actions                                                                                        |
 | `prestige/`     | Goodwill, closing the volume, partners, the shelf                                                                                                   |
+| `dynasty/`      | Retiring to an heir: the era, legacy, the family's names (PRODUCT.md, The dynasty)                                                                  |
 | `away/`         | Offline receipt, the audit (Collect ×2)                                                                                                             |
 | `sponsors/`     | Sponsor rewards: overtime, the golden invoice (take, then pay), the sponsorship, the headhunter, daily limits keyed by the date the app passes in   |
 | `sim/`          | The simulated player and the balance bands (PRODUCT.md, Balance), run by `pnpm test:calibration`                                                    |
@@ -79,6 +80,15 @@ closing bonus in `closeVolume` (added to the goodwill held, not to the goodwill 
 app ticks the game to now before granting a reward, so time spent watching the ad is not paid at
 the new rate. `tick` moves `lastTick` second by second, so a sponsorship that ends inside a tick
 doubles only the seconds before its end; the bond cap leaves the sponsorship out.
+
+### The dynasty
+
+`meta.era` and `meta.legacy` hold the dynasty; `retire` collects the receipt, closes the volume
+(no closing sponsor), earns legacy from the era's claimed goodwill and opens Vol. I of the next
+era. Legacy is its own factor in `profitPerCycle`. The family's surname comes from the game's
+start (`family:<createdAt>`) and each era's first name from its fork, so names replay. The app
+sets `data-era` on the root (1 to 4, `eraStyle`), and `theme.css` redefines the paper, rules,
+margin and ink for each era; `app.css` adds the 1980s bars and the 2010s graph lines.
 
 ### Numbers
 
