@@ -174,6 +174,16 @@ export function Settings({ state }: { state: GameState }) {
           {t('settings.privacy')}
         </button>
       )}
+      {state.settings.postits.length > 0 && (
+        <button
+          type="button"
+          class="btn"
+          style={{ alignSelf: 'flex-start' }}
+          onClick={() => act((s) => (s.settings.postits = []))}
+        >
+          {t('postit.restore')}
+        </button>
+      )}
       <p class="tiny" style={{ marginTop: '24px' }}>
         {t('settings.about', { version: VERSION })}
       </p>

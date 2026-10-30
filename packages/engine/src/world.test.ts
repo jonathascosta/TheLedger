@@ -24,6 +24,16 @@ describe('world', () => {
     ]);
   });
 
+  it('fills the folded post-its of a save without them, and drops a malformed list', () => {
+    const old = JSON.parse(JSON.stringify(newGame(T0))) as { settings: Record<string, unknown> };
+    delete old.settings.postits;
+    expect(migrate(old, T0)?.settings.postits).toEqual([]);
+    old.settings.postits = 'bonds';
+    expect(migrate(old, T0)?.settings.postits).toEqual([]);
+    old.settings.postits = ['bonds', 7, null, 'art'];
+    expect(migrate(old, T0)?.settings.postits).toEqual(['bonds', 'art']);
+  });
+
   it('replays the same market for the same volume', () => {
     const a = newGame(T0);
     const b = newGame(T0);

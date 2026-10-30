@@ -104,6 +104,14 @@ describe('the backup code', () => {
     expect(decoded.state.meta.shelf[0]?.era).toBe(2);
   });
 
+  it('keeps the folded post-its', () => {
+    const state = played();
+    state.settings.postits = ['bonds', 'clubs'];
+    const decoded = decodeBackup(encodeBackup(state, T0), T0);
+    if (!decoded.ok) throw new Error(decoded.error);
+    expect(decoded.state.settings.postits).toEqual(['bonds', 'clubs']);
+  });
+
   it('restores hours later without an absence receipt', () => {
     const state = played();
     state.volume.managers[0] = { name: 'Rosa', trait: 'perfectionist', face: 7 };

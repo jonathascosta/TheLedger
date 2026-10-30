@@ -687,4 +687,25 @@ export const pt: Record<StringKey, string> = {
     'O lucro dos negócios voltou ao normal. Um novo patrocínio pode dobrá-lo de novo.',
   'notes.tills.title': 'As caixas estão cheias',
   'notes.tills.body': 'Todo negócio sem gerente tem dinheiro esperando.',
+  // Post-its
+  'postit.fold': 'Dobrar o bilhete',
+  'postit.restore': 'Trazer de volta os post-its',
+  'postit.stocks':
+    'As ações se movem com o mercado a cada cinco segundos e pagam pequenos dividendos. Compre barato, venda caro; as notícias do jornal também as movem.',
+  'postit.bonds':
+    'Empreste até três horas de renda dos negócios; rende 1% por hora e volta quando você quiser.',
+  'postit.realEstate':
+    'Cada imóvel paga aluguel a cada segundo, também enquanto você está fora. Vendido, devolve 90% do preço.',
+  'postit.commodities':
+    'O ouro é calmo, o petróleo se move com as notícias, o café fica no meio. Compra e venda por unidade.',
+  'postit.crypto':
+    'As moedas oscilam muito: grandes ganhos, grandes perdas. Aposte só o que pode perder.',
+  'postit.startups':
+    'Invista o valor pedido; minutos depois a startup quebra ou devolve de uma a cem vezes o aporte.',
+  'postit.art':
+    'O valor de uma obra sobe aos poucos, com altos e baixos; no leilão, ela sai por 80% a 130% dele.',
+  'postit.energy':
+    'Cara para construir, depois renda estável para sempre, também enquanto você está fora.',
+  'postit.clubs':
+    'Uma rodada a cada dez minutos de jogo: a vitória paga um prêmio e valoriza o clube. Comprado pelo valor, vendido por 90% dele.',
 };

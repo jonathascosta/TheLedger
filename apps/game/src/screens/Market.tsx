@@ -19,6 +19,7 @@ import { t, tk } from '../i18n/index.ts';
 import { act } from '../store.ts';
 import { go, replace } from '../router.ts';
 import { Page } from '../ui/Page.tsx';
+import { PostIt } from '../ui/PostIt.tsx';
 import { money, moneyShort, percent, units } from '../ui/format.ts';
 
 const KIND_CLASS = { stock: 'stocks', commodity: 'commodities', coin: 'crypto' } as const;
@@ -59,6 +60,7 @@ export function Market({ state, kind }: { state: GameState; kind: InstrumentKind
           </button>
         ))}
       </div>
+      <PostIt state={state} cls={cls} />
       {!open ? (
         <div class="stack" style={{ gap: '6px' }}>
           <div class="locked-card">
