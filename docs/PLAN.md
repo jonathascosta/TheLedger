@@ -170,6 +170,30 @@ calls an action once a reward is earned.
   settings; Settings brings them back.
 - Done: an end-to-end test folding a post-it, reloading, and bringing it back.
 
+### T19. Special orders
+
+- Engine: the orders (data with names in EN and PT, unlock levels, factors, prices), buying,
+  `upgradeFactors`, the simulator buying them by payback; the band for the small businesses in
+  `sim/bands.ts`. App: the orders on the Upgrades page and the business's page, the mark on the
+  ledger row ("order at lvl N", then "order ready").
+- Done: engine tests (an order unlocks at its level, is bought once, multiplies only its
+  business, resets with the volume, is not discounted by the Negotiator; after the café's third
+  order its next level pays back within a factor of 2 of the airline's at the same spend and
+  upgrades); the calibration bands pass with the new one, and a test shows the new band fails
+  without the orders; an end-to-end test buying the café's first order.
+
+### T20. Trends
+
+- Engine: the trend clock in play, the seeded draw (volume seed and trend count) among the lower
+  half by income, the capped factor in the business's profit, its end at an absence and its
+  restart on return and on restore, the running trend in the save. App: the headline in the
+  ledger, the badge and time left on the row, the headlines for each business in EN and PT.
+- Done: engine tests (a trend replays for a seed; it only takes an opened business in the lower
+  half, never the same twice in a row; the cap holds; it ends after 5 minutes; a running trend
+  ends at an absence and the receipt does not carry it; the bond cap leaves it out; the save
+  keeps a running trend and an old save loads); calibration bands pass; an end-to-end test
+  showing a trend's badge.
+
 ### Later
 
 Everything in PRODUCT.md, Later: special editions, royalties, satellites and the IPO, Game
