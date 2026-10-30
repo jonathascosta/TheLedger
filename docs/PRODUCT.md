@@ -173,7 +173,8 @@ and desk upgrades).
   - Each order has its own name in EN and PT (the café: the office catering contract, the train
     station kiosk, the national coffee brand) and its row on the Upgrades page and on the
     business's page. The business's row in the ledger shows "order at lvl 300" until the level
-    is reached, then "order ready" until it is bought.
+    is reached, then "order ready" until it is bought; a tap on that mark opens the business's
+    page.
 
 ## Trends
 

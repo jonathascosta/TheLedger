@@ -265,6 +265,13 @@ test("the café's first order: ready on its row, bought on the Upgrades page", a
     pt ? /encomenda pronta/ : /order ready/,
   );
   await expect(card(page).locator('.badge-dot')).toHaveCount(1);
+  // The mark opens the café's page, where the order is on offer.
+  await cafe.locator('.order-mark').click();
+  await expect(page.locator('h1')).toContainText(pt ? /Café da Esquina/ : /Corner Café/);
+  await expect(
+    page.locator('.check').filter({ hasText: pt ? /Contrato com os escritórios/ : /Office/ }),
+  ).toBeEnabled();
+  await page.getByRole('button', { name: pt ? /Voltar/ : /Back/ }).click();
   await card(page).click();
   const row = page
     .locator('.row')

@@ -126,12 +126,18 @@ function BusinessRow({ state, index }: { state: GameState; index: number }) {
             </span>
           )}
           {order && (
-            <span class={b.level >= (order.level ?? 0) ? 'order-mark ready' : 'order-mark'}>
+            <>
               {' · '}
-              {b.level >= (order.level ?? 0)
-                ? t('order.ready')
-                : t('order.at', { level: order.level ?? 0 })}
-            </span>
+              <button
+                type="button"
+                class={b.level >= (order.level ?? 0) ? 'order-mark ready' : 'order-mark'}
+                onClick={() => go({ name: 'business', index })}
+              >
+                {b.level >= (order.level ?? 0)
+                  ? t('order.ready')
+                  : t('order.at', { level: order.level ?? 0 })}
+              </button>
+            </>
           )}
         </p>
         <button
