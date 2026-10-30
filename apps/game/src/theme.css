@@ -57,6 +57,8 @@
 /* Newspaper pages print in the same ink whatever the era. */
 .newsprint {
   --ink: var(--print-ink);
+  /* Text inherits a colour computed on the body: set it again here, from the newsprint's ink. */
+  color: var(--ink);
 }
 
 /* The dynasty's eras (docs/PRODUCT.md, The dynasty): the paper and ink of every page. */
