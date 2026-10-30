@@ -193,6 +193,16 @@ seal runs once. The owner's ad unit comes in at build time
 (`VITE_ADMOB_REWARDED_ID`) and the AdMob app id through the `ADMOB_APP_ID` build setting; both are
 Google's test ids until then (docs/STORE.md).
 
+### Notes from the night shift
+
+`src/notes/schedule.ts` is pure: `notes(state, now)` gives the notes to leave (the receipt full
+after 12 hours when something earns away, the sponsorship's end, the tills full), an hour apart
+and out of the quiet hours (22:00 to 8:00, device time); `shouldAsk` says when to ask for
+permission. `src/notes/notes.ts` asks at a hire or at a launch with a manager, schedules when
+the page is hidden (only with `settings.notes` on) and removes pending and delivered notes when it
+shows again. On iOS `platform/native.ts` drives `@capacitor/local-notifications`; the website has
+none (`platform().notes` is null).
+
 ### The Gold Edition
 
 `src/gold/gold.ts` holds the rules over a `GoldStore` (price, buy, owned, restore): buying sets

@@ -6,7 +6,6 @@ import {
   buyUpgrade,
   candidateFor,
   cycleOf,
-  hire,
   milestonesReached,
   MILESTONES,
   nextMilestone,
@@ -19,6 +18,7 @@ import { Portrait } from '../art/Portrait.tsx';
 import { UpgradeIcon } from '../art/UpgradeIcon.tsx';
 import { Storefront } from '../art/Storefront.tsx';
 import { t, tk } from '../i18n/index.ts';
+import { hireAndAsk } from '../notes/notes.ts';
 import { act } from '../store.ts';
 import { Page } from '../ui/Page.tsx';
 import { duration, moneyShort } from '../ui/format.ts';
@@ -163,7 +163,7 @@ export function Business({ state, index }: { state: GameState; index: number }) 
             type="button"
             class="btn"
             disabled={state.volume.cash < candidate.cost}
-            onClick={() => act((s) => hire(s, index))}
+            onClick={() => hireAndAsk(index)}
           >
             {t('classifieds.hire', { amount: moneyShort(candidate.cost) })}
           </button>

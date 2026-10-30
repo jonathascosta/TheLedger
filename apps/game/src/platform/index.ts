@@ -2,6 +2,7 @@ import { Capacitor } from '@capacitor/core';
 import { NO_ADS, wantsTestAds, type AdProvider } from '../ads/ads.ts';
 import { DebugAds } from '../ads/debug.ts';
 import type { GoldStore } from '../gold/gold.ts';
+import type { NotesApi } from '../notes/notes.ts';
 import { webStorage, type Storage } from '../persist/storage.ts';
 
 /** What differs between the website and the iPhone app. */
@@ -15,6 +16,8 @@ export interface Platform {
   privacy: { required(): boolean; show(): Promise<void> };
   /** The App Store, for the Gold Edition; none on the website. */
   gold: GoldStore | null;
+  /** Notes from the night shift (local notifications); none on the website. */
+  notes: NotesApi | null;
 }
 
 const web: Platform = {
@@ -26,6 +29,7 @@ const web: Platform = {
       : NO_ADS,
   privacy: { required: () => false, show: () => Promise.resolve() },
   gold: null,
+  notes: null,
 };
 
 let current: Platform = web;
