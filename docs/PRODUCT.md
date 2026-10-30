@@ -156,6 +156,23 @@ and desk upgrades).
 - **Ledger upgrades:** six that multiply every business's profit by 3, from $1 billion, each
   1,000 times dearer than the last.
 - **Desk upgrades:** five that double the stamp's value, from $100, each 25 times dearer.
+- **Special orders:** so that the small businesses never become dead weight, each business but
+  the airline has three special orders, unlocked by its level: the café at 300, 500 and 800, the
+  others at 150, 250 and 400 (their levels are dearer). An order is bought once per volume and
+  multiplies that business's profit. Its factor is larger the smaller the business: after its last
+  order, a business's next level pays back about as fast as the airline's at the same spend (the
+  café's three orders add up to about ×50,000, the railway's to little). The exact factors and
+  prices are set by the simulator (see Balance). Each order has its own name (the café: the office
+  catering contract, the train station kiosk, the national coffee brand), its row on the Upgrades
+  page, and a mark on the business's row ("order at lvl 300") until it is bought.
+
+## Trends
+
+Every 25 minutes of play, a trend takes one of the businesses the player has opened, drawn with
+the seeded `Rng` among the lower half of them by income (at least one): a headline in the
+ledger ("Filter coffee is all the rage") and **×50** profit for that business for 5 minutes,
+with a badge and the time left on its row. Trends run only while the game is open; an absence or
+a restore starts the clock again. The factor is set by the simulator (see Balance).
 
 ## Investments
 
@@ -418,6 +435,9 @@ paper and sponsors alone. It plays better than most people, so a person reaches 
 | $1 million net worth      | 5 to 25 min   | 15 min                           |
 | $1 billion net worth      | 30 min to 4 h | 2 h 48 min                       |
 | Closing suggested (first) | 10 to 30 h    | 13 h                             |
+
+The small businesses carry their weight: at the first suggested close, the first five businesses
+earn at least a quarter of the businesses' income (17% before the special orders).
 
 Stamps stay under half of all earnings at four taps a second, over the first 30 hours (43% when
 the bands were set).

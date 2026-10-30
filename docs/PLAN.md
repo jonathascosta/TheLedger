@@ -170,6 +170,24 @@ calls an action once a reward is earned.
   settings; Settings brings them back.
 - Done: an end-to-end test folding a post-it, reloading, and bringing it back.
 
+### T19. Special orders
+
+- Engine: the orders (data with names in EN and PT, unlock levels, factors, prices), buying,
+  `upgradeFactors`, the simulator buying them by payback; the band for the small businesses.
+  App: the orders on the Upgrades page and the business's page, the mark on the ledger row.
+- Done: engine tests (an order unlocks at its level, is bought once, multiplies only its
+  business, resets with the volume); the calibration bands, the new one included, pass; an
+  end-to-end test buying the café's first order.
+
+### T20. Trends
+
+- Engine: the trend clock in play, the seeded draw among the lower half by income, the ×
+  factor in the business's profit, its restart after an absence and on restore. App: the
+  headline in the ledger, the badge and time left on the row, strings for each business.
+- Done: engine tests (a trend replays for a seed, only takes an opened business in the lower
+  half, ends after 5 minutes, does not run while away); calibration bands pass; an end-to-end
+  test showing a trend's badge.
+
 ### Later
 
 Everything in PRODUCT.md, Later: special editions, royalties, satellites and the IPO, Game
