@@ -1,8 +1,8 @@
-import type { GameState } from '@ledger/engine';
+import { hire, type GameState } from '@ledger/engine';
 import { t } from '../i18n/index.ts';
 import { platform } from '../platform/index.ts';
 import { act, game } from '../store.ts';
-import { notes, shouldAsk, type Note } from './schedule.ts';
+import { notes, reconcile, shouldAsk, type Note, type Permission } from './schedule.ts';
 
 /** What the app needs of the device's notifications (iOS only; none on the website). */
 export interface NotesApi {
@@ -13,9 +13,24 @@ export interface NotesApi {
   ): Promise<void>;
   /** Removes pending and delivered notes. */
   clear(): Promise<void>;
+  /** What iOS allows now: the player can change it in the iPhone's Settings at any time. */
+  check(): Promise<Permission>;
 }
 
 const IDS: Record<Note['kind'], number> = { receipt: 1, sponsorship: 2, tills: 3 };
+
+/** Hires a manager (Classifieds or a business's page), then asks for permission if it is time. */
+export function hireAndAsk(business: number): void {
+  if (act((s) => hire(s, business)).ok) void askIfDue();
+}
+
+/** Brings the setting in line with what iOS allows now (a switch changed in the iPhone's Settings). */
+async function sync(api: NotesApi): Promise<void> {
+  const permission = await api.check().catch(() => null);
+  if (permission === null) return;
+  const next = reconcile(game().settings.notes, permission);
+  if (next !== game().settings.notes) act((s) => (s.settings.notes = next));
+}
 
 /** Asks for permission if it is time (a hire, or a launch with a manager, never asked). */
 export async function askIfDue(): Promise<void> {
@@ -42,11 +57,17 @@ export async function setNotes(on: boolean): Promise<void> {
 export function initNotes(): void {
   const api = platform().notes;
   if (!api) return;
-  void api.clear().catch(() => undefined);
-  void askIfDue();
+  // Clearing waits for a schedule still in flight, so a quick hide and show leaves no note.
+  let pending: Promise<unknown> = Promise.resolve();
+  const clear = (): void => {
+    pending = pending.then(() => api.clear()).catch(() => undefined);
+  };
+  clear();
+  void sync(api).then(() => askIfDue());
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) {
-      void api.clear().catch(() => undefined);
+      clear();
+      void sync(api);
       return;
     }
     const state = game();
@@ -57,6 +78,6 @@ export function initNotes(): void {
       title: t(`notes.${n.kind}.title`),
       body: t(`notes.${n.kind}.body`),
     }));
-    void api.schedule(list).catch(() => undefined);
+    pending = pending.then(() => api.schedule(list)).catch(() => undefined);
   });
 }

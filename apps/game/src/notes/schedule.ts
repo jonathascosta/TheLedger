@@ -1,4 +1,11 @@
-import { BUSINESSES, cycleOf, parkRate, rentRate, type GameState } from '@ledger/engine';
+import {
+  AWAY_MAX_SECONDS,
+  BUSINESSES,
+  cycleOf,
+  parkRate,
+  rentRate,
+  type GameState,
+} from '@ledger/engine';
 
 /** Notes from the night shift (docs/PRODUCT.md, Away from the game). */
 export type NoteKind = 'receipt' | 'sponsorship' | 'tills';
@@ -12,7 +19,7 @@ export interface Note {
 const MINUTE = 60_000;
 const HOUR = 60 * MINUTE;
 /** An absence stops counting after this long. */
-export const RECEIPT_FULL_MS = 12 * HOUR;
+export const RECEIPT_FULL_MS = AWAY_MAX_SECONDS * 1000;
 /** The quiet hours: none from 22:00 to 8:00, device time. */
 export const QUIET_FROM = 22;
 export const QUIET_UNTIL = 8;
@@ -73,4 +80,22 @@ export function notes(state: GameState, now: number): Note[] {
 /** Whether to ask for permission now: at a hire, or at a launch with a manager, if never asked. */
 export function shouldAsk(state: GameState): boolean {
   return state.settings.notes === 'unasked' && state.volume.managers.some((m) => m !== null);
+}
+
+/** What iOS allows: granted, denied, or not asked yet. */
+export type Permission = 'granted' | 'denied' | 'prompt';
+
+/**
+ * The setting after a check of what iOS allows: on but no longer allowed is denied (the switch
+ * then points to the iPhone's Settings); denied but allowed again is on; on but never asked on
+ * this device (a restored backup) waits to be asked.
+ */
+export function reconcile(
+  setting: GameState['settings']['notes'],
+  permission: Permission,
+): GameState['settings']['notes'] {
+  if (setting === 'on' && permission === 'denied') return 'denied';
+  if (setting === 'on' && permission === 'prompt') return 'unasked';
+  if (setting === 'denied' && permission === 'granted') return 'on';
+  return setting;
 }

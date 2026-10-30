@@ -1,6 +1,6 @@
-import { newGame, type GameState } from '@ledger/engine';
+import { migrate, newGame, type GameState } from '@ledger/engine';
 import { describe, expect, it } from 'vitest';
-import { notes, outOfQuiet, shouldAsk } from './schedule.ts';
+import { notes, outOfQuiet, reconcile, shouldAsk } from './schedule.ts';
 
 /** A local time today (device clock), so quiet hours are tested whatever the time zone. */
 function at(hour: number, minute = 0, day = 0): number {
@@ -51,6 +51,8 @@ describe('notes from the night shift', () => {
     expect(outOfQuiet(at(3))).toBe(at(8));
     expect(outOfQuiet(at(8))).toBe(at(8));
     expect(outOfQuiet(at(21, 59))).toBe(at(21, 59));
+    expect(outOfQuiet(at(22))).toBe(at(8, 0, 1));
+    expect(outOfQuiet(at(7, 59))).toBe(at(8));
   });
 
   it('notes are an hour apart, then out of the quiet hours', () => {
@@ -90,5 +92,20 @@ describe('notes from the night shift', () => {
     expect(shouldAsk(s)).toBe(true);
     s.settings.notes = 'off';
     expect(shouldAsk(s)).toBe(false);
+  });
+
+  it('an old save, from before the notes, has not been asked', () => {
+    const old = JSON.parse(JSON.stringify(game(at(10)))) as { settings: Record<string, unknown> };
+    delete old.settings.notes;
+    expect(migrate(old, at(10))?.settings.notes).toBe('unasked');
+  });
+
+  it('the setting follows what iOS allows now', () => {
+    expect(reconcile('on', 'denied')).toBe('denied');
+    expect(reconcile('on', 'prompt')).toBe('unasked');
+    expect(reconcile('denied', 'granted')).toBe('on');
+    expect(reconcile('on', 'granted')).toBe('on');
+    expect(reconcile('off', 'granted')).toBe('off');
+    expect(reconcile('unasked', 'denied')).toBe('unasked');
   });
 });

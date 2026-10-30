@@ -36,9 +36,12 @@ const notes: NotesApi = {
     });
   },
   async clear() {
-    const { notifications } = await LocalNotifications.getPending();
-    if (notifications.length > 0) await LocalNotifications.cancel({ notifications });
+    await LocalNotifications.cancel({ notifications: [{ id: 1 }, { id: 2 }, { id: 3 }] });
     await LocalNotifications.removeAllDeliveredNotifications();
+  },
+  async check() {
+    const { display } = await LocalNotifications.checkPermissions();
+    return display === 'granted' ? 'granted' : display === 'denied' ? 'denied' : 'prompt';
   },
 };
 
