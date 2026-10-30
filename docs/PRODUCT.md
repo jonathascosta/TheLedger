@@ -159,20 +159,42 @@ and desk upgrades).
 - **Special orders:** so that the small businesses never become dead weight, each business but
   the airline has three special orders, unlocked by its level: the café at 300, 500 and 800, the
   others at 150, 250 and 400 (their levels are dearer). An order is bought once per volume and
-  multiplies that business's profit. Its factor is larger the smaller the business: after its last
-  order, a business's next level pays back about as fast as the airline's at the same spend (the
-  café's three orders add up to about ×50,000, the railway's to little). The exact factors and
-  prices are set by the simulator (see Balance). Each order has its own name (the café: the office
-  catering contract, the train station kiosk, the national coffee brand), its row on the Upgrades
-  page, and a mark on the business's row ("order at lvl 300") until it is bought.
+  multiplies that business's profit, on top of every other factor. An order costs 50 times the
+  price of its business's unlock level (`baseCost × growth^level × 50`); the Negotiator does not
+  discount it, as with upgrades.
+  - **Factors:** after its last order, a business's next level pays back about as fast as the
+    airline's at the same spend and the same upgrades. The three orders together multiply by
+    about ×50,000 for the café, ×80,000 for the bakery, ×18,000 for the laundromat, ×4,600 for
+    the print shop, ×380 for the cabs, ×130 for the hotel, ×40 for the insurer, ×14 for the
+    shipyard and ×5 for the railway; the first order takes about a fifth of that (in orders of
+    magnitude), the second and third two fifths each (the café: ×8, ×80, ×80). The data holds
+    each order's factor.
+  - **Reach:** a first volume meets the café's first order and the first orders of the next few
+    businesses; the later orders are for later volumes, with goodwill.
+  - Each order has its own name in EN and PT (the café: the office catering contract, the train
+    station kiosk, the national coffee brand) and its row on the Upgrades page and on the
+    business's page. The business's row in the ledger shows "order at lvl 300" until the level
+    is reached, then "order ready" until it is bought.
 
 ## Trends
 
-Every 25 minutes of play, a trend takes one of the businesses the player has opened, drawn with
-the seeded `Rng` among the lower half of them by income (at least one): a headline in the
-ledger ("Filter coffee is all the rage") and **×50** profit for that business for 5 minutes,
-with a badge and the time left on its row. Trends run only while the game is open; an absence or
-a restore starts the clock again. The factor is set by the simulator (see Balance).
+A trend makes one small business the talk of the town for a while.
+
+- **When:** 25 minutes of play into a volume, and every 25 minutes of play after that (a close
+  or a retirement starts the clock again with the new volume). Trends run only in play: a trend
+  in progress ends when the player leaves (an absence, as for the golden invoice), never counts
+  in the absence receipt, and the clock starts again on return or after a restore. A reload
+  within a minute keeps a running trend (it is in the save).
+- **Which business:** drawn with the volume's seed and the trend count among the lower half of
+  the opened businesses (`floor(n/2)`, at least one; ties broken by order), ranked by income per
+  second as if every till were collected, after the special orders and without the running
+  trend. Not the same business twice in a row, unless it is the only one.
+- **Effect:** **×50** profit for that business for 5 minutes, at most as much as lifts it to the
+  income of the best business outside the lower half (at least ×2). It multiplies on top of
+  every other factor (orders, upgrades, sponsorship, Gold Edition), so the stamps and the golden
+  invoice follow it; the bond cap leaves it out, as it does the sponsorship.
+- **On the page:** a headline in the ledger, in EN and PT, one per business ("Filter coffee is
+  all the rage"), and a badge with the time left on the business's row.
 
 ## Investments
 
@@ -436,8 +458,10 @@ paper and sponsors alone. It plays better than most people, so a person reaches 
 | $1 billion net worth      | 30 min to 4 h | 2 h 48 min                       |
 | Closing suggested (first) | 10 to 30 h    | 13 h                             |
 
-The small businesses carry their weight: at the first suggested close, the first five businesses
-earn at least a quarter of the businesses' income (17% before the special orders).
+The small businesses carry their weight: when closing is first suggested, the first four
+businesses make at least a fifth of the businesses' income per second (8% before the special
+orders). The simulator plays trends (they come with the clock) and buys special orders by payback,
+like upgrades.
 
 Stamps stay under half of all earnings at four taps a second, over the first 30 hours (43% when
 the bands were set).
