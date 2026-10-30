@@ -1188,6 +1188,6 @@ p {
 }
 
 .trend-badge {
-  color: var(--loss);
+  color: var(--profit);
   font-weight: 700;
 }

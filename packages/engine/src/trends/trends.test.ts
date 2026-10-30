@@ -76,12 +76,19 @@ describe('trends', () => {
     const best = Math.max(...ranked(s).map((i) => (i === t.business ? 0 : businessRate(s, i))));
     const own = businessRate(s, t.business!) / t.factor;
     expect(t.factor).toBe(Math.max(2, Math.min(TREND_FACTOR, best / own)));
-    // Two businesses close in income: the cap holds it at the least factor.
+    // The café and the bakery at level 10: the bakery makes 20 times the café, so the cap binds.
     const two = opened(2);
-    two.volume.businesses[1]!.level = 0;
-    two.volume.businesses[0]!.level = 10;
+    const cafe = businessRate(two, 0);
+    const bakery = businessRate(two, 1);
     advanceTrends(two, T0 + TREND_EVERY_MS);
-    expect(two.volume.trend.factor).toBe(2);
+    expect(two.volume.trend.business).toBe(0);
+    expect(two.volume.trend.factor).toBeCloseTo(bakery / cafe);
+    expect(two.volume.trend.factor).toBeGreaterThan(2);
+    expect(two.volume.trend.factor).toBeLessThan(TREND_FACTOR);
+    // A single business is its own best: the cap is 1, so the factor is the least, ×2.
+    const one = opened(1);
+    advanceTrends(one, T0 + TREND_EVERY_MS);
+    expect(one.volume.trend.factor).toBe(2);
   });
 
   it('end after five minutes, in play', () => {
@@ -114,6 +121,27 @@ describe('trends', () => {
     advanceTrends(s, T0 + TREND_EVERY_MS);
     s.lastTick = T0 + TREND_EVERY_MS;
     expect(bondCap(s)).toBeCloseTo(before);
+  });
+
+  it('a damaged save gets sane values', () => {
+    const s = opened();
+    const damaged = JSON.parse(JSON.stringify(s)) as { volume: Record<string, unknown> };
+    damaged.volume.trend = { nextAt: null, recent: 'x', business: 42, factor: 'z', count: -3 };
+    const loaded = migrate(damaged, T0)!;
+    expect(loaded.volume.trend).toEqual({
+      count: 0,
+      nextAt: T0 + TREND_EVERY_MS,
+      business: null,
+      factor: 1,
+      until: 0,
+      recent: [],
+    });
+    damaged.volume.trend = { business: 1.5, recent: [0, 'a', 12, 3, null] };
+    const mixed = migrate(damaged, T0)!;
+    expect(mixed.volume.trend.business).toBeNull();
+    expect(mixed.volume.trend.recent).toEqual([0, 3]);
+    tick(loaded, T0 + 1000);
+    expect(loaded.volume.trend.count).toBe(0);
   });
 
   it('stay in the save, and an old save loads without them', () => {

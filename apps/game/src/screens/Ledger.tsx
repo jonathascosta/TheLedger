@@ -118,7 +118,7 @@ function BusinessRow({ state, index }: { state: GameState; index: number }) {
           {managed ? ` · ${t('ledger.managed')}` : ''}
           {trendFactor(state, index) > 1 && (
             <span class="trend-badge">
-              {' '}
+              {' · '}
               {t('trend.badge', {
                 factor: factor(state.volume.trend.factor),
                 time: duration(Math.ceil((state.volume.trend.until - state.lastTick) / 1000)),

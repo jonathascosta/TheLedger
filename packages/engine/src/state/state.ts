@@ -352,6 +352,24 @@ export function newGame(now: number): GameState {
   };
 }
 
+/** A saved trend, each field kept only when valid (a damaged save must not stop the engine). */
+function saneTrend(raw: unknown, now: number): TrendState {
+  const t = (typeof raw === 'object' && raw !== null ? raw : {}) as Record<string, unknown>;
+  const finite = (v: unknown, fallback: number): number =>
+    typeof v === 'number' && Number.isFinite(v) ? v : fallback;
+  const index = (v: unknown): v is number =>
+    typeof v === 'number' && Number.isInteger(v) && v >= 0 && v < BUSINESSES.length;
+  const factor = finite(t.factor, 1);
+  return {
+    count: Math.max(0, Math.floor(finite(t.count, 0))),
+    nextAt: finite(t.nextAt, now + TREND_EVERY_MS),
+    business: index(t.business) ? t.business : null,
+    factor: factor >= 1 ? factor : 1,
+    until: finite(t.until, 0),
+    recent: Array.isArray(t.recent) ? t.recent.filter(index) : [],
+  };
+}
+
 /**
  * Brings a save up to the current version. Unknown or broken input gives null, and the app
  * starts a new game.
@@ -374,16 +392,7 @@ export function migrate(raw: unknown, now: number): GameState | null {
     taken: false,
     ...golden,
   };
-  const trend = save.volume.trend as Partial<TrendState> | undefined;
-  volume.trend = {
-    count: 0,
-    nextAt: now + TREND_EVERY_MS,
-    business: null,
-    factor: 1,
-    until: 0,
-    ...trend,
-    recent: Array.isArray(trend?.recent) ? trend.recent : [],
-  };
+  volume.trend = saneTrend(save.volume.trend, now);
   if (save.version < 2 && Array.isArray(volume.upgrades)) {
     volume.upgrades = (volume.upgrades as unknown[])
       .filter((id): id is string => typeof id === 'string')
