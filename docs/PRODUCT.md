@@ -313,8 +313,8 @@ secret until earned. _Chairman_ (the first club) and _Heir_ (the first retiremen
 - A pencilled note in the ledger suggests closing when the claim would at least double the
   goodwill held (and is at least 25), which the simulated player of Balance reaches in about 13 hours and a person in about a day of play.
 - The closing page shows how much is left to earn for the next goodwill point and about how
-  long that takes at the current income, with a thin bar, only while a whole point takes more
-  than a minute of income (faster, the bar would only flicker).
+  long that takes at the current income (in whole minutes), with a thin bar, only while a whole
+  point takes more than a minute of income (faster, the bar would only flicker).
 - **The ceremony:** the book closes, a wax seal drops on it and it goes to the **shelf**, where
   every past volume shows its number, its peak net worth and the goodwill it earned.
 - **Partners** are bought with goodwill (spent goodwill no longer adds its 2%):

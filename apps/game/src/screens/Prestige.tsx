@@ -41,12 +41,13 @@ function NextPoint({ state }: { state: GameState }) {
     <div class="goodwill-next">
       <p class="small">
         {t('close.nextPoint', {
-          amount: moneyShort(next.left),
-          time: duration(Math.ceil(next.left / income)),
+          amount: moneyShort(Math.max(0, next.left)),
+          // Whole minutes: earnings arrive as cycles pay, so seconds would stall and jump.
+          time: duration(Math.max(1, Math.ceil(next.left / income / 60)) * 60),
         })}
       </p>
       <span class="bar" role="presentation">
-        <span style={{ width: `${(next.into / next.span) * 100}%` }} />
+        <span style={{ width: `${Math.min(100, Math.max(0, (next.into / next.span) * 100))}%` }} />
       </span>
     </div>
   );
