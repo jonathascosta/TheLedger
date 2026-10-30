@@ -134,7 +134,7 @@ calls an action once a reward is earned.
 - Done: the bands pass on main; the simulation replays; a deliberately broken economy (a billion
   at the start) fails them.
 
-### T15. The dynasty
+### T15. The dynasty — done
 
 - Engine: era and legacy in the save (old saves are era I with no legacy), the family's surname
   and the heirs' names, Retire (closes the volume first, then what is kept and what starts
