@@ -139,7 +139,7 @@ calls an action once a reward is earned.
 - Engine: era and legacy in the save (old saves are era I with no legacy), the family's surname
   and the heirs' names, Retire (closes the volume first, then what is kept and what starts
   again), the legacy factor on business profit, the shelf entries' era, _Heir_.
-- App: Retire on the Partners page with the closing sponsor and the ceremony, the note on the
+- App: Retire on the Partners page (no closing sponsor) with the ceremony, the note on the
   shelf, the shelf grouped by era, the eras' paper and ink as theme variables chosen by the era,
   the header from era II, the era in the backup preview.
 - Done: engine tests (the threshold counting the pending claim, the legacy formula, what is kept,

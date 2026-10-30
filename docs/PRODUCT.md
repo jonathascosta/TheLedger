@@ -191,7 +191,7 @@ one to five stars:
 | Northgate United / União Portão Norte             |    $16 T |
 | Redfield City / Cidade de Campo Rubro             |    $64 T |
 | Ironbridge Wanderers / Errantes da Ponte de Ferro |   $256 T |
-| Royal Albion / Real Albion                        | $1.02 Qa |
+| Royal Alder / Real Amieiro                        | $1.02 Qa |
 
 - **Match days:** every 10 minutes of play each owned club plays (seeded): a win with
   probability `0.30 + 0.30·s`, a draw with 0.25, a loss otherwise. Matches are played only in
@@ -248,6 +248,41 @@ Notes are taken in order of their time. One due in the quiet hours (22:00 to 8:0
 moves to 8:00; one due less than an hour after the note before it moves to an hour after it, and
 then the quiet-hours rule applies again.
 
+## Achievements
+
+Rubber stamps and wax seals on their own page, kept across volumes and eras: first business, every
+business, levels, managers, first million, billion and trillion, stamps and combos, the first
+share, _Sold at the top_, _Nerves of steel_ (hold during a crash), _Collector_ (one asset of
+every class), _Unicorn_ (a startup at 100×), properties, volumes closed, goodwill. A few are
+secret until earned. _Chairman_ (the first club) and _Heir_ (the first retirement) join them. A new one arrives with a stamp on the screen.
+
+## Closing the volume (the reset)
+
+- **Goodwill** is earned from the money made in all volumes (business income, stamps, rents,
+  interest, dividends and trading profits):
+  `total = floor(150 × sqrt(lifetime earnings / 10^15))`; closing a volume claims
+  `total − claimed so far`.
+- Each goodwill point held adds **2%** to all business profit.
+- Closing the volume resets cash, businesses, managers, upgrades and investments; it keeps
+  goodwill, partners, achievements, the shelf and the settings. Volumes are numbered in order:
+  Vol. I, II, III…
+- A pencilled note in the ledger suggests closing when the claim would at least double the
+  goodwill held (and is at least 25), which the simulated player of Balance reaches in about 13 hours and a person in about a day of play.
+- **The ceremony:** the book closes, a wax seal drops on it and it goes to the **shelf**, where
+  every past volume shows its number, its peak net worth and the goodwill it earned.
+- **Partners** are bought with goodwill (spent goodwill no longer adds its 2%):
+
+| Partner       | Goodwill | Effect                                      |
+| :------------ | -------: | :------------------------------------------ |
+| Night manager |       10 | Offline earnings +15 points                 |
+| Stamp maker   |       15 | Stamps ×3                                   |
+| Head start    |       25 | Every volume starts with $10,000            |
+| Old friends   |       50 | Managers half price                         |
+| Bond desk     |       60 | Bonds earn twice as much                    |
+| Insider       |       75 | The paper hints which way each choice leans |
+| Fast tills    |      150 | Every cycle 1.5× faster                     |
+| Estate agent  |      200 | Rents ×2                                    |
+
 ## The dynasty (retiring to an heir)
 
 Beyond closing volumes there is a slower loop: the founder retires and an heir takes the book on,
@@ -257,8 +292,9 @@ in a new **era** of the notebook.
   counting what closing now would claim, reaches 1,000 (the closing sponsor's bonus is not
   claimed goodwill): about six or seven closings. A pencilled note on the shelf says how close
   the founder is.
-- **Retiring** first closes the current volume, as Close the volume does (the closing sponsor is
-  offered as usual; an uncollected absence receipt is collected first); its claim counts.
+- **Retiring** first closes the current volume, as Close the volume does (an uncollected absence
+  receipt is collected first); its claim counts. The closing sponsor is not offered at Retire,
+  since goodwill held starts again.
 - **Legacy:** retiring earns `floor(sqrt(goodwill claimed in the era))` legacy points (31 at
   1,000, 44 at 2,000), never spent. Legacy is a factor of its own on all business profit,
   ×(1 + 0.2 × legacy), multiplying with goodwill, the Gold Edition and the sponsorship.
@@ -267,8 +303,8 @@ in a new **era** of the notebook.
   again:** goodwill held and goodwill claimed, lifetime earnings, and the volume (Vol. I of the
   new era).
 - **The pace:** the heir starts below the founder's last pace (×7.2 from 31 legacy points,
-  against the founder's goodwill) and passes it within a few closings; each era goes faster than
-  the one before.
+  against the founder's goodwill) and is meant to pass it within a few closings; each era goes
+  faster than the one before.
 - **Eras:** the founder's era is the cream ledger. The heirs' eras change the paper and ink of
   every page: II, the 1950s (green ledger paper, blue-black ink); III, the 1980s (continuous
   printer paper with grey bars); IV, the 2010s (graph paper, ballpoint blue). Era V looks like
@@ -365,8 +401,7 @@ since it earned on the other device.
 
 Special editions (two-week themed notebooks), royalties, satellites and the IPO, Game Center
 achievements and leaderboards, cloud saves, ads on the website (once its ad network is
-approved), more purchases (cosmetic covers), a big-number type past
-10^308.
+approved), more purchases (cosmetic covers), a big-number type past 10^308.
 
 ## Balance
 
