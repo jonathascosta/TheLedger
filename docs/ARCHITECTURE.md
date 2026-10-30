@@ -54,7 +54,7 @@ cheap; the app treats the state as owned by the engine and re-renders after each
 | `format/`       | Money and number formatting in English and Portuguese, long and short forms                                                                                                   |
 | `data/`         | Static tables: businesses, upgrades (with the special orders), managers' names and traits, stocks, coins, commodities, properties, art, parks, events, achievements, partners |
 | `state/`        | `GameState`, `newGame`, `newVolume`, save version and migration                                                                                                               |
-| `economy/`      | Level costs, buying (×1/×10/×100/Max), cycles and tills, milestones, multipliers, income per second, net worth                                                                |
+| `economy/`      | Level costs, buying (×1/×5/×10/×25/×100/Max), cycles and tills, milestones, multipliers, income per second, net worth                                                         |
 | `desk/`         | Stamps, invoices, combo                                                                                                                                                       |
 | `managers/`     | Candidates (seeded from the volume), hiring                                                                                                                                   |
 | `market/`       | Price walks, shocks, buying and selling stocks, commodities and coins                                                                                                         |

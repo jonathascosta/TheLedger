@@ -192,6 +192,7 @@ test('Open follows the buy mode, with its count and price on the button', async 
       },
   );
   // The café is open; ten bakery levels cost about $1,218.
+  // The café is open.
   save.volume.businesses[0] = { level: 10, progress: 0, till: 0 };
   save.volume.cash = 2000;
   save.settings.buyMode = 10;
@@ -209,11 +210,17 @@ test('Open follows the buy mode, with its count and price on the button', async 
   await expect(open).toBeEnabled();
   await open.click();
   await expect(page.locator('.biz').nth(1)).toContainText(pt ? /nív\. 10\b/ : /lvl 10\b/);
-  // The six modes stay pinned at the top while the ledger scrolls.
+  // The six modes stay pinned under the cash strip while the ledger scrolls well past them.
   const modes = page.locator('.buy-modes');
   await expect(modes.getByRole('button')).toHaveCount(6);
-  await page.locator('.scroll').evaluate((e) => e.scrollTo(0, e.scrollHeight));
-  await expect(modes).toBeInViewport();
+  // A short window, so the ledger scrolls well past the row's own place.
+  await page.setViewportSize({ width: 375, height: 420 });
+  const scroll = page.locator('.scroll');
+  const top = (await scroll.boundingBox())!.y;
+  const before = (await modes.boundingBox())!.y - top;
+  await scroll.evaluate((e) => e.scrollTo(0, e.scrollHeight));
+  expect(await scroll.evaluate((e) => e.scrollTop)).toBeGreaterThan(before);
+  await expect.poll(async () => (await modes.boundingBox())!.y).toBeCloseTo(top, 0);
   await context.close();
 });
 

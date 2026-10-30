@@ -1,5 +1,6 @@
 import {
   BUSINESSES,
+  BUY_MODES,
   businessIncome,
   businessRate,
   buyBusiness,
@@ -23,7 +24,6 @@ import {
   trendFactor,
   upgradeUnlocked,
   UPGRADES,
-  type BuyMode,
   type GameState,
 } from '@ledger/engine';
 import { BusinessDoodle, Icon } from '../art/Doodles.tsx';
@@ -36,8 +36,6 @@ import { GoldenInvoice } from '../ui/Golden.tsx';
 import { Page, Underline } from '../ui/Page.tsx';
 import { Sponsor } from '../ui/Sponsor.tsx';
 import { duration, factor, money, moneyShort, plain } from '../ui/format.ts';
-
-const MODES: readonly BuyMode[] = [1, 5, 10, 25, 100, 'max'];
 
 function BusinessRow({ state, index }: { state: GameState; index: number }) {
   const b = state.volume.businesses[index]!;
@@ -334,7 +332,7 @@ export function Ledger({ state }: { state: GameState }) {
         <p class="small">{t('ledger.count', { open, total: BUSINESSES.length })}</p>
       </div>
       <div class="row buy-modes" role="group" aria-label={t('ledger.buyMode')}>
-        {MODES.map((m) => (
+        {BUY_MODES.map((m) => (
           <button
             key={String(m)}
             type="button"

@@ -26,6 +26,9 @@ function renameUpgrade(id: string): string {
 
 export type BuyMode = 1 | 5 | 10 | 25 | 100 | 'max';
 
+/** The buy modes, in the order the ledger shows them. */
+export const BUY_MODES: readonly BuyMode[] = [1, 5, 10, 25, 100, 'max'];
+
 export interface BusinessState {
   /** Units owned; 0 means not opened. */
   level: number;
@@ -399,6 +402,7 @@ export function migrate(raw: unknown, now: number): GameState | null {
       .map(renameUpgrade);
   }
   const settings = { ...fresh.settings, ...save.settings };
+  if (!BUY_MODES.includes(settings.buyMode)) settings.buyMode = 1;
   settings.postits = Array.isArray(settings.postits)
     ? (settings.postits as unknown[]).filter((c): c is AssetClass => typeof c === 'string')
     : [];

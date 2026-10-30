@@ -1218,7 +1218,8 @@ p {
   display: block;
 }
 
-/* The buy modes: pinned at the top of the ledger while it scrolls, on the page's own paper. */
+/* The buy modes: pinned at the top of the ledger while it scrolls, a strip of the page's paper
+   colour with a soft shadow, so it reads as a band laid over the page. */
 .buy-modes {
   position: sticky;
   top: -20px;
@@ -1228,9 +1229,19 @@ p {
   margin: -8px 0 0;
   padding: 2px 0;
   background: var(--paper);
+  box-shadow: 0 3px 4px -3px var(--shadow);
 }
 
+/* Six modes fit a 320 px phone: a smaller hand, and the ring kept inside each chip. */
 .buy-modes .chip {
-  min-width: 40px;
+  min-width: 0;
+  min-height: 44px;
   flex: 1 1 0;
+  padding: 0;
+  font-size: 18px;
+  white-space: nowrap;
+}
+
+.buy-modes .chip.on::after {
+  inset: 4px 1px;
 }
