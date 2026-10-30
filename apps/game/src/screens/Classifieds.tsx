@@ -1,8 +1,9 @@
-import { BUSINESSES, candidates, headhunt, hire, offerLeft, type GameState } from '@ledger/engine';
+import { BUSINESSES, candidates, headhunt, offerLeft, type GameState } from '@ledger/engine';
 import { Portrait } from '../art/Portrait.tsx';
 import { t, tk } from '../i18n/index.ts';
 import { sponsorsOffered, today } from '../sponsor.ts';
-import { act, grant } from '../store.ts';
+import { hireAndAsk } from '../notes/notes.ts';
+import { grant } from '../store.ts';
 import { Page } from '../ui/Page.tsx';
 import { Sponsor } from '../ui/Sponsor.tsx';
 import { moneyShort } from '../ui/format.ts';
@@ -77,7 +78,7 @@ export function Classifieds({ state }: { state: GameState }) {
               class="btn"
               style={{ fontSize: '18px' }}
               disabled={state.volume.cash < c.cost}
-              onClick={() => act((s) => hire(s, c.business))}
+              onClick={() => hireAndAsk(c.business)}
             >
               {t('classifieds.hire', { amount: moneyShort(c.cost) })}
             </button>
