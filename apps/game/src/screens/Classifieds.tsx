@@ -2,6 +2,7 @@ import { BUSINESSES, candidates, headhunt, hire, offerLeft, type GameState } fro
 import { Portrait } from '../art/Portrait.tsx';
 import { t, tk } from '../i18n/index.ts';
 import { sponsorsOffered, today } from '../sponsor.ts';
+import { askIfDue } from '../notes/notes.ts';
 import { act, grant } from '../store.ts';
 import { Page } from '../ui/Page.tsx';
 import { Sponsor } from '../ui/Sponsor.tsx';
@@ -77,7 +78,9 @@ export function Classifieds({ state }: { state: GameState }) {
               class="btn"
               style={{ fontSize: '18px' }}
               disabled={state.volume.cash < c.cost}
-              onClick={() => act((s) => hire(s, c.business))}
+              onClick={() => {
+                if (act((s) => hire(s, c.business)).ok) void askIfDue();
+              }}
             >
               {t('classifieds.hire', { amount: moneyShort(c.cost) })}
             </button>

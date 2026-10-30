@@ -2,6 +2,7 @@ import { netWorth, type GameState, type Lang } from '@ledger/engine';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { buyGold, restoreGold, type GoldStore } from '../gold/gold.ts';
 import { setLang, deviceLang, lang, roman, t } from '../i18n/index.ts';
+import { setNotes } from '../notes/notes.ts';
 import { decodeBackup, encodeBackup, type Decoded } from '../persist/backup.ts';
 import { platform } from '../platform/index.ts';
 import { act, eraseSave, game, restoreGame } from '../store.ts';
@@ -144,6 +145,25 @@ export function Settings({ state }: { state: GameState }) {
         )}
       </div>
       {platform().gold && <GoldSection state={state} store={platform().gold!} />}
+      {platform().notes && (
+        <div class="stack" style={{ gap: '6px' }}>
+          <p class="caps">{t('notes.title')}</p>
+          <div class="row" role="group" aria-label={t('notes.title')} style={{ gap: '4px' }}>
+            {([true, false] as const).map((on) => (
+              <button
+                key={String(on)}
+                type="button"
+                class={(state.settings.notes === 'on') === on ? 'chip on' : 'chip'}
+                aria-pressed={(state.settings.notes === 'on') === on}
+                onClick={() => void setNotes(on)}
+              >
+                {on ? t('notes.on') : t('notes.off')}
+              </button>
+            ))}
+          </div>
+          {state.settings.notes === 'denied' && <p class="tiny">{t('notes.denied')}</p>}
+        </div>
+      )}
       {!state.meta.gold && platform().privacy.required() && (
         <button
           type="button"

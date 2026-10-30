@@ -11,6 +11,7 @@ import { render } from 'preact';
 import { App } from './App.tsx';
 import { deviceLang, setLang } from './i18n/index.ts';
 import { confirmAtLaunch } from './gold/gold.ts';
+import { initNotes } from './notes/notes.ts';
 import { act, boot, game } from './store.ts';
 import { initPlatform } from './platform/index.ts';
 import { paintGrain } from './ui/grain.ts';
@@ -19,6 +20,7 @@ const { storage, gold } = await initPlatform();
 boot(storage);
 // The store confirms the Gold Edition kept in the save; the game does not wait for it.
 if (gold) void confirmAtLaunch(gold, act);
+initNotes();
 setLang(game().settings.lang ?? deviceLang());
 paintGrain();
 render(<App />, document.getElementById('app')!);

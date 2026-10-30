@@ -1,11 +1,13 @@
 import { AdMob } from '@capacitor-community/admob';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { LocalNotifications } from '@capacitor/local-notifications';
 import { Preferences } from '@capacitor/preferences';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { AdMobAds, TEST_REWARDED_UNIT } from '../ads/admob.ts';
 import { AdConsent } from '../ads/consent.ts';
 import { goldInSave } from '../gold/gold.ts';
 import { AppStoreGold } from '../gold/native.ts';
+import type { NotesApi } from '../notes/notes.ts';
 import type { Storage } from '../persist/storage.ts';
 import type { Platform } from './index.ts';
 
@@ -15,6 +17,30 @@ const KEY = 'theledger.save';
 function report(error: unknown): void {
   console.warn('The Ledger:', error);
 }
+
+/** Notes from the night shift through iOS local notifications. */
+const notes: NotesApi = {
+  async request() {
+    const { display } = await LocalNotifications.requestPermissions();
+    return display === 'granted';
+  },
+  async schedule(list) {
+    if (list.length === 0) return;
+    await LocalNotifications.schedule({
+      notifications: list.map((n) => ({
+        id: n.id,
+        title: n.title,
+        body: n.body,
+        schedule: { at: new Date(n.at) },
+      })),
+    });
+  },
+  async clear() {
+    const { notifications } = await LocalNotifications.getPending();
+    if (notifications.length > 0) await LocalNotifications.cancel({ notifications });
+    await LocalNotifications.removeAllDeliveredNotifications();
+  },
+};
 
 /** The owner's rewarded unit when the build passes one, Google's test unit otherwise. */
 const REWARDED_UNIT =
@@ -62,5 +88,6 @@ export async function createNativePlatform(): Promise<Platform> {
       show: () => consent.showPrivacyOptions(),
     },
     gold: new AppStoreGold(),
+    notes,
   };
 }
