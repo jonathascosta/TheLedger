@@ -211,3 +211,67 @@ test('Open buys the first level in the ×100 mode', async ({ browser }) => {
   await expect(page.locator('.biz').nth(1)).toContainText(pt ? /nív\. 1\b/ : /lvl 1\b/);
   await context.close();
 });
+
+test("the café's first order: ready on its row, bought on the Upgrades page", async ({
+  browser,
+}) => {
+  const pt = test.info().project.name.endsWith('-pt');
+  const context = await browser.newContext({
+    baseURL: test.info().project.use.baseURL ?? '',
+    locale: pt ? 'pt-BR' : 'en-US',
+  });
+  const first = await context.newPage();
+  await first.goto('./');
+  await first.waitForFunction(() => localStorage.getItem('theledger.save'));
+  const save = await first.evaluate(
+    () =>
+      JSON.parse(localStorage.getItem('theledger.save') ?? 'null') as {
+        volume: { businesses: unknown[]; cash: number; upgrades: string[] };
+        lastTick: number;
+      },
+  );
+  await first.close();
+  // Every cheaper upgrade bought, so the order is the only one the cash reaches.
+  save.volume.upgrades = [
+    ...['cafe.0', 'cafe.1', 'cafe.2', 'cafe.3', 'cafe.4', 'cafe.5'],
+    ...['desk.0', 'desk.1', 'desk.2', 'desk.3', 'desk.4', 'all.0'],
+  ];
+  save.volume.cash = 2e10;
+  async function at(level: number) {
+    save.volume.businesses[0] = { level, progress: 0, till: 0 };
+    save.lastTick = Date.now();
+    const page = await context.newPage();
+    await page.addInitScript((text) => {
+      if (!sessionStorage.getItem('seeded')) {
+        localStorage.setItem('theledger.save', text);
+        sessionStorage.setItem('seeded', '1');
+      }
+    }, JSON.stringify(save));
+    await page.goto('./');
+    return page;
+  }
+  const card = (page: Page) =>
+    page.locator('.card-link').filter({ hasText: pt ? /Melhorias/ : /Upgrades/ });
+  // One level short: the order is locked, so nothing is on offer.
+  const early = await at(299);
+  await expect(early.locator('.biz').first().locator('.order-mark')).toHaveText(
+    pt ? /nív\. 300/ : /lvl 300/,
+  );
+  await expect(card(early).locator('.badge-dot')).toHaveCount(0);
+  await early.close();
+  const page = await at(300);
+  const cafe = page.locator('.biz').first();
+  await expect(cafe.locator('.order-mark.ready')).toHaveText(
+    pt ? /encomenda pronta/ : /order ready/,
+  );
+  await expect(card(page).locator('.badge-dot')).toHaveCount(1);
+  await card(page).click();
+  const row = page
+    .locator('.row')
+    .filter({ hasText: pt ? /Contrato com os escritórios/ : /Office catering contract/ });
+  await expect(row).toContainText('×8');
+  await row.getByRole('button').click();
+  await page.getByRole('button', { name: pt ? /Voltar/ : /Back/ }).click();
+  await expect(cafe.locator('.order-mark')).toHaveText(pt ? /nív\. 500/ : /lvl 500/);
+  await context.close();
+});

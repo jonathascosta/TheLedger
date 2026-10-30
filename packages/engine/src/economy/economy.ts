@@ -3,7 +3,7 @@ import { GOODWILL_BONUS, type PartnerId } from '../data/partners.ts';
 import { NEGOTIATOR_DISCOUNT, PERFECTIONIST_BONUS } from '../data/people.ts';
 import { LEGACY_BONUS } from '../data/dynasty.ts';
 import { GOLD_FACTOR, SPONSORSHIP_FACTOR, STAR_FACTOR } from '../data/sponsors.ts';
-import { UPGRADE_BY_ID } from '../data/upgrades.ts';
+import { UPGRADE_BY_ID, type UpgradeDef } from '../data/upgrades.ts';
 import type { GameState, Manager } from '../state/state.ts';
 
 export type ActionResult =
@@ -183,12 +183,17 @@ export function managerCost(state: GameState, business: number): number {
   return BUSINESSES[business]!.baseCost * MANAGER_COST_FACTOR * half;
 }
 
+/** Whether an upgrade can be bought now: its business is open, or at a special order's level. */
+export function upgradeUnlocked(state: GameState, def: UpgradeDef): boolean {
+  if (def.effect.kind !== 'business') return true;
+  return state.volume.businesses[def.effect.business]!.level >= (def.level ?? 1);
+}
+
 export function buyUpgrade(state: GameState, id: string): ActionResult {
   const def = UPGRADE_BY_ID.get(id);
   if (!def) return { ok: false, reason: 'none' };
   if (state.volume.upgrades.includes(id)) return { ok: false, reason: 'owned' };
-  if (def.effect.kind === 'business' && state.volume.businesses[def.effect.business]!.level === 0)
-    return { ok: false, reason: 'locked' };
+  if (!upgradeUnlocked(state, def)) return { ok: false, reason: 'locked' };
   if (!spend(state, def.cost)) return { ok: false, reason: 'cash' };
   state.volume.upgrades.push(id);
   return OK;

@@ -20,6 +20,7 @@ import {
   shouldClose,
   sponsorshipLeft,
   startSponsorship,
+  upgradeUnlocked,
   UPGRADES,
   type BuyMode,
   type GameState,
@@ -81,6 +82,13 @@ function BusinessRow({ state, index }: { state: GameState; index: number }) {
   const full = b.till > 0;
   const fraction = managed && seconds < 0.3 ? 1 : Math.min(1, b.progress / seconds);
   const offer = buyOffer(state, index);
+  const order = UPGRADES.find(
+    (u) =>
+      u.level !== undefined &&
+      u.effect.kind === 'business' &&
+      u.effect.business === index &&
+      !state.volume.upgrades.includes(u.id),
+  );
   return (
     <div class="biz">
       <button
@@ -107,6 +115,14 @@ function BusinessRow({ state, index }: { state: GameState; index: number }) {
           {t('common.level', { level: b.level })} ·{' '}
           {t('common.perSecond', { amount: moneyShort(businessRate(state, index)) })}
           {managed ? ` · ${t('ledger.managed')}` : ''}
+          {order && (
+            <span class={b.level >= (order.level ?? 0) ? 'order-mark ready' : 'order-mark'}>
+              {' · '}
+              {b.level >= (order.level ?? 0)
+                ? t('order.ready')
+                : t('order.at', { level: order.level ?? 0 })}
+            </span>
+          )}
         </p>
         <button
           type="button"
@@ -151,10 +167,7 @@ export function Ledger({ state }: { state: GameState }) {
   );
   const nextLocked = BUSINESSES.findIndex((_, i) => !isAvailable(state, i));
   const affordableUpgrades = UPGRADES.filter(
-    (u) =>
-      !v.upgrades.includes(u.id) &&
-      u.cost <= v.cash &&
-      (u.effect.kind !== 'business' || v.businesses[u.effect.business]!.level > 0),
+    (u) => !v.upgrades.includes(u.id) && u.cost <= v.cash && upgradeUnlocked(state, u),
   ).length;
   const list = candidates(state);
   const applicants = list.length;

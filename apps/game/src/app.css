@@ -1167,3 +1167,9 @@ p {
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+/* A special order on a business's row: when it unlocks, then ready to buy. */
+.order-mark.ready {
+  color: var(--profit);
+  font-weight: 700;
+}

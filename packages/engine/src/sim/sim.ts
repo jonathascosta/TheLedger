@@ -10,6 +10,7 @@ import {
   isAvailable,
   levelCost,
   managerCost,
+  upgradeUnlocked,
 } from '../economy/economy.ts';
 import { tick } from '../game.ts';
 import { hire } from '../managers/managers.ts';
@@ -30,6 +31,8 @@ export interface SimOptions {
   readonly seconds: number;
   /** Cash at the start, to test that a broken economy fails the bands. */
   readonly startCash?: number;
+  /** Leave the special orders alone, to test that the small businesses' band needs them. */
+  readonly noOrders?: boolean;
 }
 
 export interface SimResult {
@@ -39,10 +42,15 @@ export interface SimResult {
   readonly closeAt: number | null;
   /** Share of all earnings that came from stamps. */
   readonly stampShare: number;
+  /** Share of the businesses' income per second the first four made when closing was suggested. */
+  readonly smallShare: number | null;
   readonly state: GameState;
 }
 
 const T0 = 1_700_000_000_000;
+
+/** The small businesses of the balance band: the first four. */
+const SMALL_BUSINESSES = 4;
 
 /** Seconds until a purchase pays for itself (Infinity when it adds nothing). */
 function payback(cost: number, gain: number): number {
@@ -67,7 +75,7 @@ function upgradeGain(state: GameState, upgrade: UpgradeDef): number {
 }
 
 /** Buys the purchase that pays back soonest, while one is affordable; returns how many it made. */
-function shop(state: GameState): number {
+function shop(state: GameState, noOrders: boolean): number {
   let bought = 0;
   for (let guard = 0; guard < 200; guard++) {
     const v = state.volume;
@@ -95,7 +103,8 @@ function shop(state: GameState): number {
     }
     for (const u of UPGRADES) {
       if (v.upgrades.includes(u.id)) continue;
-      if (u.effect.kind === 'business' && v.businesses[u.effect.business]!.level === 0) continue;
+      if (!upgradeUnlocked(state, u)) continue;
+      if (u.level !== undefined && noOrders) continue;
       // Desk upgrades: bought as soon as they cost less than a minute of income (a payback of
       // one second puts them ahead of nearly everything); never before.
       if (u.effect.kind === 'desk') {
@@ -122,6 +131,7 @@ export function simulate(options: SimOptions): SimResult {
     billion: null,
   };
   let closeAt: number | null = null;
+  let smallShare: number | null = null;
   let stamped = 0;
   for (let s = 1; s <= options.seconds; s++) {
     const now = T0 + s * 1000;
@@ -129,12 +139,18 @@ export function simulate(options: SimOptions): SimResult {
     for (let k = 0; k < taps; k++)
       stamped += stamp(state, now - 1000 + ((k + 1) * 1000) / (taps + 1)).value;
     for (let i = 0; i < BUSINESSES.length; i++) collect(state, i);
-    shop(state);
+    shop(state, options.noOrders ?? false);
     const worth = netWorth(state);
     if (reached.million === null && worth >= 1e6) reached.million = s;
     if (reached.billion === null && worth >= 1e9) reached.billion = s;
-    if (closeAt === null && shouldClose(state)) closeAt = s;
+    if (closeAt === null && shouldClose(state)) {
+      closeAt = s;
+      const total = businessIncome(state);
+      let small = 0;
+      for (let i = 0; i < SMALL_BUSINESSES; i++) small += businessRate(state, i);
+      smallShare = total > 0 ? small / total : 0;
+    }
   }
   const earned = state.volume.earned;
-  return { reached, closeAt, stampShare: earned > 0 ? stamped / earned : 0, state };
+  return { reached, closeAt, stampShare: earned > 0 ? stamped / earned : 0, smallShare, state };
 }

@@ -1,4 +1,5 @@
 import type { UpgradeDef } from '@ledger/engine';
+import { factor } from '../ui/format.ts';
 import { BusinessDoodle, Icon } from './Doodles.tsx';
 
 /** The red ink stamp in the corner that marks an upgrade: "×3", "×2", or a green tick once bought. */
@@ -34,7 +35,7 @@ function Mark({ text, bought, size }: { text: string; bought: boolean; size: num
             text-anchor="middle"
             font-family="Courier Prime, monospace"
             font-weight="700"
-            font-size="11"
+            font-size={text.length <= 2 ? 11 : text.length === 3 ? 9 : 7.5}
             style={{ fill: ink }}
           >
             {text}
@@ -71,7 +72,7 @@ export function UpgradeIcon({
 }) {
   const e = upgrade.effect;
   const mark = (
-    <Mark text={`×${e.factor}`} bought={bought} size={Math.max(21, Math.round(size * 0.56))} />
+    <Mark text={factor(e.factor)} bought={bought} size={Math.max(21, Math.round(size * 0.56))} />
   );
   if (e.kind === 'all') {
     const mini = Math.round(size * 0.62);

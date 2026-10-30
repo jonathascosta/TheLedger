@@ -14,7 +14,7 @@ export type { Lang } from './format/format.ts';
 
 export { BUSINESSES, MILESTONES } from './data/businesses.ts';
 export type { BusinessDef } from './data/businesses.ts';
-export { UPGRADES, UPGRADE_BY_ID } from './data/upgrades.ts';
+export { ORDER_FACTORS, orderLevels, UPGRADES, UPGRADE_BY_ID } from './data/upgrades.ts';
 export type { UpgradeDef, UpgradeEffect } from './data/upgrades.ts';
 export { TRAITS } from './data/people.ts';
 export type { Trait } from './data/people.ts';
@@ -112,6 +112,7 @@ export {
   buyBusiness,
   buyOffer,
   buyUpgrade,
+  upgradeUnlocked,
   collect,
   cycleOf,
   earn,
