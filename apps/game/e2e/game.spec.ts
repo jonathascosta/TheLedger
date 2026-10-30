@@ -446,4 +446,9 @@ test("an instrument's chart marks the price paid, or an arrow when it is out of 
   await expect(below.mark.locator('path')).toHaveCount(0);
   await expect(below.mark).toContainText(pt ? /^↓ pago / : /^↓ paid /);
   await below.context.close();
+  // Paid far above: an arrow on the top edge.
+  const above = await chart(10);
+  await expect(above.mark.locator('path')).toHaveCount(0);
+  await expect(above.mark).toContainText(pt ? /^↑ pago / : /^↑ paid /);
+  await above.context.close();
 });

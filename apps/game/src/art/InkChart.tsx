@@ -104,6 +104,19 @@ export function InkChart({
   );
 }
 
+/**
+ * Where a reference price falls against the chart's range. A price paid at the high or the low is
+ * often a hair off it (cost / units), so it counts as in range.
+ */
+export function referenceSide(
+  value: number,
+  min: number,
+  max: number,
+): { above: boolean; below: boolean } {
+  const slack = (max - min) * 1e-9;
+  return { above: value > max + slack, below: value < min - slack };
+}
+
 /** The reference line inside the range; outside it, an arrow and the price on that edge. */
 function Reference({
   value,
@@ -122,10 +135,11 @@ function Reference({
   x0: number;
   x1: number;
 }) {
-  const above = value > max;
-  const below = value < min;
-  const at = above ? y(max) : below ? y(min) : y(value);
+  const { above, below } = referenceSide(value, min, max);
+  const at = y(Math.min(max, Math.max(min, value)));
   const label = above ? `↑ ${text}` : below ? `↓ ${text}` : text;
+  // Below the line when there is no room above it (the top edge), above it otherwise.
+  const under = above || at - 16 < 0;
   return (
     <g class="chart-reference">
       {!above && !below && (
@@ -139,11 +153,14 @@ function Reference({
       )}
       <text
         x={x0 + 4}
-        y={below ? at - 6 : at + (above ? 14 : -5)}
+        y={under ? at + 14 : at - 6}
         font-family="Caveat, cursive"
         font-size="16"
         font-weight="700"
-        style={{ fill: 'var(--profit)' }}
+        paint-order="stroke"
+        stroke-width="4"
+        stroke-linejoin="round"
+        style={{ fill: 'var(--profit)', stroke: 'var(--paper)' }}
       >
         {label}
       </text>
