@@ -391,3 +391,59 @@ test('the closing page shows the next goodwill point only while it takes over a 
   await expect(fast.shown).toHaveCount(0);
   await fast.context.close();
 });
+
+test("an instrument's chart marks the price paid, or an arrow when it is out of range", async ({
+  browser,
+}) => {
+  const pt = test.info().project.name.endsWith('-pt');
+  async function chart(paid: number) {
+    const context = await browser.newContext({
+      baseURL: test.info().project.use.baseURL ?? '',
+      locale: pt ? 'pt-BR' : 'en-US',
+    });
+    const first = await context.newPage();
+    await first.goto('./');
+    await first.waitForFunction(() => localStorage.getItem('theledger.save'));
+    const save = await first.evaluate(
+      () =>
+        JSON.parse(localStorage.getItem('theledger.save') ?? 'null') as {
+          volume: {
+            peakNetWorth: number;
+            holdings: Record<string, { units: number; cost: number }>;
+            market: { prices: Record<string, number>; history: Record<string, number[]> };
+          };
+          lastTick: number;
+        },
+    );
+    await first.close();
+    const price = save.volume.market.prices.nmtc!;
+    save.volume.peakNetWorth = 2e5;
+    save.volume.market.history.nmtc = [price * 0.9, price * 1.1, price];
+    save.volume.holdings = { nmtc: { units: 2, cost: 2 * paid * price } };
+    save.lastTick = Date.now();
+    const page = await context.newPage();
+    await page.addInitScript((text) => {
+      if (!sessionStorage.getItem('seeded')) {
+        localStorage.setItem('theledger.save', text);
+        sessionStorage.setItem('seeded', '1');
+      }
+    }, JSON.stringify(save));
+    await page.goto('./');
+    await page
+      .locator('.tabs')
+      .getByRole('button', { name: pt ? /Bolsa/ : /Market/ })
+      .click();
+    await page.getByRole('button', { name: /NMTC/ }).click();
+    return { context, mark: page.locator('.chart-reference') };
+  }
+  // Paid inside the range: a dashed line and its label.
+  const inside = await chart(1);
+  await expect(inside.mark.locator('path')).toHaveCount(1);
+  await expect(inside.mark).toContainText(pt ? /^pago / : /^paid /);
+  await inside.context.close();
+  // Paid far below: no line, an arrow on the bottom edge.
+  const below = await chart(0.1);
+  await expect(below.mark.locator('path')).toHaveCount(0);
+  await expect(below.mark).toContainText(pt ? /^↓ pago / : /^↓ paid /);
+  await below.context.close();
+});
