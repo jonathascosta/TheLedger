@@ -372,13 +372,16 @@ approved), more purchases (cosmetic covers), haptics on every stamp, a big-numbe
 ## Balance
 
 A simulated player (`pnpm test:calibration`) plays the game on its own and keeps the pace in
-bands, so a change that breaks the pace fails a test. A steady player (playing without breaks,
-buying the best value each second, stamping once a second) reaches:
+bands, so a change that breaks the pace fails a test. It plays without breaks, collects every
+till each second, stamps once a second, hires a manager once it costs less than a minute of
+income and buys whatever pays back soonest; it leaves investments, the paper and sponsors alone.
+It plays better than most people, so a person reaches each mark somewhat later.
 
-| Mark                      | Band          |
-| :------------------------ | :------------ |
-| $1 million net worth      | 5 to 25 min   |
-| $1 billion net worth      | 30 min to 4 h |
-| Closing suggested (first) | 15 to 30 h    |
+| Mark                      | Band          | Measured when the bands were set |
+| :------------------------ | :------------ | :------------------------------- |
+| $1 million net worth      | 5 to 25 min   | 15 min                           |
+| $1 billion net worth      | 30 min to 4 h | 2 h 48 min                       |
+| Closing suggested (first) | 10 to 30 h    | 13 h                             |
 
-and stamps stay under half of all earnings even at four taps a second.
+Stamps stay under half of all earnings even at four taps a second (43% when the bands were
+set).

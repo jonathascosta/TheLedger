@@ -5,5 +5,7 @@ export default defineConfig({
     name: 'engine',
     environment: 'node',
     include: ['src/**/*.test.ts'],
+    // The long simulations run apart (`pnpm test:calibration`).
+    exclude: ['src/**/*.calibration.test.ts'],
   },
 });

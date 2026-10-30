@@ -126,7 +126,7 @@ calls an action once a reward is earned.
 - Done: unit tests for a round trip, a changed character, a cut code and a code from a newer
   version; an end-to-end test copies a code and restores it in a fresh page.
 
-### T14. Engine: the balance simulator
+### T14. Engine: the balance simulator — done
 
 - A simulated player in the engine (`sim/`): each second it collects, stamps at a given rate,
   hires managers and buys the best value among levels and upgrades. Deterministic for a seed.

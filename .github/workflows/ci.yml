@@ -34,6 +34,21 @@ jobs:
       - run: pnpm test
       - run: pnpm build
 
+  calibration:
+    # The simulated player keeps the pace in the bands of PRODUCT.md, Balance (about a minute).
+    name: Balance (calibration)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test:calibration
+
   e2e:
     # The first session and every tab, on a phone profile in English and Portuguese, against
     # the production build.

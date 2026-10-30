@@ -64,6 +64,7 @@ cheap; the app treats the state as owned by the engine and re-renders after each
 | `prestige/`     | Goodwill, closing the volume, partners, the shelf                                                                                                   |
 | `away/`         | Offline receipt, the audit (Collect ×2)                                                                                                             |
 | `sponsors/`     | Sponsor rewards: overtime, the golden invoice (take, then pay), the sponsorship, the headhunter, daily limits keyed by the date the app passes in   |
+| `sim/`          | The simulated player and the balance bands (PRODUCT.md, Balance), run by `pnpm test:calibration`                                                    |
 | `game.ts`       | `tick`, `applyAway`, and the public actions                                                                                                         |
 
 ### Sponsors
