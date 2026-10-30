@@ -397,6 +397,7 @@ export const pt: Record<StringKey, string> = {
   'close.claim': 'Goodwill a receber',
   'close.held': 'Goodwill atual',
   'close.after': 'Bônus de lucro depois de fechar',
+  'close.nextPoint': 'Próximo ponto de goodwill: faltam {amount}, cerca de {time}',
   'close.bonus': '+{percent}',
   'close.confirm': 'Selar',
   'close.nothing': 'Ganhe mais antes de fechar: ainda não há nada a receber.',

@@ -6,8 +6,11 @@ import {
   LEGACY_BONUS,
   legacyClaim,
   retire,
+  businessIncome,
   claimable,
   closeVolume,
+  nextGoodwill,
+  passiveRate,
   closingBonus,
   GOODWILL_BONUS,
   PARTNERS,
@@ -21,7 +24,33 @@ import { act, grant } from '../store.ts';
 import { go, switchTab } from '../router.ts';
 import { Page } from '../ui/Page.tsx';
 import { Sponsor } from '../ui/Sponsor.tsx';
-import { moneyShort, percent, plain } from '../ui/format.ts';
+import { duration, moneyShort, percent, plain } from '../ui/format.ts';
+
+/** A goodwill point takes at least this long at the current income before its bar shows. */
+const NEXT_POINT_MIN_SECONDS = 60;
+
+/**
+ * The way to the next goodwill point (PRODUCT.md, Closing the volume), shown only while a point
+ * takes more than a minute of income: faster, the bar would only flicker.
+ */
+function NextPoint({ state }: { state: GameState }) {
+  const income = businessIncome(state) + passiveRate(state);
+  const next = nextGoodwill(state);
+  if (income <= 0 || next.span / income <= NEXT_POINT_MIN_SECONDS) return null;
+  return (
+    <div class="goodwill-next">
+      <p class="small">
+        {t('close.nextPoint', {
+          amount: moneyShort(next.left),
+          time: duration(Math.ceil(next.left / income)),
+        })}
+      </p>
+      <span class="bar" role="presentation">
+        <span style={{ width: `${(next.into / next.span) * 100}%` }} />
+      </span>
+    </div>
+  );
+}
 
 export function Close({ state }: { state: GameState }) {
   const [sealed, setSealed] = useState<{ number: number; goodwill: number } | null>(null);
@@ -125,6 +154,7 @@ export function Close({ state }: { state: GameState }) {
           <b>{t('close.bonus', { percent: percent(after, false) })}</b>
         </p>
       </div>
+      <NextPoint state={state} />
       <div style={{ alignSelf: 'center' }}>
         <Cover
           kind={coverFor(v.peakNetWorth)}

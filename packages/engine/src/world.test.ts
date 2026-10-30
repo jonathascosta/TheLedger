@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { buyUnits, sellUnits } from './market/market.ts';
-import { buyPartner, claimable, closeVolume, goodwillTotal } from './prestige/prestige.ts';
+import {
+  buyPartner,
+  claimable,
+  closeVolume,
+  earningsFor,
+  goodwillTotal,
+  nextGoodwill,
+} from './prestige/prestige.ts';
 import { answer } from './paper/paper.ts';
 import { migrate, newGame } from './state/state.ts';
 import { tick } from './game.ts';
@@ -32,6 +39,17 @@ describe('world', () => {
     expect(migrate(old, T0)?.settings.postits).toEqual([]);
     old.settings.postits = ['bonds', 7, null, 'art'];
     expect(migrate(old, T0)?.settings.postits).toEqual(['bonds', 'art']);
+  });
+
+  it('measures the way to the next goodwill point', () => {
+    const s = newGame(T0);
+    s.meta.lifetimeEarnings = earningsFor(10) + (earningsFor(11) - earningsFor(10)) / 4;
+    const next = nextGoodwill(s);
+    expect(goodwillTotal(s.meta.lifetimeEarnings)).toBe(10);
+    expect(next.span).toBeCloseTo(earningsFor(11) - earningsFor(10));
+    expect(next.into / next.span).toBeCloseTo(0.25);
+    expect(next.left / next.span).toBeCloseTo(0.75);
+    expect(goodwillTotal(s.meta.lifetimeEarnings + next.left * 1.0000001)).toBe(11);
   });
 
   it('replays the same market for the same volume', () => {
