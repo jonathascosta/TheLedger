@@ -155,7 +155,7 @@ calls an action once a reward is earned.
 - Done: unit tests of the schedule (each note, quiet hours, the spacing chain, none without a
   reason) and of when permission is asked (new and existing players); the iOS workflow builds.
 
-### T17. Sports clubs
+### T17. Sports clubs — done
 
 - Engine: the clubs class (data, seeded strengths, match days in play and their restart after an
   absence, prizes, value moves, buying at value and selling at 90%, net worth, _Chairman_). App:
