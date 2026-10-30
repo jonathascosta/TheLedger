@@ -71,6 +71,7 @@ The approved mock-ups live in the design canvas (owner's link). The rules:
 | Meso  | minutes | Buy levels and upgrades, hire managers, invest, answer the paper |
 | Macro | days    | Close the volume, earn goodwill, spend it on partners            |
 | Meta  | weeks   | The shelf of volumes, the covers, the achievements               |
+| Era   | months  | Retire to an heir: a new era of the notebook, legacy points      |
 
 ## Money
 
@@ -173,10 +174,24 @@ pencil, the classes, and the locked ones.
 | Startups    |     $1 B | A pitch at a time: invest the ask; after a few minutes it fails or returns 1× to 100×                  |
 | Art         |    $10 B | Pieces at auction; value creeps up with noise; selling at auction lands at 80% to 130%                 |
 | Energy      |   $100 B | Solar and wind parks: dear, steady income                                                              |
+| Clubs       |     $1 T | Six sports clubs; each plays a match every 10 minutes of play: prize money and a value that moves      |
 
 The fictional companies: New Moon Telecom (NMTC), Iron Blue Mining (IRNB), Golden
 Cocoa (GLDC), Nimbus Cloud (NMBS), Skylark Airlines (SKYL), Petro Atlantic (PATL). Coins:
 Pennycoin (PNY), Hashbrown (HSH), Stardust (SDT). No real brand appears in the game.
+
+**Sports clubs.** Six fictional clubs, each with a price (the first $1 trillion, each next four
+times dearer) and a strength the volume's seed draws. Every 10 minutes of play is a match day:
+each owned club wins, draws or loses (a stronger club wins more often; seeded). A win pays a
+prize and lifts the club's value 4%, a draw pays a third of the prize, a loss pays nothing and
+takes 3% off; the value stays between half and four times the price. On average a club earns
+about half what a park of the same price earns, in lumps, and its value can grow. Clubs are sold
+at 90% of their value. Matches are played only in play, like the paper's editions. The last five
+results show as a row of W, D and L. _Collector_ keeps its classes (clubs are not required).
+
+**Post-its.** Each investment's page carries a yellow post-it with its rule in a sentence or
+two (the Market's for stocks, commodities and crypto; the class pages for the rest). A tap on
+its corner folds it away; Settings can bring them all back.
 
 ## The morning paper
 
@@ -195,6 +210,21 @@ Pennycoin (PNY), Hashbrown (HSH), Stardust (SDT). No real brand appears in the g
   12 hours), at the offline rate: 10%, plus 15 points with the _Night manager_ partner, plus
   _Night owl_ managers for their business. Market prices move on meanwhile.
 - **Collect** adds it; **Collect ×2** with a sponsor (the audit, see Sponsors).
+
+**Notes from the night shift** (iPhone): local notifications, nothing from a server. The game
+asks for permission once, the first time the player hires a manager ("The night shift can leave
+you a note when there is something to collect"); Settings turns them on or off. When the game
+goes to the background it schedules, and when it comes back it cancels:
+
+- **The receipt is full:** 12 hours after leaving, when an absence stops counting (only with a
+  manager).
+- **The sponsorship ends:** when the banked sponsorship runs out, if that is at least ten minutes
+  away.
+- **Tills full:** when every open business without a manager has a till waiting, if that is at
+  least five minutes away.
+
+At most one note an hour; none between 22:00 and 8:00 on the device's clock (a note due then
+moves to 8:00).
 
 ## Achievements
 
@@ -230,6 +260,28 @@ secret until earned. A new one arrives with a stamp on the screen.
 | Insider       |       75 | The paper hints which way each choice leans |
 | Fast tills    |      150 | Every cycle 1.5× faster                     |
 | Estate agent  |      200 | Rents ×2                                    |
+
+## The dynasty (retiring to an heir)
+
+Above closing volumes, a slower loop: the founder retires and an heir takes the book on, in a
+new **era** of the notebook.
+
+- **When:** once the goodwill claimed in this era reaches 1,000 (weeks of play), the Partners
+  page offers **Retire**. A pencilled note on the shelf says how close the founder is.
+- **Legacy:** retiring earns `floor(sqrt(goodwill claimed in the era))` legacy points (31 at
+  1,000, 44 at 2,000). Each legacy point adds 10% to all business profit, for good; legacy is
+  never spent.
+- **What the heir keeps:** legacy, achievements, the shelf (grouped by era), the Gold Edition,
+  the settings, the sponsors' timers. **What starts again:** goodwill and goodwill claimed,
+  lifetime earnings, partners, and the volume (Vol. I of the new era).
+- **Eras:** the founder's era is the cream ledger. The heirs' eras change the paper and the
+  title: II, the 1950s (green ledger paper, a fountain pen's blue-black ink); III, the 1980s
+  (continuous printer paper with tractor holes and grey bars); IV, the 2010s (graph paper and a
+  ballpoint's blue). Past the fourth, the eras cycle with the generation's numeral.
+- **The heir:** a name drawn from the era's seed with the family's surname ("Helena Costa II"),
+  and a portrait from the same parts as the managers'.
+- **The ceremony:** the founder's pen is laid on the closed book, the shelf moves up a row and
+  the new era's first page opens.
 
 ## Sponsors (rewarded ads)
 
@@ -312,8 +364,21 @@ since it earned on the other device.
 
 ## Later (not in the first release)
 
-The dynasty (retiring to an heir, eras), special editions (two-week themed notebooks), royalties,
-sports clubs, satellites and the IPO, the stock rules on post-it notes, Game Center achievements
-and leaderboards, cloud saves, ads on the website (once its ad network is approved), more
-purchases (cosmetic covers), haptics on every stamp, local notifications, a big-number type
-past 10^308, the balance simulator with calibration bands.
+Special editions (two-week themed notebooks), royalties, satellites and the IPO, Game Center
+achievements and leaderboards, cloud saves, ads on the website (once its ad network is
+approved), more purchases (cosmetic covers), haptics on every stamp, a big-number type past
+10^308.
+
+## Balance
+
+A simulated player (`pnpm test:calibration`) plays the game on its own and keeps the pace in
+bands, so a change that breaks the pace fails a test. A steady player (playing without breaks,
+buying the best value each second, stamping once a second) reaches:
+
+| Mark                      | Band          |
+| :------------------------ | :------------ |
+| $1 million net worth      | 5 to 25 min   |
+| $1 billion net worth      | 30 min to 4 h |
+| Closing suggested (first) | 15 to 30 h    |
+
+and stamps stay under half of all earnings even at four taps a second.

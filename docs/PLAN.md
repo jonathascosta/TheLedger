@@ -126,8 +126,40 @@ calls an action once a reward is earned.
 - Done: unit tests for a round trip, a changed character, a cut code and a code from a newer
   version; an end-to-end test copies a code and restores it in a fresh page.
 
+### T14. Engine: the balance simulator
+
+- A simulated player in the engine (`sim/`): each second it collects, stamps at a given rate,
+  hires managers and buys the best value among levels and upgrades. Deterministic for a seed.
+- `pnpm test:calibration` (a separate Vitest project, `*.calibration.test.ts`, out of the
+  pre-commit hook) checks the bands of PRODUCT.md, Balance; CI runs it.
+- Done: the bands pass on main as it is; a test shows a deliberately broken economy fails them.
+
+### T15. The dynasty
+
+- Engine: legacy, eras, the heir's name, retiring (what is kept and what starts again), the
+  legacy factor on business profit; old saves are era I with no legacy.
+- App: Retire on the Partners page with the ceremony, the shelf grouped by era, the eras' paper
+  and ink as theme variables chosen by the era, the heir on the ledger's header.
+- Done: engine tests (the threshold, the legacy formula, what is kept, the factor), an
+  end-to-end test retiring a seeded save and seeing era II's paper.
+
+### T16. Notes from the night shift (iPhone)
+
+- A pure schedule (`notes(state, now)`) of the three notes with the quiet hours and the hour
+  between notes; `@capacitor/local-notifications` on iOS scheduling it on hide and cancelling on
+  show; the permission asked at the first hire; the Settings switch. None on the website.
+- Done: unit tests of the schedule (each note, quiet hours, spacing, none without a reason); the
+  iOS workflow builds.
+
+### T17. Sports clubs and post-its
+
+- Engine: the clubs class (data, seeded strengths, match days in play, prizes, value moves,
+  buying and selling, net worth). App: the Clubs page with crests and the W/D/L row, the
+  Portfolio entry. Post-its with each class's rule, folded away per class, restored in Settings.
+- Done: engine tests (unlock, a match day replays for a seed, prize and value bounds, average
+  earnings near half a park's); an end-to-end test buying a club and folding a post-it.
+
 ### Later
 
-Everything in PRODUCT.md, Later: the dynasty, special editions, more classes, rules on post-its,
-Game Center, cloud saves, ads on the website, more purchases, haptics, notifications, the
-big-number type, the balance simulator.
+Everything in PRODUCT.md, Later: special editions, royalties, satellites and the IPO, Game
+Center, cloud saves, ads on the website, more purchases, haptics, the big-number type.
