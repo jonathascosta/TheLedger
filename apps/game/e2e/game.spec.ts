@@ -230,25 +230,42 @@ test("the café's first order: ready on its row, bought on the Upgrades page", a
         lastTick: number;
       },
   );
-  save.volume.businesses[0] = { level: 300, progress: 0, till: 0 };
-  // Every cheaper upgrade bought, so the order is on the first rows of the offer.
-  save.volume.upgrades = ['cafe.0', 'cafe.1', 'cafe.2', 'cafe.3', 'cafe.4', 'cafe.5', 'desk.0'];
-  save.volume.cash = 2e10;
-  save.lastTick = Date.now();
-  const page = await context.newPage();
-  await page.addInitScript((text) => {
-    if (!sessionStorage.getItem('seeded')) {
-      localStorage.setItem('theledger.save', text);
-      sessionStorage.setItem('seeded', '1');
-    }
-  }, JSON.stringify(save));
   await first.close();
-  await page.goto('./');
+  // Every cheaper upgrade bought, so the order is the only one the cash reaches.
+  save.volume.upgrades = [
+    ...['cafe.0', 'cafe.1', 'cafe.2', 'cafe.3', 'cafe.4', 'cafe.5'],
+    ...['desk.0', 'desk.1', 'desk.2', 'desk.3', 'desk.4', 'all.0'],
+  ];
+  save.volume.cash = 2e10;
+  async function at(level: number) {
+    save.volume.businesses[0] = { level, progress: 0, till: 0 };
+    save.lastTick = Date.now();
+    const page = await context.newPage();
+    await page.addInitScript((text) => {
+      if (!sessionStorage.getItem('seeded')) {
+        localStorage.setItem('theledger.save', text);
+        sessionStorage.setItem('seeded', '1');
+      }
+    }, JSON.stringify(save));
+    await page.goto('./');
+    return page;
+  }
+  const card = (page: Page) =>
+    page.locator('.card-link').filter({ hasText: pt ? /Melhorias/ : /Upgrades/ });
+  // One level short: the order is locked, so nothing is on offer.
+  const early = await at(299);
+  await expect(early.locator('.biz').first().locator('.order-mark')).toHaveText(
+    pt ? /nív\. 300/ : /lvl 300/,
+  );
+  await expect(card(early).locator('.badge-dot')).toHaveCount(0);
+  await early.close();
+  const page = await at(300);
   const cafe = page.locator('.biz').first();
   await expect(cafe.locator('.order-mark.ready')).toHaveText(
     pt ? /encomenda pronta/ : /order ready/,
   );
-  await page.getByRole('button', { name: pt ? /Melhorias/ : /Upgrades/ }).click();
+  await expect(card(page).locator('.badge-dot')).toHaveCount(1);
+  await card(page).click();
   const row = page
     .locator('.row')
     .filter({ hasText: pt ? /Contrato com os escritórios/ : /Office catering contract/ });

@@ -35,7 +35,7 @@ function Mark({ text, bought, size }: { text: string; bought: boolean; size: num
             text-anchor="middle"
             font-family="Courier Prime, monospace"
             font-weight="700"
-            font-size="11"
+            font-size={text.length <= 2 ? 11 : text.length === 3 ? 9 : 7.5}
             style={{ fill: ink }}
           >
             {text}

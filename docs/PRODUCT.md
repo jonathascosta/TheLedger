@@ -451,16 +451,16 @@ it costs less than a minute of income, and buys whatever affordable level or upg
 soonest (desk upgrades once they cost less than a minute of income); it leaves investments, the
 paper and sponsors alone. It plays better than most people, so a person reaches each mark later.
 
-| Mark                      | Band          | Measured when the bands were set |
-| :------------------------ | :------------ | :------------------------------- |
-| $1 million net worth      | 5 to 25 min   | 15 min                           |
-| $1 billion net worth      | 30 min to 4 h | 2 h 48 min                       |
-| Closing suggested (first) | 10 to 30 h    | 13 h                             |
+| Mark                      | Band          | Measured when the bands were set           |
+| :------------------------ | :------------ | :----------------------------------------- |
+| $1 million net worth      | 5 to 25 min   | 15 min                                     |
+| $1 billion net worth      | 30 min to 4 h | 2 h 48 min                                 |
+| Closing suggested (first) | 10 to 30 h    | 13 h (11 h 47 min with the special orders) |
 
 The small businesses carry their weight: when closing is first suggested, the first four
 businesses make at least a fifth of the businesses' income per second (8% without the special
-orders, 24% with them when the band was set). The simulator plays trends (they come with the clock) and buys special orders by payback,
-like upgrades.
+orders, 24% with them when the band was set). The simulator plays trends (they come with the
+clock) and buys special orders by payback, like upgrades.
 
 Stamps stay under half of all earnings at four taps a second, over the first 30 hours (43% when
 the bands were set).

@@ -20,6 +20,7 @@ import {
   shouldClose,
   sponsorshipLeft,
   startSponsorship,
+  upgradeUnlocked,
   UPGRADES,
   type BuyMode,
   type GameState,
@@ -166,10 +167,7 @@ export function Ledger({ state }: { state: GameState }) {
   );
   const nextLocked = BUSINESSES.findIndex((_, i) => !isAvailable(state, i));
   const affordableUpgrades = UPGRADES.filter(
-    (u) =>
-      !v.upgrades.includes(u.id) &&
-      u.cost <= v.cash &&
-      (u.effect.kind !== 'business' || v.businesses[u.effect.business]!.level > 0),
+    (u) => !v.upgrades.includes(u.id) && u.cost <= v.cash && upgradeUnlocked(state, u),
   ).length;
   const list = candidates(state);
   const applicants = list.length;
