@@ -1169,10 +1169,11 @@ p {
 }
 
 /* A special order on a business's row: when it unlocks, then ready to buy; a tap opens the
-   business's page. The padding widens the tap target without moving the line. */
+   business's page. A button lays out as an inline-block: the padding widens the tap target
+   without moving the line, and the text keeps the row's left alignment when it wraps. */
 .order-mark {
-  display: inline;
   margin: -12px 0;
+  text-align: inherit;
   padding: 12px 0;
   border: none;
   background: transparent;
@@ -1180,6 +1181,13 @@ p {
   color: inherit;
   text-decoration: underline dotted;
   text-underline-offset: 3px;
+}
+
+/* The keyboard focus marks the words, not the padded box (which crosses the line above). */
+.order-mark:focus-visible {
+  outline: none;
+  text-decoration: underline solid 2px;
+  text-decoration-color: var(--ink);
 }
 
 .order-mark.ready {
