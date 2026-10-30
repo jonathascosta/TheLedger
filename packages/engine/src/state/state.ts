@@ -192,6 +192,8 @@ export interface Volume {
 }
 
 export interface ShelfEntry {
+  /** The era the volume was closed in (1 for saves from before the dynasty). */
+  era?: number;
   number: number;
   peakNetWorth: number;
   goodwill: number;
@@ -212,6 +214,9 @@ export interface Meta {
   editionsAnswered: number;
   /** The Gold Edition (PRODUCT.md): set by the app from the store. */
   gold: boolean;
+  /** The dynasty (PRODUCT.md): the era (1 for the founder) and the legacy points earned. */
+  era: number;
+  legacy: number;
 }
 
 export interface Settings {
@@ -294,6 +299,8 @@ export function newGame(now: number): GameState {
       bestCombo: 0,
       editionsAnswered: 0,
       gold: false,
+      era: 1,
+      legacy: 0,
     },
     settings: { lang: null, buyMode: 1, notes: 'unasked' },
     away: null,

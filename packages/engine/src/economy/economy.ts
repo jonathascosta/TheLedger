@@ -1,6 +1,7 @@
 import { BUSINESSES, MANAGER_COST_FACTOR, MILESTONES, MIN_CYCLE } from '../data/businesses.ts';
 import { GOODWILL_BONUS, type PartnerId } from '../data/partners.ts';
 import { NEGOTIATOR_DISCOUNT, PERFECTIONIST_BONUS } from '../data/people.ts';
+import { LEGACY_BONUS } from '../data/dynasty.ts';
 import { GOLD_FACTOR, SPONSORSHIP_FACTOR, STAR_FACTOR } from '../data/sponsors.ts';
 import { UPGRADE_BY_ID } from '../data/upgrades.ts';
 import type { GameState, Manager } from '../state/state.ts';
@@ -36,6 +37,11 @@ export function goodwillMultiplier(state: GameState): number {
 /** The sponsorship's factor on business profit, at the game's current time. */
 export function sponsorshipFactor(state: GameState): number {
   return state.lastTick < state.sponsors.sponsoredUntil ? SPONSORSHIP_FACTOR : 1;
+}
+
+/** The dynasty's legacy factor on business profit (PRODUCT.md, The dynasty): +20% a point. */
+export function legacyFactor(state: GameState): number {
+  return 1 + LEGACY_BONUS * state.meta.legacy;
 }
 
 /** The Gold Edition's factor on business profit. */
@@ -98,6 +104,7 @@ export function profitPerCycle(state: GameState, business: number): number {
     goodwillMultiplier(state) *
     sponsorshipFactor(state) *
     goldFactor(state) *
+    legacyFactor(state) *
     cycleOf(state, business).extra
   );
 }

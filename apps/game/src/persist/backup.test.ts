@@ -77,6 +77,18 @@ describe('the backup code', () => {
     expect(decoded.state.volume.history[0]).toBeGreaterThan(0);
   });
 
+  it('carries the dynasty: the era, legacy and the eras of the shelf', () => {
+    const state = played();
+    state.meta.era = 3;
+    state.meta.legacy = 50;
+    state.meta.shelf = [{ era: 2, number: 4, peakNetWorth: 1e12, goodwill: 120, closedAt: T0 }];
+    const decoded = decodeBackup(encodeBackup(state, T0), T0);
+    if (!decoded.ok) throw new Error(decoded.error);
+    expect(decoded.state.meta.era).toBe(3);
+    expect(decoded.state.meta.legacy).toBe(50);
+    expect(decoded.state.meta.shelf[0]?.era).toBe(2);
+  });
+
   it('restores hours later without an absence receipt', () => {
     const state = played();
     state.volume.managers[0] = { name: 'Rosa', trait: 'perfectionist', face: 7 };
