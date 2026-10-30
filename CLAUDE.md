@@ -16,6 +16,8 @@ next, and what done means) before changing anything.
 ## Commands
 
 - `pnpm test` — unit tests (seconds). Run before every commit.
+- `pnpm test:calibration` — the simulated player against the balance bands (about a minute). Run
+  after touching the economy: businesses, upgrades, managers, the desk, goodwill, sponsors.
 - `pnpm lint`, `pnpm format:check`, `pnpm typecheck` — the same gates as CI and the pre-commit hook.
 - `pnpm build` — builds every package.
 
