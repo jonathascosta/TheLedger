@@ -654,13 +654,13 @@ export const en = {
   'gold.busy': 'One moment…',
   'gold.ribbon': 'Gold Edition',
   // The dynasty
-  'ledger.headerEra': 'Era {era} · {name} · Vol. {roman}',
+  'ledger.headerEra': 'Era\u00a0{era} · {name} · Vol.\u00a0{roman}',
   'retire.title': 'Retire',
   'retire.cardLead':
     'Hand the book to an heir: a new era, +{legacy} legacy points (business profit ×{factor} for good).',
   'retire.progress': 'Retire at 1,000 goodwill claimed in this era: {claimed} so far.',
   'retire.lead':
-    'The founder lays down the pen. The volume closes, the heir takes the book on in a new era of the notebook.',
+    'The founder lays down the pen. The volume closes and an heir takes over the book in a new era of the notebook.',
   'retire.legacy': 'Legacy points earned',
   'retire.factor': 'Business profit from legacy',
   'retire.heir': 'The heir',
@@ -671,6 +671,9 @@ export const en = {
   'retire.open': 'Open the new book',
   'shelf.era': 'Era {era} · {name}',
   'settings.previewEra': 'Era {era} · Vol. {roman} · net worth {worth} · made {date}',
+  'retire.legacyEarned': '+{legacy} legacy points',
+  'common.era': 'Era {era}',
+  'retire.isOpen': 'Retire is open on the Partners page.',
 } as const;
 
 export type StringKey = keyof typeof en;

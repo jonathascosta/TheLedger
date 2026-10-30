@@ -39,7 +39,7 @@ export function sponsorshipFactor(state: GameState): number {
   return state.lastTick < state.sponsors.sponsoredUntil ? SPONSORSHIP_FACTOR : 1;
 }
 
-/** The dynasty's legacy factor on business profit (PRODUCT.md, The dynasty): +10% a point. */
+/** The dynasty's legacy factor on business profit (PRODUCT.md, The dynasty): +20% a point. */
 export function legacyFactor(state: GameState): number {
   return 1 + LEGACY_BONUS * state.meta.legacy;
 }

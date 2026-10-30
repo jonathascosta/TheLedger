@@ -1,6 +1,8 @@
 /* Every colour, font and size of the notebook (docs/PRODUCT.md, Art direction). */
 :root {
   --paper: #f4eddc;
+  /* The newspaper's ink, the same in every era. */
+  --print-ink: #1f2a44;
   --paper-dark: #eadfc6;
   --paper-white: #fffdf7;
   --newsprint: #ece6d5;
@@ -52,13 +54,18 @@
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
+/* Newspaper pages print in the same ink whatever the era. */
+.newsprint {
+  --ink: var(--print-ink);
+}
+
 /* The dynasty's eras (docs/PRODUCT.md, The dynasty): the paper and ink of every page. */
 :root[data-era='2'] {
   /* The 1950s: green ledger paper, blue-black ink. */
   --paper: #e9efdb;
   --rule: #b7cda6;
   --margin: #c88f86;
-  --ink: #1b2a3a;
+  --ink: #1a2f55;
 }
 
 :root[data-era='3'] {

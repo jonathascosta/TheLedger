@@ -38,7 +38,7 @@ test('retiring hands the book to an heir in era II', async ({ page, context }) =
   await expect(second.locator('h1')).toContainText(pt ? 'Começa a era II' : 'Era II begins');
   await expect(second.locator('html')).toHaveAttribute('data-era', '2');
   await second.locator('.stamp-btn.green').click();
-  await expect(second.locator('.page').first()).toContainText(/Era II · \S+ \S+ · Vol\. I/);
+  await expect(second.locator('.page').first()).toContainText(/Era\sII · \S+ \S+ · Vol\.\sI/);
   const meta = () =>
     second.evaluate(
       () =>

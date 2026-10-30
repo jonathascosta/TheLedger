@@ -632,16 +632,17 @@ export const pt: Record<StringKey, string> = {
   'gold.busy': 'Um momento…',
   'gold.ribbon': 'Edição de Ouro',
   // The dynasty
-  'ledger.headerEra': 'Era {era} · {name} · Vol. {roman}',
+  'ledger.headerEra': 'Era\u00a0{era} · {name} · Vol.\u00a0{roman}',
   'retire.title': 'Aposentar-se',
   'retire.cardLead':
     'Passe o livro a um herdeiro: uma nova era, +{legacy} pontos de legado (lucro dos negócios ×{factor} para sempre).',
-  'retire.progress': 'Aposentadoria com 1.000 de goodwill recebido nesta era: {claimed} até agora.',
+  'retire.progress':
+    'O fundador se aposenta com 1.000 de goodwill recebido nesta era: {claimed} até agora.',
   'retire.lead':
     'O fundador pousa a caneta. O volume se fecha e o herdeiro assume o livro numa nova era do caderno.',
   'retire.legacy': 'Pontos de legado ganhos',
   'retire.factor': 'Lucro dos negócios pelo legado',
-  'retire.heir': 'O herdeiro',
+  'retire.heir': 'Quem herda',
   'retire.keeps':
     'O herdeiro mantém os sócios, as conquistas, a estante e o legado; o goodwill e o volume recomeçam.',
   'retire.confirm': 'Aposentar-se',
@@ -649,4 +650,7 @@ export const pt: Record<StringKey, string> = {
   'retire.open': 'Abrir o livro novo',
   'shelf.era': 'Era {era} · {name}',
   'settings.previewEra': 'Era {era} · Vol. {roman} · patrimônio {worth} · feito em {date}',
+  'retire.legacyEarned': '+{legacy} pontos de legado',
+  'common.era': 'Era {era}',
+  'retire.isOpen': 'A aposentadoria está aberta na página dos Sócios.',
 };

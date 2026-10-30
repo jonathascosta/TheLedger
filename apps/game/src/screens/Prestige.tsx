@@ -168,12 +168,71 @@ export function Close({ state }: { state: GameState }) {
   );
 }
 
-/** The pencilled line on how close the founder is to retiring. */
+/** The pencilled line on how close the founder is to retiring (or that Retire is open). */
 function RetireProgress({ state }: { state: GameState }) {
   return (
     <p class="hand muted" style={{ fontSize: '19px' }}>
-      {t('retire.progress', { claimed: plain(eraClaimed(state)) })}
+      {canRetire(state)
+        ? t('retire.isOpen')
+        : t('retire.progress', { claimed: plain(eraClaimed(state)) })}
     </p>
+  );
+}
+
+/** Rows of the shelf, one per era: its books and, for the current era, the open volume. */
+function EraRows({
+  state,
+  eras,
+  width = 44,
+}: {
+  state: GameState;
+  eras: number[];
+  width?: number;
+}) {
+  return (
+    <div class="stack" style={{ gap: '6px' }}>
+      {eras.map((era) => {
+        const heir = heirOf(state, era);
+        const books = state.meta.shelf.filter((e) => (e.era ?? 1) === era);
+        return (
+          <div key={era} class="stack" style={{ gap: '4px' }}>
+            <p class="caps">
+              {t('shelf.era', { era: roman(era), name: `${heir.first} ${heir.surname}` })}
+            </p>
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '8px',
+                alignItems: 'flex-end',
+                borderBottom: '5px solid var(--sticker-warm)',
+                paddingBottom: '3px',
+              }}
+            >
+              {books.map((e) => (
+                <Cover
+                  key={e.number}
+                  kind={coverFor(e.peakNetWorth)}
+                  title={t('app.title')}
+                  subtitle={t('shelf.volume', { roman: roman(e.number) })}
+                  width={width}
+                />
+              ))}
+              {era === state.meta.era && (
+                <div style={{ opacity: 0.55 }}>
+                  <Cover
+                    kind={coverFor(state.volume.peakNetWorth)}
+                    title={t('app.title')}
+                    subtitle={t('shelf.volume', { roman: roman(state.volume.number) })}
+                    width={width}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
   );
 }
 
@@ -212,7 +271,7 @@ export function Retire({ state }: { state: GameState }) {
           <Cover
             kind="leather"
             title={t('app.title')}
-            subtitle={`Era ${roman(done.era - 1)}`}
+            subtitle={t('common.era', { era: roman(done.era - 1) })}
             width={170}
           />
           <svg
@@ -239,8 +298,9 @@ export function Retire({ state }: { state: GameState }) {
           class="hand profit center"
           style={{ fontWeight: 700, fontSize: '26px', marginTop: '18px' }}
         >
-          {heir.first} {heir.surname} · +{plain(done.legacy)}
+          {heir.first} {heir.surname} · {t('retire.legacyEarned', { legacy: plain(done.legacy) })}
         </p>
+        <EraRows state={state} eras={[done.era - 1, done.era]} />
         <button
           type="button"
           class="stamp-btn green"
@@ -249,6 +309,14 @@ export function Retire({ state }: { state: GameState }) {
         >
           {t('retire.open')}
         </button>
+      </Page>
+    );
+  }
+  if (!canRetire(state)) {
+    return (
+      <Page>
+        <h1 class="h1">{t('retire.title')}</h1>
+        <RetireProgress state={state} />
       </Page>
     );
   }
@@ -287,16 +355,14 @@ export function Retire({ state }: { state: GameState }) {
         </p>
       </div>
       <p class="small">{t('retire.keeps')}</p>
-      {canRetire(state) && (
-        <button
-          type="button"
-          class="stamp-btn red"
-          style={{ alignSelf: 'center', marginTop: '10px' }}
-          onClick={confirm}
-        >
-          {t('retire.confirm')}
-        </button>
-      )}
+      <button
+        type="button"
+        class="stamp-btn red"
+        style={{ alignSelf: 'center', marginTop: '10px' }}
+        onClick={confirm}
+      >
+        {t('retire.confirm')}
+      </button>
     </Page>
   );
 }
