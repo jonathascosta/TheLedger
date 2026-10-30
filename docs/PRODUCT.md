@@ -65,13 +65,13 @@ The approved mock-ups live in the design canvas (owner's link). The rules:
 
 ## Core loops
 
-| Loop  | Length  | What the player does                                             |
-| :---- | :------ | :--------------------------------------------------------------- |
-| Micro | seconds | Stamp invoices, collect tills                                    |
-| Meso  | minutes | Buy levels and upgrades, hire managers, invest, answer the paper |
-| Macro | days    | Close the volume, earn goodwill, spend it on partners            |
-| Meta  | weeks   | The shelf of volumes, the covers, the achievements               |
-| Era   | months  | Retire to an heir: a new era of the notebook, legacy points      |
+| Loop  | Length          | What the player does                                             |
+| :---- | :-------------- | :--------------------------------------------------------------- |
+| Micro | seconds         | Stamp invoices, collect tills                                    |
+| Meso  | minutes         | Buy levels and upgrades, hire managers, invest, answer the paper |
+| Macro | days            | Close the volume, earn goodwill, spend it on partners            |
+| Meta  | weeks           | The shelf of volumes, the covers, the achievements               |
+| Era   | weeks to months | Retire to an heir: a new era of the notebook, legacy points      |
 
 ## Money
 
@@ -180,14 +180,33 @@ The fictional companies: New Moon Telecom (NMTC), Iron Blue Mining (IRNB), Golde
 Cocoa (GLDC), Nimbus Cloud (NMBS), Skylark Airlines (SKYL), Petro Atlantic (PATL). Coins:
 Pennycoin (PNY), Hashbrown (HSH), Stardust (SDT). No real brand appears in the game.
 
-**Sports clubs.** Six fictional clubs, each with a price (the first $1 trillion, each next four
-times dearer) and a strength the volume's seed draws. Every 10 minutes of play is a match day:
-each owned club wins, draws or loses (a stronger club wins more often; seeded). A win pays a
-prize and lifts the club's value 4%, a draw pays a third of the prize, a loss pays nothing and
-takes 3% off; the value stays between half and four times the price. On average a club earns
-about half what a park of the same price earns, in lumps, and its value can grow. Clubs are sold
-at 90% of their value. Matches are played only in play, like the paper's editions. The last five
-results show as a row of W, D and L. _Collector_ keeps its classes (clubs are not required).
+**Sports clubs** (football). Six fictional clubs, each with a price (the first $1 trillion, each
+next four times dearer) and a strength `s` between 0 and 1 that the volume's seed draws, shown as
+one to five stars:
+
+| Club (EN / PT)                                    |    Price |
+| :------------------------------------------------ | -------: |
+| Millbrook Athletic / Atlético Moinho              |     $1 T |
+| Harbour Rovers / Andarilhos do Porto              |     $4 T |
+| Northgate United / União Portão Norte             |    $16 T |
+| Redfield City / Cidade de Campo Rubro             |    $64 T |
+| Ironbridge Wanderers / Errantes da Ponte de Ferro |   $256 T |
+| Royal Alder / Real Amieiro                        | $1.02 Qa |
+
+- **Match days:** every 10 minutes of play each owned club plays (seeded): a win with
+  probability `0.30 + 0.30·s`, a draw with 0.25, a loss otherwise. Matches are played only in
+  play, like the paper's editions; after an absence the match-day clock starts again.
+- **Prize:** a win pays 0.85 × the club's **price** (not its value), a draw a third of that, a
+  loss nothing; an average club earns about 0.45 × its price a match day, half what a park of
+  that price earns. Prizes are not business profit: the sponsorship, the Gold Edition, goodwill
+  and legacy do not multiply them. They count in lifetime earnings.
+- **Value:** a win lifts the club's value 4%, a loss takes 3% off; the value stays between half
+  and four times the price. It moves only while the club is owned and stays where it is when
+  sold. A club is bought at its current value (the price until it has played) and sold at 90% of
+  it. Clubs count in net worth at their value.
+- The last five results show as a row of W, D and L. _Collector_ still asks for one asset of each
+  of the nine other classes; clubs are not required. An achievement, _Chairman_, for the first
+  club.
 
 **Post-its.** Each investment's page carries a yellow post-it with its rule in a sentence or
 two (the Market's for stocks, commodities and crypto; the class pages for the rest). A tap on
@@ -212,27 +231,30 @@ its corner folds it away; Settings can bring them all back.
 - **Collect** adds it; **Collect ×2** with a sponsor (the audit, see Sponsors).
 
 **Notes from the night shift** (iPhone): local notifications, nothing from a server. The game
-asks for permission once, the first time the player hires a manager ("The night shift can leave
-you a note when there is something to collect"); Settings turns them on or off. When the game
-goes to the background it schedules, and when it comes back it cancels:
+asks for permission at a hire ("The night shift can leave you a note when there is something to
+collect"): the first hire, or, for a player who already has managers and was never asked, the
+first launch with a manager. Settings has a switch; when iOS permission was declined, the switch
+says to allow notes in the iPhone's Settings. When the game goes to the background it schedules
+the notes; when it comes back it removes them, pending and delivered:
 
-- **The receipt is full:** 12 hours after leaving, when an absence stops counting (only with a
-  manager).
+- **The receipt is full:** 12 hours after leaving, when an absence stops counting (only when
+  something earns while away: a manager, rents, bonds or parks).
 - **The sponsorship ends:** when the banked sponsorship runs out, if that is at least ten minutes
   away.
 - **Tills full:** when every open business without a manager has a till waiting, if that is at
   least five minutes away.
 
-At most one note an hour; none between 22:00 and 8:00 on the device's clock (a note due then
-moves to 8:00).
+Notes are taken in order of their time. One due in the quiet hours (22:00 to 8:00, device time)
+moves to 8:00; one due less than an hour after the note before it moves to an hour after it, and
+then the quiet-hours rule applies again.
 
 ## Achievements
 
-Rubber stamps and wax seals on their own page, kept across volumes: first business, every
+Rubber stamps and wax seals on their own page, kept across volumes and eras: first business, every
 business, levels, managers, first million, billion and trillion, stamps and combos, the first
 share, _Sold at the top_, _Nerves of steel_ (hold during a crash), _Collector_ (one asset of
 every class), _Unicorn_ (a startup at 100×), properties, volumes closed, goodwill. A few are
-secret until earned. A new one arrives with a stamp on the screen.
+secret until earned. _Chairman_ (the first club) and _Heir_ (the first retirement) join them. A new one arrives with a stamp on the screen.
 
 ## Closing the volume (the reset)
 
@@ -245,7 +267,7 @@ secret until earned. A new one arrives with a stamp on the screen.
   goodwill, partners, achievements, the shelf and the settings. Volumes are numbered in order:
   Vol. I, II, III…
 - A pencilled note in the ledger suggests closing when the claim would at least double the
-  goodwill held (and is at least 25), which a steady player reaches in about 20 hours of play.
+  goodwill held (and is at least 25), which the simulated player of Balance reaches in about 13 hours and a person in about a day of play.
 - **The ceremony:** the book closes, a wax seal drops on it and it goes to the **shelf**, where
   every past volume shows its number, its peak net worth and the goodwill it earned.
 - **Partners** are bought with goodwill (spent goodwill no longer adds its 2%):
@@ -263,25 +285,38 @@ secret until earned. A new one arrives with a stamp on the screen.
 
 ## The dynasty (retiring to an heir)
 
-Above closing volumes, a slower loop: the founder retires and an heir takes the book on, in a
-new **era** of the notebook.
+Beyond closing volumes there is a slower loop: the founder retires and an heir takes the book on,
+in a new **era** of the notebook.
 
-- **When:** once the goodwill claimed in this era reaches 1,000 (weeks of play), the Partners
-  page offers **Retire**. A pencilled note on the shelf says how close the founder is.
+- **When:** Retire is offered on the Partners page once the goodwill claimed in this era,
+  counting what closing now would claim, reaches 1,000 (the closing sponsor's bonus is not
+  claimed goodwill): about six or seven closings. A pencilled note on the shelf says how close
+  the founder is.
+- **Retiring** first closes the current volume, as Close the volume does (an uncollected absence
+  receipt is collected first); its claim counts. The closing sponsor is not offered at Retire,
+  since goodwill held starts again.
 - **Legacy:** retiring earns `floor(sqrt(goodwill claimed in the era))` legacy points (31 at
-  1,000, 44 at 2,000). Each legacy point adds 10% to all business profit, for good; legacy is
-  never spent.
-- **What the heir keeps:** legacy, achievements, the shelf (grouped by era), the Gold Edition,
-  the settings, the sponsors' timers. **What starts again:** goodwill and goodwill claimed,
-  lifetime earnings, partners, and the volume (Vol. I of the new era).
-- **Eras:** the founder's era is the cream ledger. The heirs' eras change the paper and the
-  title: II, the 1950s (green ledger paper, a fountain pen's blue-black ink); III, the 1980s
-  (continuous printer paper with tractor holes and grey bars); IV, the 2010s (graph paper and a
-  ballpoint's blue). Past the fourth, the eras cycle with the generation's numeral.
-- **The heir:** a name drawn from the era's seed with the family's surname ("Helena Costa II"),
-  and a portrait from the same parts as the managers'.
-- **The ceremony:** the founder's pen is laid on the closed book, the shelf moves up a row and
-  the new era's first page opens.
+  1,000, 44 at 2,000), never spent. Legacy is a factor of its own on all business profit,
+  ×(1 + 0.2 × legacy), multiplying with goodwill, the Gold Edition and the sponsorship.
+- **What the heir keeps:** legacy, the partners, achievements, the shelf (each entry with its
+  era), the Gold Edition, the settings, and the sponsors' timers and daily counts. **What starts
+  again:** goodwill held and goodwill claimed, lifetime earnings, and the volume (Vol. I of the
+  new era).
+- **The pace:** the heir starts below the founder's last pace (×7.2 from 31 legacy points,
+  against the founder's goodwill) and is meant to pass it within a few closings; each era goes
+  faster than the one before.
+- **Eras:** the founder's era is the cream ledger. The heirs' eras change the paper and ink of
+  every page: II, the 1950s (green ledger paper, blue-black ink); III, the 1980s (continuous
+  printer paper with grey bars); IV, the 2010s (graph paper, ballpoint blue). Era V looks like
+  era I, VI like II, and so on; only the numeral changes. The covers still follow net worth
+  (notepad, spiral notebook, leather ledger). From era II the ledger's header reads
+  "Era II · Helena Costa · Vol. I".
+- **The family:** the surname is drawn once from the game's start and kept; each era's head has a
+  first name from the era's seed.
+- **The ceremony:** the founder's pen is laid on the closed book, the shelf adds a row for the new
+  era and the new era's first page opens.
+- An achievement, _Heir_, for the first retirement. The backup code carries the era and legacy,
+  and its preview shows the era.
 
 ## Sponsors (rewarded ads)
 
@@ -366,16 +401,16 @@ since it earned on the other device.
 
 Special editions (two-week themed notebooks), royalties, satellites and the IPO, Game Center
 achievements and leaderboards, cloud saves, ads on the website (once its ad network is
-approved), more purchases (cosmetic covers), haptics on every stamp, a big-number type past
-10^308.
+approved), more purchases (cosmetic covers), a big-number type past 10^308.
 
 ## Balance
 
-A simulated player (`pnpm test:calibration`) plays the game on its own and keeps the pace in
-bands, so a change that breaks the pace fails a test. It plays without breaks, collects every
-till each second, stamps once a second, hires a manager once it costs less than a minute of
-income and buys whatever pays back soonest; it leaves investments, the paper and sponsors alone.
-It plays better than most people, so a person reaches each mark somewhat later.
+A simulated player (`pnpm test:calibration`) plays a new game (era I, Vol. I, no goodwill,
+partners, legacy or Gold Edition) on its own, so a change that breaks the pace fails a test. It
+plays without breaks, collects every till each second, stamps once a second, hires a manager once
+it costs less than a minute of income, and buys whatever affordable level or upgrade pays back
+soonest (desk upgrades once they cost less than a minute of income); it leaves investments, the
+paper and sponsors alone. It plays better than most people, so a person reaches each mark later.
 
 | Mark                      | Band          | Measured when the bands were set |
 | :------------------------ | :------------ | :------------------------------- |
@@ -383,5 +418,5 @@ It plays better than most people, so a person reaches each mark somewhat later.
 | $1 billion net worth      | 30 min to 4 h | 2 h 48 min                       |
 | Closing suggested (first) | 10 to 30 h    | 13 h                             |
 
-Stamps stay under half of all earnings even at four taps a second (43% when the bands were
-set).
+Stamps stay under half of all earnings at four taps a second, over the first 30 hours (43% when
+the bands were set).

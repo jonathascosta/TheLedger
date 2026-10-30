@@ -77,7 +77,7 @@ function shop(state: GameState): number {
     const manager = BUSINESSES.findIndex(
       (_, i) => v.businesses[i]!.level > 0 && !v.managers[i] && managerCost(state, i) <= v.cash,
     );
-    if (manager >= 0 && managerCost(state, manager) <= Math.max(1000, income * 60)) {
+    if (manager >= 0 && managerCost(state, manager) <= income * 60) {
       hire(state, manager);
       bought++;
       continue;
@@ -85,7 +85,9 @@ function shop(state: GameState): number {
     let best: { cost: number; time: number; buy: () => void } | null = null;
     const consider = (cost: number, gain: number, buy: () => void): void => {
       const time = payback(cost, gain);
-      if (cost <= v.cash && (!best || time < best.time)) best = { cost, time, buy };
+      // A purchase that never pays back is never chosen.
+      if (cost <= v.cash && Number.isFinite(time) && (!best || time < best.time))
+        best = { cost, time, buy };
     };
     for (let i = 0; i < BUSINESSES.length; i++) {
       if (!isAvailable(state, i)) continue;
@@ -94,10 +96,13 @@ function shop(state: GameState): number {
     for (const u of UPGRADES) {
       if (v.upgrades.includes(u.id)) continue;
       if (u.effect.kind === 'business' && v.businesses[u.effect.business]!.level === 0) continue;
-      // Desk upgrades: worth it once they cost less than a minute of income.
-      const gain =
-        u.effect.kind === 'desk' && u.cost <= income * 60 ? Infinity : upgradeGain(state, u);
-      consider(u.cost, gain === Infinity ? u.cost : gain, () => buyUpgrade(state, u.id));
+      // Desk upgrades: bought as soon as they cost less than a minute of income (a payback of
+      // one second puts them ahead of nearly everything); never before.
+      if (u.effect.kind === 'desk') {
+        if (u.cost <= income * 60) consider(u.cost, u.cost, () => buyUpgrade(state, u.id));
+        continue;
+      }
+      consider(u.cost, upgradeGain(state, u), () => buyUpgrade(state, u.id));
     }
     const chosen = best as { buy: () => void } | null;
     if (!chosen) break;
