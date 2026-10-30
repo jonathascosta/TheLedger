@@ -6,7 +6,13 @@ import { act } from '../store.ts';
  * A yellow post-it with an investment class's rule (docs/PRODUCT.md, Investments). A tap on its
  * corner folds it away for good; Settings brings them all back.
  */
-export function PostIt({ state, cls }: { state: GameState; cls: AssetClass }) {
+export function PostIt({
+  state,
+  cls,
+}: {
+  state: GameState;
+  cls: Exclude<AssetClass, 'businesses'>;
+}) {
   if (state.settings.postits.includes(cls)) return null;
   return (
     <div class="postit" role="note">

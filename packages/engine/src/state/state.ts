@@ -1,5 +1,5 @@
 import { BUSINESSES } from '../data/businesses.ts';
-import { INSTRUMENTS } from '../data/market.ts';
+import { INSTRUMENTS, type AssetClass } from '../data/market.ts';
 import { MATCH_MS } from '../data/clubs.ts';
 import { goldenGap, type CountedOffer } from '../data/sponsors.ts';
 import type { Trait } from '../data/people.ts';
@@ -245,7 +245,7 @@ export interface Settings {
    */
   notes: 'unasked' | 'on' | 'off' | 'denied';
   /** Investment classes whose post-it the player folded away (PRODUCT.md, Investments). */
-  postits: string[];
+  postits: AssetClass[];
 }
 
 export interface GameState {
@@ -356,6 +356,10 @@ export function migrate(raw: unknown, now: number): GameState | null {
       .filter((id): id is string => typeof id === 'string')
       .map(renameUpgrade);
   }
+  const settings = { ...fresh.settings, ...save.settings };
+  settings.postits = Array.isArray(settings.postits)
+    ? (settings.postits as unknown[]).filter((c): c is AssetClass => typeof c === 'string')
+    : [];
   return {
     ...fresh,
     ...save,
@@ -367,6 +371,6 @@ export function migrate(raw: unknown, now: number): GameState | null {
       ...save.sponsors,
       counts: { ...save.sponsors?.counts },
     },
-    settings: { ...fresh.settings, ...save.settings },
+    settings,
   };
 }

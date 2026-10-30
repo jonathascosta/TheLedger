@@ -699,14 +699,13 @@ export const pt: Record<StringKey, string> = {
   'postit.commodities':
     'O ouro é calmo, o petróleo se move com as notícias, o café fica no meio. Compra e venda por unidade.',
   'postit.crypto':
-    'As moedas oscilam muito: grandes ganhos, grandes perdas. Só o que você pode perder.',
+    'As moedas oscilam muito: grandes ganhos, grandes perdas. Aposte só o que pode perder.',
   'postit.startups':
     'Invista o valor pedido; minutos depois a startup quebra ou devolve de uma a cem vezes o aporte.',
   'postit.art':
-    'O valor de uma obra sobe aos poucos, com ruído; no leilão ela vende por 80% a 130% dele.',
+    'O valor de uma obra sobe aos poucos, com altos e baixos; no leilão, ela sai por 80% a 130% dele.',
   'postit.energy':
     'Cara para construir, depois renda estável para sempre, também enquanto você está fora.',
-  'postit.businesses': 'Os negócios rendem pela renda deles.',
   'postit.clubs':
     'Uma rodada a cada dez minutos de jogo: a vitória paga um prêmio e valoriza o clube. Comprado pelo valor, vendido por 90% dele.',
 };

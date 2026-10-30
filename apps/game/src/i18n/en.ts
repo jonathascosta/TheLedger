@@ -717,12 +717,13 @@ export const en = {
     'Each property pays rent every second, also while you are away. Sold, it brings back 90% of its price.',
   'postit.commodities':
     'Gold is calm, oil moves with the news, coffee in between. Bought and sold by the unit.',
-  'postit.crypto': 'Coins swing wildly: big gains, big losses. Only what you can afford to lose.',
+  'postit.crypto':
+    'Coins swing wildly: big gains, big losses. Put in only what you can afford to lose.',
   'postit.startups':
     'Invest the ask; a few minutes later the startup fails or returns one to a hundred times the stake.',
-  'postit.art': 'A piece’s value creeps up with noise; at auction it sells for 80% to 130% of it.',
+  'postit.art':
+    'A piece’s value creeps up, with ups and downs; at auction it sells for 80% to 130% of it.',
   'postit.energy': 'Dear to build, then steady income forever, also while you are away.',
-  'postit.businesses': 'Businesses pay through their income.',
   'postit.clubs':
     'A match day every ten minutes of play: a win pays a prize and lifts the club’s value. Bought at its value, sold at 90% of it.',
 } as const;
