@@ -7,6 +7,7 @@ import {
   newGame,
   SAVE_VERSION,
   tick,
+  TREND_EVERY_MS,
   type GameState,
 } from '@ledger/engine';
 import { describe, expect, it } from 'vitest';
@@ -110,6 +111,24 @@ describe('the backup code', () => {
     const decoded = decodeBackup(encodeBackup(state, T0), T0);
     if (!decoded.ok) throw new Error(decoded.error);
     expect(decoded.state.settings.postits).toEqual(['bonds', 'clubs']);
+  });
+
+  it('a restore ends a running trend and starts its clock again', () => {
+    const state = played();
+    state.volume.trend = {
+      count: 1,
+      nextAt: state.lastTick + 60_000,
+      business: 0,
+      factor: 50,
+      until: state.lastTick + 120_000,
+      recent: [0],
+    };
+    const later = state.lastTick + 30_000;
+    const decoded = decodeBackup(encodeBackup(state, state.lastTick), later);
+    if (!decoded.ok) throw new Error(decoded.error);
+    expect(decoded.state.volume.trend.business).toBeNull();
+    expect(decoded.state.volume.trend.nextAt).toBe(later + TREND_EVERY_MS);
+    expect(decoded.state.volume.trend.recent).toEqual([0]);
   });
 
   it('restores hours later without an absence receipt', () => {

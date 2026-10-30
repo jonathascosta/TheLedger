@@ -145,10 +145,14 @@ export function simulate(options: SimOptions): SimResult {
     if (reached.billion === null && worth >= 1e9) reached.billion = s;
     if (closeAt === null && shouldClose(state)) {
       closeAt = s;
+      // Measured without a running trend, which could lift a small business by luck.
+      const trend = { ...state.volume.trend };
+      state.volume.trend.business = null;
       const total = businessIncome(state);
       let small = 0;
       for (let i = 0; i < SMALL_BUSINESSES; i++) small += businessRate(state, i);
       smallShare = total > 0 ? small / total : 0;
+      state.volume.trend = trend;
     }
   }
   const earned = state.volume.earned;

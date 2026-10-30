@@ -66,6 +66,7 @@ cheap; the app treats the state as owned by the engine and re-renders after each
 | `dynasty/`      | Retiring to an heir: the era, legacy, the family's names (PRODUCT.md, The dynasty)                                                                                            |
 | `away/`         | Offline receipt, the audit (Collect ×2)                                                                                                                                       |
 | `sponsors/`     | Sponsor rewards: overtime, the golden invoice (take, then pay), the sponsorship, the headhunter, daily limits keyed by the date the app passes in                             |
+| `trends/`       | Trends: the clock in play, the seeded draw among the lower half (skipping recent ones), the capped factor, the end at an absence or a restore                                 |
 | `sim/`          | The simulated player and the balance bands (PRODUCT.md, Balance), run by `pnpm test:calibration`                                                                              |
 | `game.ts`       | `tick`, `applyAway`, and the public actions                                                                                                                                   |
 

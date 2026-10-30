@@ -15,6 +15,7 @@ import { advancePaper } from './paper/paper.ts';
 import type { AwayLine, AwayReceipt, GameState } from './state/state.ts';
 import { advanceClubs, restartMatchDays } from './clubs/clubs.ts';
 import { advanceGolden, restartGolden } from './sponsors/sponsors.ts';
+import { advanceTrends, restartTrends } from './trends/trends.ts';
 import { isUnlocked, netWorth } from './worth.ts';
 
 /** Net worth is sampled for the ink chart this often (game ms). */
@@ -65,6 +66,7 @@ export function tick(state: GameState, now: number): void {
   advanceWorld(state, now, total);
   advanceGolden(state, now);
   state.lastTick = Math.max(state.lastTick, now);
+  advanceTrends(state, now);
   sample(state, now);
   checkAchievements(state, now);
 }
@@ -93,6 +95,8 @@ export function applyAway(state: GameState, now: number): AwayReceipt | null {
     return null;
   }
   const seconds = Math.min(gap, AWAY_MAX_SECONDS);
+  // A running trend ends when the player leaves; the receipt never carries it.
+  restartTrends(state, now);
   const receipt = awayReceipt(state, seconds, awayExtras);
   // Unmanaged tills fill (one cycle each); managed businesses earn through the receipt.
   advanceBusinesses(state, seconds, true);

@@ -39,6 +39,20 @@ export function sponsorshipFactor(state: GameState): number {
   return state.lastTick < state.sponsors.sponsoredUntil ? SPONSORSHIP_FACTOR : 1;
 }
 
+/** A running trend's factor on a business's profit (PRODUCT.md, Trends); 1 otherwise. */
+export function trendFactor(state: GameState, business: number): number {
+  const t = state.volume.trend;
+  return t.business === business && state.lastTick < t.until ? t.factor : 1;
+}
+
+/** Ends the running trend, if any. */
+export function endTrend(state: GameState): void {
+  const t = state.volume.trend;
+  t.business = null;
+  t.factor = 1;
+  t.until = 0;
+}
+
 /** The dynasty's legacy factor on business profit (PRODUCT.md, The dynasty): +20% a point. */
 export function legacyFactor(state: GameState): number {
   return 1 + LEGACY_BONUS * state.meta.legacy;
@@ -105,6 +119,7 @@ export function profitPerCycle(state: GameState, business: number): number {
     sponsorshipFactor(state) *
     goldFactor(state) *
     legacyFactor(state) *
+    trendFactor(state, business) *
     cycleOf(state, business).extra
   );
 }

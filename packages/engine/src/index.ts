@@ -43,6 +43,8 @@ export type { PartnerDef, PartnerId } from './data/partners.ts';
 
 export { SAVE_VERSION, migrate, newGame, newVolume } from './state/state.ts';
 export { CLUBS, CLUB_SALE, MATCH_MS, WIN_PRIZE } from './data/clubs.ts';
+export { TREND_EVERY_MS, TREND_FACTOR, TREND_MS } from './data/trends.ts';
+export { advanceTrends, drawTrend, restartTrends } from './trends/trends.ts';
 export type { ClubDef } from './data/clubs.ts';
 export {
   buyClub,
@@ -101,6 +103,7 @@ export type {
   Settings,
   ShelfEntry,
   SponsorState,
+  TrendState,
   StartupPitch,
   StartupResult,
   Volume,
@@ -113,6 +116,7 @@ export {
   buyOffer,
   buyUpgrade,
   upgradeUnlocked,
+  trendFactor,
   collect,
   cycleOf,
   earn,
