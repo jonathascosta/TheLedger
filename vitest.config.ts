@@ -16,6 +16,7 @@ export default defineConfig({
           root: './packages/engine',
           include: ['src/**/*.calibration.test.ts'],
           testTimeout: 10 * 60_000,
+          hookTimeout: 10 * 60_000,
         },
       },
     ],
