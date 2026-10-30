@@ -126,8 +126,9 @@ costs `baseCost × growth^level`. A cycle pays `baseRevenue × level × multipli
 - **Milestones:** at levels 25, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900 and 1000 the
   business's cycle time halves (a cycle never gets shorter than 0.1 s; past that, profit doubles
   instead).
-- **Buying:** ×1, ×10, ×100 or Max, chosen once for the whole ledger. Opening a business always
-  buys its first level, whatever the mode.
+- **Buying:** ×1, ×5, ×10, ×25, ×100 or Max, chosen once for the whole ledger and pinned at the
+  top of the ledger while it scrolls. Opening a business follows the mode too (Max: as many
+  levels as the cash pays, at least one); the button shows how many levels and their price.
 - Each business has its page: its sketch, its level and next milestone, its upgrades and its
   manager.
 

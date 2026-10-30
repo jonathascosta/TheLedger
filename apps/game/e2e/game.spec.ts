@@ -174,7 +174,7 @@ test('the Classifieds dot shows only when an applicant can be paid', async ({ br
   expect(await dotWith(20_000)).toBe(1);
 });
 
-test('Open buys the first level in the ×100 mode', async ({ browser }) => {
+test('Open follows the buy mode, with its count and price on the button', async ({ browser }) => {
   const pt = test.info().project.name.endsWith('-pt');
   const context = await browser.newContext({
     baseURL: test.info().project.use.baseURL ?? '',
@@ -191,10 +191,11 @@ test('Open buys the first level in the ×100 mode', async ({ browser }) => {
         lastTick: number;
       },
   );
-  // The café is open; the bakery's first level costs $60, a hundred levels far more.
+  // The café is open; ten bakery levels cost about $1,218.
+  // The café is open.
   save.volume.businesses[0] = { level: 10, progress: 0, till: 0 };
-  save.volume.cash = 1000;
-  save.settings.buyMode = 100;
+  save.volume.cash = 2000;
+  save.settings.buyMode = 10;
   save.lastTick = Date.now();
   const page = await context.newPage();
   await page.addInitScript((text) => {
@@ -205,10 +206,21 @@ test('Open buys the first level in the ×100 mode', async ({ browser }) => {
   }, JSON.stringify(save));
   await first.close();
   await page.goto('./');
-  const open = page.getByRole('button', { name: pt ? /^Abrir/ : /^Open/ });
+  const open = page.getByRole('button', { name: pt ? /^Abrir ×10/ : /^Open ×10/ });
   await expect(open).toBeEnabled();
   await open.click();
-  await expect(page.locator('.biz').nth(1)).toContainText(pt ? /nív\. 1\b/ : /lvl 1\b/);
+  await expect(page.locator('.biz').nth(1)).toContainText(pt ? /nív\. 10\b/ : /lvl 10\b/);
+  // The six modes stay pinned under the cash strip while the ledger scrolls well past them.
+  const modes = page.locator('.buy-modes');
+  await expect(modes.getByRole('button')).toHaveCount(6);
+  // A short window, so the ledger scrolls well past the row's own place.
+  await page.setViewportSize({ width: 375, height: 420 });
+  const scroll = page.locator('.scroll');
+  const top = (await scroll.boundingBox())!.y;
+  const before = (await modes.boundingBox())!.y - top;
+  await scroll.evaluate((e) => e.scrollTo(0, e.scrollHeight));
+  expect(await scroll.evaluate((e) => e.scrollTop)).toBeGreaterThan(before);
+  await expect.poll(async () => (await modes.boundingBox())!.y).toBeCloseTo(top, 0);
   await context.close();
 });
 

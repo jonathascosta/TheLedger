@@ -29,6 +29,7 @@ export const pt: Record<StringKey, string> = {
   'ledger.buyMode': 'Comprar',
   'ledger.buy': 'Comprar ×{count}',
   'ledger.open': 'Abrir',
+  'ledger.openCount': 'Abrir ×{count}',
   'ledger.collect': 'Recolher',
   'ledger.running': 'gerente de serviço',
   'ledger.nextBusiness': 'Próximo: {name} por {amount}',

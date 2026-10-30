@@ -52,6 +52,19 @@ describe('world', () => {
     expect(goodwillTotal(s.meta.lifetimeEarnings + next.left * 1.0000001)).toBe(11);
   });
 
+  it('keeps a known buy mode and replaces a garbage one with x1', () => {
+    for (const mode of [1, 10, 100, 'max'] as const) {
+      const old = newGame(T0);
+      old.settings.buyMode = mode;
+      expect(migrate(JSON.parse(JSON.stringify(old)), T0)?.settings.buyMode).toBe(mode);
+    }
+    for (const garbage of ['foo', -3, 2.5, 0, null]) {
+      const old = JSON.parse(JSON.stringify(newGame(T0))) as { settings: Record<string, unknown> };
+      old.settings.buyMode = garbage;
+      expect(migrate(old, T0)?.settings.buyMode).toBe(1);
+    }
+  });
+
   it('replays the same market for the same volume', () => {
     const a = newGame(T0);
     const b = newGame(T0);
