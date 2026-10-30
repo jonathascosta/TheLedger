@@ -656,7 +656,7 @@ export const en = {
   'class.clubs': 'Sports clubs',
   'clubs.title': 'Sports clubs',
   'clubs.subtitle': 'A match day every ten minutes: prizes, and a value that moves with results.',
-  'clubs.prize': 'win {amount}',
+  'clubs.prize': 'a win pays {amount}',
   'clubs.value': 'worth {amount}',
   'clubs.buy': 'Buy {amount}',
   'clubs.sell': 'Sell {amount}',

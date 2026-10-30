@@ -634,7 +634,7 @@ export const pt: Record<StringKey, string> = {
   'class.clubs': 'Clubes esportivos',
   'clubs.title': 'Clubes esportivos',
   'clubs.subtitle': 'Uma rodada a cada dez minutos: prêmios e um valor que muda com os resultados.',
-  'clubs.prize': 'vitória {amount}',
+  'clubs.prize': 'vitória paga {amount}',
   'clubs.value': 'vale {amount}',
   'clubs.buy': 'Comprar {amount}',
   'clubs.sell': 'Vender {amount}',

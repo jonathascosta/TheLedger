@@ -70,9 +70,13 @@ describe('sports clubs', () => {
       s.volume.seed = `vol:${volume}:x`;
       for (const def of CLUBS) buyClub(s, def.id);
       for (let day = 1; day <= 250; day++) {
-        const paid = playMatchDay(s, day);
-        ratio += paid / CLUBS.reduce((sum, d) => sum + d.price, 0);
-        n++;
+        playMatchDay(s, day);
+        // Each club weighs the same: its prize this match day over its price.
+        for (const def of CLUBS) {
+          const last = clubOf(s, def).results.at(-1);
+          ratio += last === 'W' ? WIN_PRIZE : last === 'D' ? WIN_PRIZE / 3 : 0;
+          n++;
+        }
       }
     }
     const perMatchDay = ratio / n;

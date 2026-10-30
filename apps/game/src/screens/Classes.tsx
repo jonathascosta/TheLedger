@@ -6,6 +6,7 @@ import {
   sellClub,
   stars,
   strength,
+  WIN_PRIZE,
   bondCap,
   bondRate,
   buyArt,
@@ -442,46 +443,56 @@ export function Clubs({ state }: { state: GameState }) {
           return (
             <div key={def.id} class="row" style={{ minHeight: '64px', alignItems: 'flex-start' }}>
               <Crest index={i} name={name} />
-              <div class="grow">
+              <div class="grow stack" style={{ gap: '2px' }}>
                 <p class="h3">{name}</p>
-                <p class="small" aria-label={t('clubs.stars', { count: s })}>
-                  {'★'.repeat(s)}
-                  {'☆'.repeat(5 - s)} · {t('clubs.prize', { amount: moneyShort(def.price * 0.85) })}
+                <p class="small">
+                  <span aria-hidden="true">
+                    {'★'.repeat(s)}
+                    {'☆'.repeat(5 - s)}
+                  </span>
+                  <span class="sr-only">{t('clubs.stars', { count: s })}</span>
+                  {' · '}
+                  {t('clubs.prize', { amount: moneyShort(def.price * WIN_PRIZE) })}
                 </p>
                 <p class="small">
                   {t('clubs.value', { amount: moneyShort(club.value) })}
                   {club.results.length > 0 && (
-                    <span aria-label={t('clubs.results')}>
+                    <>
                       {' · '}
+                      <span class="sr-only">{t('clubs.results')}: </span>
                       {club.results.map((r, k) => (
-                        <b key={k} class={r === 'W' ? 'profit' : r === 'L' ? 'loss' : ''}>
+                        <b
+                          key={k}
+                          class={r === 'W' ? 'profit' : r === 'L' ? 'loss' : ''}
+                          style={{ marginRight: '3px' }}
+                        >
                           {tk(`clubs.result.${r}`)}
                         </b>
                       ))}
-                    </span>
+                    </>
                   )}
                 </p>
+                {club.owned ? (
+                  <button
+                    type="button"
+                    class="btn"
+                    style={{ alignSelf: 'flex-start' }}
+                    onClick={() => act((st) => sellClub(st, def.id))}
+                  >
+                    {t('clubs.sell', { amount: moneyShort(club.value * CLUB_SALE) })}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    class="btn"
+                    style={{ alignSelf: 'flex-start' }}
+                    disabled={v.cash < club.value}
+                    onClick={() => act((st) => buyClub(st, def.id))}
+                  >
+                    {t('clubs.buy', { amount: moneyShort(club.value) })}
+                  </button>
+                )}
               </div>
-              {club.owned ? (
-                <button
-                  type="button"
-                  class="stamp-btn red"
-                  style={{ fontSize: '16px' }}
-                  onClick={() => act((st) => sellClub(st, def.id))}
-                >
-                  {t('clubs.sell', { amount: moneyShort(club.value * CLUB_SALE) })}
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  class="stamp-btn green"
-                  style={{ fontSize: '16px' }}
-                  disabled={v.cash < club.value}
-                  onClick={() => act((st) => buyClub(st, def.id))}
-                >
-                  {t('clubs.buy', { amount: moneyShort(club.value) })}
-                </button>
-              )}
             </div>
           );
         })}

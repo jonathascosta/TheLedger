@@ -42,9 +42,17 @@ export type { AchievementDef, AchievementStyle } from './data/achievements.ts';
 export type { PartnerDef, PartnerId } from './data/partners.ts';
 
 export { SAVE_VERSION, migrate, newGame, newVolume } from './state/state.ts';
-export { CLUBS, CLUB_SALE, MATCH_MS } from './data/clubs.ts';
+export { CLUBS, CLUB_SALE, MATCH_MS, WIN_PRIZE } from './data/clubs.ts';
 export type { ClubDef } from './data/clubs.ts';
-export { buyClub, clubOf, clubsValue, sellClub, stars, strength } from './clubs/clubs.ts';
+export {
+  buyClub,
+  clubOf,
+  clubsValue,
+  restartMatchDays,
+  sellClub,
+  stars,
+  strength,
+} from './clubs/clubs.ts';
 export {
   CLOSING_BONUS,
   DAILY_LIMITS,
