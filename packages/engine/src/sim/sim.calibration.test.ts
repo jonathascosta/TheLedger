@@ -23,6 +23,11 @@ describe('the balance bands (PRODUCT.md, Balance)', () => {
     expect(again.reached).toEqual(first.reached);
   });
 
+  it('the small businesses need the special orders', () => {
+    const without = simulate({ seconds: HORIZON, tapsPerSecond: 1, noOrders: true });
+    expect(outOfBands(without, fastTapper).some((line) => line.startsWith('small'))).toBe(true);
+  });
+
   it('a pace too fast fails the bands', () => {
     // A game that starts with a billion in cash reaches the money marks far too soon.
     const broken = simulate({ seconds: 3600, tapsPerSecond: 1, startCash: 1e9 });

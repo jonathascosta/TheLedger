@@ -10,6 +10,7 @@ import {
   MILESTONES,
   nextMilestone,
   profitPerCycle,
+  upgradeUnlocked,
   UPGRADES,
   type GameState,
 } from '@ledger/engine';
@@ -21,7 +22,7 @@ import { t, tk } from '../i18n/index.ts';
 import { hireAndAsk } from '../notes/notes.ts';
 import { act } from '../store.ts';
 import { Page } from '../ui/Page.tsx';
-import { duration, moneyShort } from '../ui/format.ts';
+import { duration, factor, moneyShort } from '../ui/format.ts';
 
 export function Business({ state, index }: { state: GameState; index: number }) {
   const def = BUSINESSES[index]!;
@@ -127,13 +128,21 @@ export function Business({ state, index }: { state: GameState; index: number }) 
               key={u.id}
               type="button"
               class="check"
-              disabled={owned || b.level === 0 || state.volume.cash < u.cost}
+              disabled={owned || !upgradeUnlocked(state, u) || state.volume.cash < u.cost}
               style={owned ? { opacity: 1 } : undefined}
               onClick={() => act((s) => buyUpgrade(s, u.id))}
             >
               <UpgradeIcon upgrade={u} bought={owned} size={34} />
-              <span class="grow">{tk(`upgrade.${u.id}`)} · ×3</span>
-              <span class={owned ? 'cost profit' : 'cost'}>{owned ? '✓' : moneyShort(u.cost)}</span>
+              <span class="grow">
+                {tk(`upgrade.${u.id}`)} · {factor(u.effect.factor)}
+              </span>
+              <span class={owned ? 'cost profit' : 'cost'}>
+                {owned
+                  ? '✓'
+                  : !upgradeUnlocked(state, u) && u.level !== undefined
+                    ? t('order.locked', { level: u.level })
+                    : moneyShort(u.cost)}
+              </span>
             </button>
           );
         })}

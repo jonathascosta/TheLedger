@@ -170,7 +170,7 @@ calls an action once a reward is earned.
   settings; Settings brings them back.
 - Done: an end-to-end test folding a post-it, reloading, and bringing it back.
 
-### T19. Special orders
+### T19. Special orders — done
 
 - Engine: the orders (data with names in EN and PT, unlock levels, factors, prices), buying,
   `upgradeFactors`, the simulator buying them by payback; the band for the small businesses in

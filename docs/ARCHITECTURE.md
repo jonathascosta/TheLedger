@@ -48,26 +48,26 @@ cheap; the app treats the state as owned by the engine and re-renders after each
 
 ### Module map
 
-| Module          | Contents                                                                                                                                            |
-| :-------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `rng/`          | `createRng(seed)`: xoshiro128\*\* from a string hash, `fork(label)`                                                                                 |
-| `format/`       | Money and number formatting in English and Portuguese, long and short forms                                                                         |
-| `data/`         | Static tables: businesses, upgrades, managers' names and traits, stocks, coins, commodities, properties, art, parks, events, achievements, partners |
-| `state/`        | `GameState`, `newGame`, `newVolume`, save version and migration                                                                                     |
-| `economy/`      | Level costs, buying (×1/×10/×100/Max), cycles and tills, milestones, multipliers, income per second, net worth                                      |
-| `desk/`         | Stamps, invoices, combo                                                                                                                             |
-| `managers/`     | Candidates (seeded from the volume), hiring                                                                                                         |
-| `market/`       | Price walks, shocks, buying and selling stocks, commodities and coins                                                                               |
-| `assets/`       | Bonds, real estate, startups, art, energy                                                                                                           |
-| `clubs/`        | Sports clubs: seeded strengths, match days in play (restarting after an absence), prizes, values, buying at value and selling at 90%                |
-| `paper/`        | Editions, events, choices and their seeded outcomes                                                                                                 |
-| `achievements/` | Predicates over the state, checked on tick and after actions                                                                                        |
-| `prestige/`     | Goodwill, closing the volume, partners, the shelf                                                                                                   |
-| `dynasty/`      | Retiring to an heir: the era, legacy, the family's names (PRODUCT.md, The dynasty)                                                                  |
-| `away/`         | Offline receipt, the audit (Collect ×2)                                                                                                             |
-| `sponsors/`     | Sponsor rewards: overtime, the golden invoice (take, then pay), the sponsorship, the headhunter, daily limits keyed by the date the app passes in   |
-| `sim/`          | The simulated player and the balance bands (PRODUCT.md, Balance), run by `pnpm test:calibration`                                                    |
-| `game.ts`       | `tick`, `applyAway`, and the public actions                                                                                                         |
+| Module          | Contents                                                                                                                                                                      |
+| :-------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `rng/`          | `createRng(seed)`: xoshiro128\*\* from a string hash, `fork(label)`                                                                                                           |
+| `format/`       | Money and number formatting in English and Portuguese, long and short forms                                                                                                   |
+| `data/`         | Static tables: businesses, upgrades (with the special orders), managers' names and traits, stocks, coins, commodities, properties, art, parks, events, achievements, partners |
+| `state/`        | `GameState`, `newGame`, `newVolume`, save version and migration                                                                                                               |
+| `economy/`      | Level costs, buying (×1/×10/×100/Max), cycles and tills, milestones, multipliers, income per second, net worth                                                                |
+| `desk/`         | Stamps, invoices, combo                                                                                                                                                       |
+| `managers/`     | Candidates (seeded from the volume), hiring                                                                                                                                   |
+| `market/`       | Price walks, shocks, buying and selling stocks, commodities and coins                                                                                                         |
+| `assets/`       | Bonds, real estate, startups, art, energy                                                                                                                                     |
+| `clubs/`        | Sports clubs: seeded strengths, match days in play (restarting after an absence), prizes, values, buying at value and selling at 90%                                          |
+| `paper/`        | Editions, events, choices and their seeded outcomes                                                                                                                           |
+| `achievements/` | Predicates over the state, checked on tick and after actions                                                                                                                  |
+| `prestige/`     | Goodwill, closing the volume, partners, the shelf                                                                                                                             |
+| `dynasty/`      | Retiring to an heir: the era, legacy, the family's names (PRODUCT.md, The dynasty)                                                                                            |
+| `away/`         | Offline receipt, the audit (Collect ×2)                                                                                                                                       |
+| `sponsors/`     | Sponsor rewards: overtime, the golden invoice (take, then pay), the sponsorship, the headhunter, daily limits keyed by the date the app passes in                             |
+| `sim/`          | The simulated player and the balance bands (PRODUCT.md, Balance), run by `pnpm test:calibration`                                                                              |
+| `game.ts`       | `tick`, `applyAway`, and the public actions                                                                                                                                   |
 
 ### Sponsors
 

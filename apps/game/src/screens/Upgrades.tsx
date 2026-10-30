@@ -1,22 +1,32 @@
-import { BUSINESSES, buyUpgrade, UPGRADES, type GameState, type UpgradeDef } from '@ledger/engine';
+import {
+  BUSINESSES,
+  buyUpgrade,
+  upgradeUnlocked,
+  UPGRADES,
+  type GameState,
+  type UpgradeDef,
+} from '@ledger/engine';
 import { UpgradeIcon } from '../art/UpgradeIcon.tsx';
 import { t, tk } from '../i18n/index.ts';
 import { act } from '../store.ts';
 import { Page } from '../ui/Page.tsx';
-import { moneyShort } from '../ui/format.ts';
+import { factor, moneyShort } from '../ui/format.ts';
 
 function effectText(u: UpgradeDef): string {
   const e = u.effect;
   if (e.kind === 'business')
-    return t('upgrades.effect.business', { name: tk(`biz.${BUSINESSES[e.business]!.id}`) });
+    return t('upgrades.effect.business', {
+      factor: factor(e.factor),
+      name: tk(`biz.${BUSINESSES[e.business]!.id}`),
+    });
   return e.kind === 'all' ? t('upgrades.effect.all') : t('upgrades.effect.desk');
 }
 
 export function Upgrades({ state }: { state: GameState }) {
   const v = state.volume;
-  const usable = (u: UpgradeDef): boolean =>
-    u.effect.kind !== 'business' || v.businesses[u.effect.business]!.level > 0;
-  const offer = UPGRADES.filter((u) => !v.upgrades.includes(u.id) && usable(u)).slice(0, 12);
+  const offer = UPGRADES.filter(
+    (u) => !v.upgrades.includes(u.id) && upgradeUnlocked(state, u),
+  ).slice(0, 12);
   const bought = UPGRADES.filter((u) => v.upgrades.includes(u.id));
   return (
     <Page>

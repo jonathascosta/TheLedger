@@ -4,6 +4,8 @@ import { hire } from '../managers/managers.ts';
 import { stamp } from '../desk/desk.ts';
 import { collectAway } from '../away/away.ts';
 import { newGame } from '../state/state.ts';
+import { closeVolume } from '../prestige/prestige.ts';
+import { UPGRADE_BY_ID } from '../data/upgrades.ts';
 import {
   buyBusiness,
   buyOffer,
@@ -105,5 +107,62 @@ describe('the front desk stays a boost', () => {
     const income = businessIncome(s);
     expect(value / income).toBeLessThanOrEqual(0.2);
     expect(value / income).toBeGreaterThan(0.1);
+  });
+});
+
+describe('special orders', () => {
+  const ORDER = 'order.cafe.0';
+  const cost = UPGRADE_BY_ID.get(ORDER)!.cost;
+
+  it('unlocks at its level and is bought once', () => {
+    const s = newGame(T0);
+    s.volume.cash = cost * 3;
+    s.volume.businesses[0]!.level = 299;
+    expect(buyUpgrade(s, ORDER)).toEqual({ ok: false, reason: 'locked' });
+    s.volume.businesses[0]!.level = 300;
+    expect(buyUpgrade(s, ORDER).ok).toBe(true);
+    expect(buyUpgrade(s, ORDER)).toEqual({ ok: false, reason: 'owned' });
+  });
+
+  it('multiplies only its business, and goes with the volume', () => {
+    const s = newGame(T0);
+    s.volume.cash = cost;
+    s.volume.businesses[0]!.level = 300;
+    s.volume.businesses[1]!.level = 10;
+    const cafe = businessRate(s, 0);
+    const bakery = businessRate(s, 1);
+    buyUpgrade(s, ORDER);
+    expect(businessRate(s, 0)).toBeCloseTo(cafe * 8);
+    expect(businessRate(s, 1)).toBe(bakery);
+    closeVolume(s, T0 + 1);
+    expect(s.volume.upgrades).toEqual([]);
+  });
+
+  it('is not discounted by a Negotiator', () => {
+    const s = newGame(T0);
+    s.volume.managers[0] = { name: 'Rosa M.', trait: 'negotiator', face: 1 };
+    s.volume.businesses[0]!.level = 300;
+    s.volume.cash = cost * 2;
+    buyUpgrade(s, ORDER);
+    expect(s.volume.cash).toBeCloseTo(cost);
+  });
+
+  it("after the café's last order, its next level pays back like the airline's", () => {
+    const s = newGame(T0);
+    s.volume.businesses[0]!.level = 800;
+    s.volume.upgrades.push('order.cafe.0', 'order.cafe.1', 'order.cafe.2');
+    // The airline's level whose price matches the café's next level.
+    let airline = 1;
+    while (levelCost(s, 9, 1) < levelCost(s, 0, 1)) s.volume.businesses[9]!.level = ++airline;
+    const payback = (i: number): number => {
+      const before = businessRate(s, i);
+      s.volume.businesses[i]!.level++;
+      const gain = businessRate(s, i) - before;
+      s.volume.businesses[i]!.level--;
+      return levelCost(s, i, 1) / gain;
+    };
+    const ratio = payback(0) / payback(9);
+    expect(ratio).toBeGreaterThan(0.5);
+    expect(ratio).toBeLessThan(2);
   });
 });
