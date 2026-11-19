@@ -28,9 +28,9 @@
     "preact": "^10.29.0"
   },
   "devDependencies": {
-    "@capacitor/cli": "^8.6.0",
-    "@playwright/test": "1.63.0",
+    "@capacitor/cli": "^8.6.2",
+    "@playwright/test": "1.65.1",
     "@preact/preset-vite": "^2.10.6",
-    "vite": "^8.3.5"
+    "vite": "^8.3.8"
   }
 }
